@@ -17,7 +17,7 @@ const useStyle = makeStyles({
       }
 })
 
-const MenuBar = () => {
+const MenuSideBar = () => {
   const style = useStyle()
     return (
     <nav className={style.menuContainer}>
@@ -28,4 +28,4 @@ const MenuBar = () => {
   )
 }
 
-export default MenuBar
+export default MenuSideBar

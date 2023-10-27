@@ -1,5 +1,5 @@
 import { makeStyles } from "@fluentui/react-components";
-import NavBar from "../components/NavBar";
+import OptionBar from "../components/OptionBar";
 import Table from "../components/Table";
 
 const useStyles = makeStyles({
@@ -12,7 +12,7 @@ export default function Dashboard() {
   const styles = useStyles();
   return (
     <main className={styles.mainContainer}>
-      <NavBar />
+      <OptionBar />
       <Table />
     </main>
   );

@@ -55,7 +55,7 @@ const useStyles = makeStyles({
       flexWrap: "wrap",
       rowGap: "15px",
     },
-    "> div > .selectOptions": {
+    "> div > .select-options": {
       display: "none",
     },
   },
@@ -64,7 +64,7 @@ const useStyles = makeStyles({
   },
 });
 
-const NavBar = () => {
+const OptionBar = () => {
   const [open, setOpen] = useState();
   const [checkedValues, setValues] = useState({
     buscar: ["ncontrol"],
@@ -75,6 +75,26 @@ const NavBar = () => {
       "industrial",
       "electromecanica",
       "mecatronica",
+    ],
+    carrera: [
+      {
+        name: 'Sistemas'
+      },
+      {
+        name: 'Administracion'
+      },
+      {
+        name: 'Agricola'
+      },
+      {
+        name: 'Industrial'
+      },
+      {
+        name: 'Mecatronica'
+      },
+      {
+        name: 'Electromecanica'
+      }
     ],
     generos: ["M", "F"],
     docs: ["cert", "titulo"],
@@ -119,7 +139,10 @@ const NavBar = () => {
         </MenuTrigger>
         <MenuPopover>
           <MenuList>
-            <MenuItemCheckbox name="carreras" value="sistemas">
+            {checkedValues.carrera.map((list)=>(
+              <MenuItemCheckbox key={list.name} name="carreras" value={list.name}>{list.name}</MenuItemCheckbox>
+            ))}
+            {/* <MenuItemCheckbox name="carreras" value="sistemas">
               Sistemas
             </MenuItemCheckbox>
             <MenuItemCheckbox name="carreras" value="administracion">
@@ -136,7 +159,7 @@ const NavBar = () => {
             </MenuItemCheckbox>
             <MenuItemCheckbox name="carreras" value="mecatronica">
               Mecatrónica
-            </MenuItemCheckbox>
+            </MenuItemCheckbox> */}
           </MenuList>
         </MenuPopover>
       </Menu>
@@ -224,7 +247,7 @@ const NavBar = () => {
             Seleccionar
           </Button>
           <ToolbarDivider />
-          <div className="selectOptions">
+          <div className="select-options">
             <Button appearance="transparent" icon={<Edit16Regular />}></Button>
             <Button appearance="transparent" icon={<Delete16Filled />}></Button>
             <Button appearance="transparent" icon={<Dismiss16Filled />}>
@@ -250,4 +273,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default OptionBar;

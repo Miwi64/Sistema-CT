@@ -47,7 +47,7 @@ const useStyles = makeStyles({
         borderBottomRightRadius: "10px",
       },
     },
-    "> div > .contentContainer": {
+    "> div > .content-container": {
       display: "grid",
       width: "100%",
       height: "100%",
@@ -56,19 +56,19 @@ const useStyles = makeStyles({
       marginLeft: "20px",
       marginRight: "20px",
     },
-    "> div > .contentContainer > .titleContainer": {
+    "> div > .content-container > .title-container": {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
     },
-    "> div > .contentContainer > .titleContainer > span": {
+    "> div > .content-container > .title-container > span": {
       marginBottom: "10px",
     },
-    "> div > .contentContainer > label": {
+    "> div > .content-container > label": {
       marginTop: "20px",
       marginBottom: "10px",
     },
-    "> div > .contentContainer > div > a": {
+    "> div > .content-container > div > a": {
       width: "100%",
       marginTop: "30px",
     },
@@ -84,8 +84,8 @@ export default function SignIn() {
     <section className="background">
     </section>
       <div>
-      <section className="contentContainer">
-        <div className="titleContainer">
+      <section className="content-container">
+        <div className="title-container">
           <Avatar as="span" size={120} />
           <Title1>Iniciar Sesión</Title1>
         </div>

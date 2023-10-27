@@ -5,7 +5,7 @@ import {
   SettingsRegular,
 } from "@fluentui/react-icons";
 import React, { useState } from "react";
-import MenuBar from "./MenuBar";
+import MenuSideBar from "./MenuSideBar";
 import AccountMenu from "./AccountMenu";
 
 const useStyle = makeStyles({
@@ -18,7 +18,7 @@ const useStyle = makeStyles({
     height: "60px",
     color: "white",
     backgroundColor: tokens.colorBrandBackground,
-    "> .titleContainer": {
+    "> .title-container": {
       width: "95%",
       display: "flex",
       justifyContent: "space-between",
@@ -26,16 +26,16 @@ const useStyle = makeStyles({
       height: "100%",
       marginLeft: "10px",
     },
-    "> .titleContainer > h1": {
+    "> .title-container > h1": {
       whiteSpace: "nowrap",
       overflowX: "hidden",
       textOverflow: "ellipsis",
     },
-    "> .titleContainer > .optionsContainer": {
+    "> .title-container > .options-container": {
       display: "flex",
       height: "100%",
     },
-    "> .buttonContainer": {
+    "> .button-container": {
       backgroundColor: tokens.colorBrandBackgroundHover,
       display: "flex",
       justifyContent: "center",
@@ -67,7 +67,7 @@ const useStyle = makeStyles({
   },
 });
 
-const Header = () => {
+const HeaderBar = () => {
   const [openMenu, setOpenMenu] = useState({menu: false, account: false});
   const styles = useStyle();
   return (
@@ -77,15 +77,15 @@ const Header = () => {
           onClick={() => {
             setOpenMenu({...openMenu, menu: !openMenu.menu});
           }}
-          className="buttonContainer"
+          className="button-container"
         >
           <GridRegular fontSize={30} />
         </div>
-        <div className="titleContainer">
+        <div className="title-container">
           <Text as="h1" size={700}>
             Títulos y Certificados
           </Text>
-          <div className="optionsContainer">
+          <div className="options-container">
             <div onClick={() => {
             setOpenMenu({...openMenu, account: !openMenu.account});
           }} className={styles.buttonOptionsContainer}>
@@ -97,10 +97,10 @@ const Header = () => {
           </div>
         </div>
       </header>
-      {openMenu.menu && <MenuBar />}
+      {openMenu.menu && <MenuSideBar />}
       {openMenu.account && <AccountMenu />}
     </>
   );
 };
 
-export default Header;
+export default HeaderBar;

@@ -25,6 +25,29 @@ const useStyles = makeStyles({
 
 const CertificateForm = ({setSelectedValue}) => {
   const styles = useStyles();
+
+  const carreras = [
+    {
+      name: 'Sistemas'
+    },
+    {
+      name: 'Administracion'
+    },
+    {
+      name: 'Agricola'
+    },
+    {
+      name: 'Industrial'
+    },
+    {
+      name: 'Mecatronica'
+    },
+    {
+      name: 'Electromecanica'
+    }
+  ];
+
+
   return (
     <div className={styles.formContainer}>
       <Field orientation="horizontal" as="div" label={"Estudiante"} required>
@@ -43,12 +66,15 @@ const CertificateForm = ({setSelectedValue}) => {
       </Field>
       <Field orientation="horizontal" as="div" label="Carrera" required>
         <Combobox>
-          <Option>Sistemas</Option>
+          {carreras.map((list)=>(
+            <Option key={list.name} value={list.name}>{list.name}</Option>
+          ))}
+          {/* <Option>Sistemas</Option>
           <Option>Administración</Option>
           <Option>Agrícola</Option>
           <Option>Industrial</Option>
           <Option>Mecatrónica</Option>
-          <Option>Electromecánica</Option>
+          <Option>Electromecánica</Option> */}
         </Combobox>
       </Field>
       <Field orientation="horizontal" as="div" label="Fecha de registro" required>

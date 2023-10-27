@@ -1,10 +1,10 @@
 import React from "react";
-import Header from "../components/Header";
+import HeaderBar from "../components/HeaderBar";
 
 const DashboardLayout = ({children}) => {
   return (
     <>
-      <Header />
+      <HeaderBar />
       {children}
     </>
   );

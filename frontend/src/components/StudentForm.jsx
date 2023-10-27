@@ -37,6 +37,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
     rowGap: "20px",
     maxWidth: "800px",
+    maxHeight: ""
   },
   field: {
     display: "grid",
@@ -46,6 +47,49 @@ const useStyles = makeStyles({
 
 const StudentForm = () => {
   const styles = useStyles();
+
+  const carreras = [
+    {
+      name: 'Sistemas'
+    },
+    {
+      name: 'Administracion'
+    },
+    {
+      name: 'Agricola'
+    },
+    {
+      name: 'Industrial'
+    },
+    {
+      name: 'Mecatronica'
+    },
+    {
+      name: 'Electromecanica'
+    }
+  ];
+
+  const estados = [
+    {
+      name: 'Baja California'
+    },
+    {
+      name: 'Baja California Sur'
+    },
+    {
+      name: 'Sonora'
+    },
+    {
+      name: 'Tamaulipas'
+    },
+    {
+      name: 'Puebla'
+    },
+    {
+      name: 'Ciudad de Mexico'
+    }
+  ];
+
   return (
     <div className={styles.formContainer}>
       <Field as="div" orientation="horizontal" label={"Numero de control"} required>
@@ -71,12 +115,15 @@ const StudentForm = () => {
       </Field>
       <Field as="div" orientation="horizontal" label="Estado de origen" required>
         <Combobox>
-          <Option>Baja California</Option>
+          {estados.map((list)=>(
+            <Option key={list.name} value={list.name}>{list.name}</Option>
+          ))}
+          {/* <Option>Baja California</Option>
           <Option>Baja California Sur</Option>
           <Option>Sonora</Option>
           <Option>Tamaulipas</Option>
           <Option>Puebla</Option>
-          <Option>Ciudad de México</Option>
+          <Option>Ciudad de México</Option> */}
         </Combobox>
       </Field>
       <Field as="div" orientation="horizontal" label="Fecha de nacimiento" required>
@@ -85,12 +132,15 @@ const StudentForm = () => {
       <Divider />
       <Field as="div" orientation="horizontal" label="Carrera" required>
         <Combobox>
-          <Option>Sistemas</Option>
+        {carreras.map((list)=>(
+            <Option key={list.name} value={list.name}>{list.name}</Option>
+          ))}
+          {/* <Option>Sistemas</Option>
           <Option>Administración</Option>
           <Option>Agrícola</Option>
           <Option>Industrial</Option>
           <Option>Mecatrónica</Option>
-          <Option>Electromecánica</Option>
+          <Option>Electromecánica</Option> */}
         </Combobox>
       </Field>
       <Field as="div" orientation="horizontal" label="Periodo de ingreso" required>
