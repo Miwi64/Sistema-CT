@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import CertificateForm from "../components/CertificateForm";
 import StudentForm from "../components/StudentForm";
 import TitleForm from "../components/TitleForm";
-import { Folder20Filled, OpenFolder20Filled } from "@fluentui/react-icons";
+import { Folder20Filled } from "@fluentui/react-icons";
 
 const useStyles = makeStyles({
   mainContainer: {
     direction: "flex",
     flexDirection: "column",
-    height: "100vh",
+    height: "fit-content",
     paddingTop: "20px",
     paddingBottom: "20px",
     paddingLeft: "20px",
