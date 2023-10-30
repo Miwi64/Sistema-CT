@@ -21,7 +21,7 @@ const useStyles = makeStyles({
       alignItems: "center",
       paddingBottom: "30px"
     },
-    "> .title-container": {
+    "> .title-container, .import-options-container": {
       display: "flex",
       width: "100%",
       flexDirection: "row",
@@ -34,7 +34,7 @@ const useStyles = makeStyles({
 const ImportData = () => {
   const [selectedValue, setSelectedValue] = useState("titulo");
 
-  const onTabSelect = (event, data) => {
+  const onTabSelect = (_, data) => {
     setSelectedValue(data.value);
   };
 
@@ -44,7 +44,7 @@ const ImportData = () => {
       <div className="title-container">
         <Title1 as="h1">Importar Datos</Title1>
       </div>
-      <div className="title-container">
+      <div className="import-options-container">
         <Button appearance="subtle" icon={<Folder20Filled />}>Importar Titulos desde Excel</Button>
         <Button appearance="subtle" icon={<Folder20Filled />}>Importar Certificados desde Excel</Button>
       </div>

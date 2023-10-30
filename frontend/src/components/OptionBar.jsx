@@ -22,22 +22,19 @@ import {
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import {
   Add16Filled,
-  BinFullRegular,
   Calendar16Regular,
   CheckboxChecked16Regular,
-  ClosedCaptionRegular,
   Delete16Filled,
   Dismiss16Filled,
   Document16Regular,
   Edit16Regular,
-  List16Regular,
   MoreHorizontal16Regular,
   People16Regular,
   Save16Regular,
   Search16Regular,
-  SelectObject20Regular,
 } from "@fluentui/react-icons";
 import React, { useState } from "react";
+import { careers } from "../libs/constants";
 
 const useStyles = makeStyles({
   navContainer: {
@@ -65,101 +62,52 @@ const useStyles = makeStyles({
 });
 
 const OptionBar = () => {
+  const searchCriteria = [
+    { value: "ncontrol", text: "Número de control" },
+    { value: "nombre", text: "Nombre" },
+    { value: "apat", text: "Apellido Paterno" },
+    { value: "amat", text: "Apellido Materno" },
+  ];
+  const documents = [{value: "titulo", text: "Título"}, {value: "cert", text: "Certificado"}];
+  const sex = [{value: "M", text: "Masculino"}, {value: "F", text: "Femenino"}];
+  const initialState = {
+    criteria: [searchCriteria[0].value],
+    careers: careers.map(({ value }) => value),
+    sex: ["M", "F"],
+    docs: ["titulo", "cert"],
+  };
+
   const [open, setOpen] = useState();
-  const [checkedValues, setValues] = useState({
-    buscar: ["ncontrol"],
-    carreras: [
-      "sistemas",
-      "administracion",
-      "agricola",
-      "industrial",
-      "electromecanica",
-      "mecatronica",
-    ],
-    carrera: [
-      {
-        name: 'Sistemas'
-      },
-      {
-        name: 'Administracion'
-      },
-      {
-        name: 'Agricola'
-      },
-      {
-        name: 'Industrial'
-      },
-      {
-        name: 'Mecatronica'
-      },
-      {
-        name: 'Electromecanica'
-      }
-    ],
-    generos: ["M", "F"],
-    docs: ["cert", "titulo"],
-  });
-  const onChange = (e, { name, checkedItems }) => {
+  const [checkedValues, setValues] = useState(initialState);
+  const onChange = (_, { name, checkedItems }) => {
     setValues((s) => {
       return s ? { ...s, [name]: checkedItems } : { [name]: checkedItems };
     });
   };
 
-  const searchMenu = () => {
+  const menu = (list, title, groupName, icon, multiselect) => {
     return (
       <Menu checkedValues={checkedValues} onCheckedValueChange={onChange}>
         <MenuTrigger disableButtonEnhancement>
-          <Button appearance="transparent" icon={<MoreHorizontal16Regular />} />
+          <Button appearance="transparent" icon={icon}>
+            {title}
+          </Button>
         </MenuTrigger>
         <MenuPopover>
           <MenuList>
-            <MenuItemRadio name="buscar" value="ncontrol">
-              Número de control
-            </MenuItemRadio>
-            <MenuItemRadio name="buscar" value="nombre">
-              Nombre
-            </MenuItemRadio>
-            <MenuItemRadio name="buscar" value="apat">
-              Apellido paterno
-            </MenuItemRadio>
-            <MenuItemRadio name="buscar" value="amat">
-              Apellido Materno
-            </MenuItemRadio>
-          </MenuList>
-        </MenuPopover>
-      </Menu>
-    );
-  };
-
-  const careerMenu = () => {
-    return (
-      <Menu checkedValues={checkedValues} onCheckedValueChange={onChange}>
-        <MenuTrigger disableButtonEnhancement>
-          <Button appearance="transparent">Carrera</Button>
-        </MenuTrigger>
-        <MenuPopover>
-          <MenuList>
-            {checkedValues.carrera.map((list)=>(
-              <MenuItemCheckbox key={list.name} name="carreras" value={list.name}>{list.name}</MenuItemCheckbox>
-            ))}
-            {/* <MenuItemCheckbox name="carreras" value="sistemas">
-              Sistemas
-            </MenuItemCheckbox>
-            <MenuItemCheckbox name="carreras" value="administracion">
-              Administración
-            </MenuItemCheckbox>
-            <MenuItemCheckbox name="carreras" value="agricola">
-              Agrícola
-            </MenuItemCheckbox>
-            <MenuItemCheckbox name="carreras" value="industrial">
-              Industrial
-            </MenuItemCheckbox>
-            <MenuItemCheckbox name="carreras" value="electromecanica">
-              Electromecánica
-            </MenuItemCheckbox>
-            <MenuItemCheckbox name="carreras" value="mecatronica">
-              Mecatrónica
-            </MenuItemCheckbox> */}
+            {multiselect ? (
+              list.map(({ value, text }, index) => (
+                <MenuItemCheckbox key={index} name={groupName} value={value}>
+                  {text}
+                </MenuItemCheckbox>
+              ))
+            ) : (
+              list.map(({ value, text }, index) => (
+                <MenuItemRadio key={index} name={groupName} value={value}>
+                  {text}
+                </MenuItemRadio>
+              ))
+            )}
           </MenuList>
         </MenuPopover>
       </Menu>
@@ -173,43 +121,17 @@ const OptionBar = () => {
       <section className={styles.navContainer}>
         <Toolbar as="div" size="large">
           <Input appearance="underline" contentBefore={<Search16Regular />} />
-          {searchMenu()}
+          {menu(
+            searchCriteria,
+            null,
+            "criteria",
+            <MoreHorizontal16Regular />,
+            false
+          )}
           <ToolbarDivider />
-          {careerMenu()}
-          <Menu checkedValues={checkedValues} onCheckedValueChange={onChange}>
-            <MenuTrigger disableButtonEnhancement>
-              <Button appearance="transparent" icon={<Document16Regular />}>
-                Documento
-              </Button>
-            </MenuTrigger>
-            <MenuPopover>
-              <MenuList>
-                <MenuItemCheckbox name="docs" value="titulo">
-                  Título
-                </MenuItemCheckbox>
-                <MenuItemCheckbox name="docs" value="cert">
-                  Certificado
-                </MenuItemCheckbox>
-              </MenuList>
-            </MenuPopover>
-          </Menu>
-          <Menu checkedValues={checkedValues} onCheckedValueChange={onChange}>
-            <MenuTrigger disableButtonEnhancement>
-              <Button appearance="transparent" icon={<People16Regular />}>
-                Sexo
-              </Button>
-            </MenuTrigger>
-            <MenuPopover>
-              <MenuList>
-                <MenuItemCheckbox name="generos" value="M">
-                  Masculino
-                </MenuItemCheckbox>
-                <MenuItemCheckbox name="generos" value="F">
-                  Femenino
-                </MenuItemCheckbox>
-              </MenuList>
-            </MenuPopover>
-          </Menu>
+          {menu(careers, "Carreras", "careers", null, true)}
+          {menu(documents, "Documento", "docs", <Document16Regular />, true)}
+          {menu(sex, "Sexo", "sex", <People16Regular />, true)}
           <Popover
             withArrow
             trapFocus
@@ -247,6 +169,7 @@ const OptionBar = () => {
             Seleccionar
           </Button>
           <ToolbarDivider />
+
           <div className="select-options">
             <Button appearance="transparent" icon={<Edit16Regular />}></Button>
             <Button appearance="transparent" icon={<Delete16Filled />}></Button>
@@ -254,6 +177,7 @@ const OptionBar = () => {
               Cerrar Selección
             </Button>
           </div>
+          
           <Menu>
             <MenuTrigger disableButtonEnhancement>
               <MenuButton appearance="primary" icon={<Save16Regular />}>

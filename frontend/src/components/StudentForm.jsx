@@ -27,6 +27,7 @@ import {
 } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import React from "react";
+import { careers, countryStates } from "../libs/constants";
 
 const useStyles = makeStyles({
   formContainer: {
@@ -48,47 +49,8 @@ const useStyles = makeStyles({
 const StudentForm = () => {
   const styles = useStyles();
 
-  const carreras = [
-    {
-      name: 'Sistemas'
-    },
-    {
-      name: 'Administracion'
-    },
-    {
-      name: 'Agricola'
-    },
-    {
-      name: 'Industrial'
-    },
-    {
-      name: 'Mecatronica'
-    },
-    {
-      name: 'Electromecanica'
-    }
-  ];
-
-  const estados = [
-    {
-      name: 'Baja California'
-    },
-    {
-      name: 'Baja California Sur'
-    },
-    {
-      name: 'Sonora'
-    },
-    {
-      name: 'Tamaulipas'
-    },
-    {
-      name: 'Puebla'
-    },
-    {
-      name: 'Ciudad de Mexico'
-    }
-  ];
+  const careersList = careers;
+  const statesList = countryStates;
 
   return (
     <div className={styles.formContainer}>
@@ -115,15 +77,9 @@ const StudentForm = () => {
       </Field>
       <Field as="div" orientation="horizontal" label="Estado de origen" required>
         <Combobox>
-          {estados.map((list)=>(
-            <Option key={list.name} value={list.name}>{list.name}</Option>
+          {statesList.map((state, index)=>(
+            <Option key={index} value={state.value}>{state.text}</Option>
           ))}
-          {/* <Option>Baja California</Option>
-          <Option>Baja California Sur</Option>
-          <Option>Sonora</Option>
-          <Option>Tamaulipas</Option>
-          <Option>Puebla</Option>
-          <Option>Ciudad de México</Option> */}
         </Combobox>
       </Field>
       <Field as="div" orientation="horizontal" label="Fecha de nacimiento" required>
@@ -132,15 +88,9 @@ const StudentForm = () => {
       <Divider />
       <Field as="div" orientation="horizontal" label="Carrera" required>
         <Combobox>
-        {carreras.map((list)=>(
-            <Option key={list.name} value={list.name}>{list.name}</Option>
+        {careersList.map((career, index)=>(
+            <Option key={index} value={career.value}>{career.text}</Option>
           ))}
-          {/* <Option>Sistemas</Option>
-          <Option>Administración</Option>
-          <Option>Agrícola</Option>
-          <Option>Industrial</Option>
-          <Option>Mecatrónica</Option>
-          <Option>Electromecánica</Option> */}
         </Combobox>
       </Field>
       <Field as="div" orientation="horizontal" label="Periodo de ingreso" required>

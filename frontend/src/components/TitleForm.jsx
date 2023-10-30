@@ -10,6 +10,7 @@ import {
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { Add16Regular, Search16Regular } from "@fluentui/react-icons";
 import React from "react";
+import { studyPlans } from "../libs/constants";
 
 const useStyles = makeStyles({
   formContainer: {
@@ -25,27 +26,7 @@ const useStyles = makeStyles({
 
 const TitleForm = ({setSelectedValue}) => {
   const styles = useStyles();
-
-  const carreras = [
-    {
-      name: 'Sistemas'
-    },
-    {
-      name: 'Administracion'
-    },
-    {
-      name: 'Agricola'
-    },
-    {
-      name: 'Industrial'
-    },
-    {
-      name: 'Mecatronica'
-    },
-    {
-      name: 'Electromecanica'
-    }
-  ];
+  const plansList = studyPlans;
 
   return (
     <div className={styles.formContainer}>
@@ -68,15 +49,9 @@ const TitleForm = ({setSelectedValue}) => {
       </Field>
       <Field orientation="horizontal" as="div" label="Plan de estudios" required>
         <Combobox>
-        {carreras.map((list)=>(
-            <Option key={list.name} value={list.name}>{list.name}</Option>
+        {plansList.map((plan, index)=>(
+            <Option key={index} value={plan.value}>{plan.text}</Option>
         ))}
-          {/* <Option>Sistemas</Option>
-          <Option>Administración</Option>
-          <Option>Agrícola</Option>
-          <Option>Industrial</Option>
-          <Option>Mecatrónica</Option>
-          <Option>Electromecánica</Option> */}
         </Combobox>
       </Field>
       <Field orientation="horizontal" as="div" label="Fecha del acto" required>
