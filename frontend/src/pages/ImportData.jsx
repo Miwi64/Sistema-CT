@@ -9,7 +9,7 @@ const useStyles = makeStyles({
   mainContainer: {
     direction: "flex",
     flexDirection: "column",
-    height: "100vh",
+    height: "100%",
     paddingTop: "20px",
     paddingBottom: "20px",
     paddingLeft: "20px",
