@@ -82,7 +82,7 @@ const HeaderBar = () => {
           <GridRegular fontSize={30} />
         </div>
         <div className="title-container">
-          <Text as="h1" size={700}>
+          <Text as="h1" size={600}>
             Títulos y Certificados
           </Text>
           <div className="options-container">
