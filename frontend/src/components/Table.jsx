@@ -73,6 +73,22 @@ const columns = [
     },
   }),
   createTableColumn({
+    columnId: "Nombre",
+    compare: (a, b) => {
+      return a.nombre.label.localeCompare(b.nombre.label);
+    },
+    renderHeaderCell: () => {
+      return "Nombre";
+    },
+    renderCell: (item) => {
+      return (
+        <TableCellLayout>
+          {item.nombre.label}
+        </TableCellLayout>
+      );
+    },
+  }),
+  createTableColumn({
     columnId: "apellido",
     compare: (a, b) => {
       return a.apellido.label.localeCompare(b.apellido.label);
