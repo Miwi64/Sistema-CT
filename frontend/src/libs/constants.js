@@ -44,3 +44,40 @@ export const reports = [
   { value: "gob", text: "Gobierno del estado" },
   { value: "est911", text: "Estadística 911" },
 ];
+
+export const items = [
+  {
+    numeroControl: { label: "1976123"},
+    nombre: { label: "Elton"},
+    apellido: { label: "Tito"},
+    carrera: {label : "Administración"},
+    folio: {label: "023024934"},
+    titulo: {label: "353594395"},
+  },
+  {
+    numeroControl: { label: "17766348"},
+    nombre: { label: "Javier"},
+    apellido: { label: "Torres"},
+    carrera: {label : "Sistemas"},
+    folio: {label: ""},
+    titulo: {label: "49596590"},
+  },
+  {
+    numeroControl: { label: "1576213"},
+    nombre: { label: "Ana"},
+    apellido: { label: "Perez"},
+    carrera: {label : "Electromecánica"},
+    folio: {label: "35475758"},
+    titulo: {label: "87749599"},
+  },
+  {
+    numeroControl: { label: "18760647"},
+    nombre: { label: "María"},
+    apellido: { label: "López"},
+    carrera: {label : "Agrícola"},
+    folio: {label: "59495940"},
+    titulo: {label: ""},
+  },
+];
+
+

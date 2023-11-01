@@ -19,8 +19,9 @@ import {
   TableCellLayout,
   createTableColumn,
 } from "@fluentui/react-components";
+import { items } from "../libs/constants";
 
-const items = [
+/* const items = [
   {
     numeroControl: { label: "1976123"},
     nombre: { label: "Elton"},
@@ -53,7 +54,7 @@ const items = [
     folio: {label: "59495940"},
     titulo: {label: ""},
   },
-];
+]; */
 
 const columns = [
   createTableColumn({
