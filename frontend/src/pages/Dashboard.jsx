@@ -4,7 +4,7 @@ import Table from "../components/Table";
 
 const useStyles = makeStyles({
   mainContainer:{
-    height: "100%"
+    height: "100%",
   }
 })
 
