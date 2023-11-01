@@ -1,15 +1,5 @@
 import * as React from "react";
 import {
-  FolderRegular,
-  EditRegular,
-  OpenRegular,
-  DocumentRegular,
-  PeopleRegular,
-  DocumentPdfRegular,
-  VideoRegular,
-} from "@fluentui/react-icons";
-import {
-  Avatar,
   DataGridBody,
   DataGridRow,
   DataGrid,
@@ -156,9 +146,10 @@ const columns = [
 ];
 
 export default function Table() {
+  const studentList = items
   return (
     <DataGrid
-      items={items}
+      items={studentList}
       columns={columns}
       sortable
       selectionMode="multiselect"
