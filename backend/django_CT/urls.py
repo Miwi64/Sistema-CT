@@ -16,16 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from tasks import views
+# from rest_framework import routers
+# from tasks import views
+
+# router = routers.DefaultRouter()
+# router.register(r'carreras', views.CarreraView, 'carreras')
+# router.register(r'alumnos', views.AlumnosView, 'alumnos')
+# router.register(r'certificados', views.CertificadosView, 'certificados')
+# router.register(r'titulados', views.TituladosView, 'titulados')
+# router.register(r'planestudio', views.PlanEstudioView, 'planestudio')
+# router.register(r'operaciones', views.OperacionesView, 'operaciones')
+# router.register(r'rol', views.RolView, 'rol')
+# router.register(r'usuarios', views.UsuariosView, 'usuarios')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('carreras/', views.CarreraView.as_view({'get': 'list'})),
-    path('alumnos/', views.AlumnosView.as_view({'get': 'list'})),
-    path('plan_estudio/', views.PlanEstudioView.as_view({'get': 'list'})),
-    path('titulados/', views.TituladosView.as_view({'get': 'list'})),
-    path('certificados/', views.CertificadosView.as_view({'get': 'list'})),
-    path('operaciones/', views.OperacionesView.as_view({'get': 'list'})),
-    path('rol/', views.RolView.as_view({'get': 'list'})),
-    path('usuarios/', views.UsuariosView.as_view({'get': 'list'})),
+    path('data/', include('tasks.urls'))
 ]
+
