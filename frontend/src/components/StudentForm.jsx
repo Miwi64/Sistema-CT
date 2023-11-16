@@ -60,7 +60,7 @@ const StudentForm = () => {
       <Field as="div" orientation="horizontal" label={"Nombre"} required>
         <Input />
       </Field>
-      <Field as="div" orientation="horizontal" label={"Apellido Paterno"}>
+      <Field as="div" orientation="horizontal" label={"Apellido Paterno"} required>
         <Input />
       </Field>
       <Field as="div" orientation="horizontal" label={"Apellido Materno"}>

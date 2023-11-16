@@ -11,44 +11,9 @@ import {
 } from "@fluentui/react-components";
 import { items } from "../libs/constants";
 
-/* const items = [
-  {
-    numeroControl: { label: "1976123"},
-    nombre: { label: "Elton"},
-    apellido: { label: "Tito"},
-    carrera: {label : "Administración"},
-    folio: {label: "023024934"},
-    titulo: {label: "353594395"},
-  },
-  {
-    numeroControl: { label: "17766348"},
-    nombre: { label: "Javier"},
-    apellido: { label: "Torres"},
-    carrera: {label : "Sistemas"},
-    folio: {label: ""},
-    titulo: {label: "49596590"},
-  },
-  {
-    numeroControl: { label: "1576213"},
-    nombre: { label: "Ana"},
-    apellido: { label: "Perez"},
-    carrera: {label : "Electromecánica"},
-    folio: {label: "35475758"},
-    titulo: {label: "87749599"},
-  },
-  {
-    numeroControl: { label: "18760647"},
-    nombre: { label: "María"},
-    apellido: { label: "López"},
-    carrera: {label : "Agrícola"},
-    folio: {label: "59495940"},
-    titulo: {label: ""},
-  },
-]; */
-
 const columns = [
   createTableColumn({
-    columnId: "Numero de control",
+    columnId: "control",
     compare: (a, b) => {
       return a.numeroControl.label.localeCompare(b.numeroControl.label);
     },
@@ -56,15 +21,11 @@ const columns = [
       return "Número de control";
     },
     renderCell: (item) => {
-      return (
-        <TableCellLayout>
-          {item.numeroControl.label}
-        </TableCellLayout>
-      );
+      return <TableCellLayout>{item.numeroControl.label}</TableCellLayout>;
     },
   }),
   createTableColumn({
-    columnId: "Nombre",
+    columnId: "nombre",
     compare: (a, b) => {
       return a.nombre.label.localeCompare(b.nombre.label);
     },
@@ -72,11 +33,7 @@ const columns = [
       return "Nombre";
     },
     renderCell: (item) => {
-      return (
-        <TableCellLayout>
-          {item.nombre.label}
-        </TableCellLayout>
-      );
+      return <TableCellLayout>{item.nombre.label}</TableCellLayout>;
     },
   }),
   createTableColumn({
@@ -88,11 +45,7 @@ const columns = [
       return "Apellido";
     },
     renderCell: (item) => {
-      return (
-        <TableCellLayout>
-          {item.apellido.label}
-        </TableCellLayout>
-      );
+      return <TableCellLayout>{item.apellido.label}</TableCellLayout>;
     },
   }),
   createTableColumn({
@@ -104,11 +57,7 @@ const columns = [
       return "Carrera";
     },
     renderCell: (item) => {
-      return (
-        <TableCellLayout>
-          {item.carrera.label}
-        </TableCellLayout>
-      );
+      return <TableCellLayout>{item.carrera.label}</TableCellLayout>;
     },
   }),
   createTableColumn({
@@ -120,11 +69,7 @@ const columns = [
       return "Número de título";
     },
     renderCell: (item) => {
-      return (
-        <TableCellLayout>
-          {item.titulo.label}
-        </TableCellLayout>
-      );
+      return <TableCellLayout>{item.titulo.label}</TableCellLayout>;
     },
   }),
   createTableColumn({
@@ -136,46 +81,80 @@ const columns = [
       return "Número de folio";
     },
     renderCell: (item) => {
-      return (
-        <TableCellLayout>
-          {item.folio.label}
-        </TableCellLayout>
-      );
+      return <TableCellLayout>{item.folio.label}</TableCellLayout>;
     },
   }),
 ];
 
+const columnSizingOptions = {
+  control: {
+    minWidth: 180,
+    defaultWidth: 180,
+    idealWidth: 200,
+  },
+  nombre: {
+    minWidth: 120,
+    defaultWidth: 120,
+    idealWidth: 220,
+  },
+  apellido: {
+    minWidth: 120,
+    defaultWidth: 120,
+    idealWidth: 220,
+  },
+  carrera: {
+    minWidth: 120,
+    defaultWidth: 120,
+    idealWidth: 220,
+  },
+  titulo: {
+    minWidth: 120,
+    defaultWidth: 120,
+    idealWidth: 220,
+  },
+  folio: {
+    minWidth: 120,
+    defaultWidth: 120,
+    idealWidth: 220,
+  },
+};
+
 export default function Table() {
-  const studentList = items
+  const studentList = items;
+
   return (
-    <DataGrid
-      items={studentList}
-      columns={columns}
-      sortable
-      selectionMode="multiselect"
-      getRowId={(item) => item.nombre.label}
-      onSelectionChange={(e, data) => {}}
-      focusMode="composite"
-    >
-      <DataGridHeader>
-        <DataGridRow selectionCell={{ "aria-label": "Select all rows" }}>
-          {({ renderHeaderCell }) => (
-            <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-          )}
-        </DataGridRow>
-      </DataGridHeader>
-      <DataGridBody>
-        {({ item, rowId }) => (
-          <DataGridRow
-            key={rowId}
-            selectionCell={{ "aria-label": "Select row" }}
-          >
-            {({ renderCell }) => (
-              <DataGridCell>{renderCell(item)}</DataGridCell>
+    <div style={{ overflowX: "auto" }}>
+      <DataGrid
+        columnSizingOptions={columnSizingOptions}
+        resizableColumns
+        items={studentList}
+        columns={columns}
+        sortable
+        selectionMode="multiselect"
+        getRowId={(item) => item.nombre.label}
+        onSelectionChange={(e, data) => {}}
+        focusMode="composite"
+      >
+        <DataGridHeader>
+          <DataGridRow selectionCell={{ "aria-label": "Select all rows" }}>
+            {({ renderHeaderCell }) => (
+              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
             )}
           </DataGridRow>
-        )}
-      </DataGridBody>
-    </DataGrid>
+        </DataGridHeader>
+        <DataGridBody>
+          {({ item, rowId }) => (
+            <DataGridRow
+              key={rowId}
+              selectionCell={{ "aria-label": "Select row" }}
+            >
+              {({ renderCell }) => (
+                <DataGridCell>{renderCell(item)}</DataGridCell>
+              )}
+            </DataGridRow>
+          )}
+        </DataGridBody>
+      </DataGrid>
+    </div>
   );
-};
+}

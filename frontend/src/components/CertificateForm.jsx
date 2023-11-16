@@ -43,13 +43,6 @@ const CertificateForm = ({setSelectedValue}) => {
       <Field orientation="horizontal" as="div" label={"Numero de folio"} required>
         <Input />
       </Field>
-      <Field orientation="horizontal" as="div" label="Carrera" required>
-        <Combobox>
-          {careersList.map((career, index)=>(
-            <Option key={index} value={career.value}>{career.text}</Option>
-          ))}
-        </Combobox>
-      </Field>
       <Field orientation="horizontal" as="div" label="Fecha de registro" required>
         <DatePicker allowTextInput placeholder="Fecha de registro" />
       </Field>

@@ -13,7 +13,7 @@ export default function Dashboard() {
   return (
     <main className={styles.mainContainer}>
       <OptionBar />
-      <Table />
+        <Table />
     </main>
   );
 }

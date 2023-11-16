@@ -48,11 +48,7 @@ const TitleForm = ({setSelectedValue}) => {
         <Input />
       </Field>
       <Field orientation="horizontal" as="div" label="Plan de estudios" required>
-        <Combobox>
-        {plansList.map((plan, index)=>(
-            <Option key={index} value={plan.value}>{plan.text}</Option>
-        ))}
-        </Combobox>
+        <Input />
       </Field>
       <Field orientation="horizontal" as="div" label="Fecha del acto" required>
         <DatePicker allowTextInput placeholder="Fecha del acto" />

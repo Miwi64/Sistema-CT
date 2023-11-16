@@ -25,9 +25,22 @@ const useStyles = makeStyles({
       display: "flex",
       width: "100%",
       flexDirection: "row",
-      paddingBottom: "10px",
+      paddingBottom: "5px",
       justifyContent: "center",
     },
+    "> .import-options-container": {
+      "@media (max-width: 1024px)": {
+        flexDirection: "column",
+        alignItems: "center"
+      }
+    },
+    "> .import-options-container > button": {
+      "@media (max-width: 1024px)": {
+        paddingTop: "15px",
+        paddingBottom: "15px",
+        width:"fit-content"
+      }
+    }
   },
 });
 
@@ -45,8 +58,8 @@ const ImportData = () => {
         <Title1 as="h1">Importar Datos</Title1>
       </div>
       <div className="import-options-container">
-        <Button appearance="subtle" icon={<Folder20Filled />}>Importar Titulos desde Excel</Button>
-        <Button appearance="subtle" icon={<Folder20Filled />}>Importar Certificados desde Excel</Button>
+        <Button as="button" appearance="subtle" icon={<Folder20Filled />}>Importar Titulos desde Excel</Button>
+        <Button as="button" appearance="subtle" icon={<Folder20Filled />}>Importar Certificados desde Excel</Button>
       </div>
       <TabList className="title-container" selectedValue={selectedValue} onTabSelect={onTabSelect}>
         <Tab id="titulo" value="titulo">
