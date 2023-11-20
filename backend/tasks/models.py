@@ -2,14 +2,14 @@ from django.db import models
 
 # Create your models here.
 class Carreras(models.Model):
-    id_carrera = models.IntegerField(primary_key=True)
-    nombre_carrera = models.CharField(max_length=45,blank=True)
+    id_carrera = models.BigAutoField(primary_key=True,auto_created=True)
+    nombre_carrera = models.CharField(max_length=45,blank=True, unique=True)
     def __str__(self):
         return self.nombre_carrera
 
 
 class Alumnos(models.Model):
-    id_alumno = models.IntegerField(primary_key=True)
+    id_alumno = models.BigAutoField(primary_key=True,auto_created=True)
     nombre = models.CharField(max_length=45, blank=True)
     apellidop = models.CharField(max_length=45, blank=True)
     apellidom = models.CharField(max_length=45, blank=True)
@@ -27,14 +27,14 @@ class Alumnos(models.Model):
 
 
 class Plan_Estudio(models.Model):
-    id_plan = models.IntegerField(primary_key=True)
+    id_plan = models.BigAutoField(primary_key=True,auto_created=True)
     nombre_plan = models.CharField(max_length=45,blank=True, unique=True)
     def __str__(self):
         return self.nombre_plan
 
 
 class Titulados(models.Model):
-    id_titulo = models.IntegerField(primary_key=True)
+    id_titulo = models.BigAutoField(primary_key=True,auto_created=True)
     num_titulo = models.IntegerField(blank=True, unique=True)
     clave_plan = models.CharField(max_length=20, blank=True)
     fecha_acto = models.DateField()
@@ -47,8 +47,8 @@ class Titulados(models.Model):
 
 
 class Certificados(models.Model):
-    id_certificado = models.IntegerField(primary_key=True)
-    num_folio = models.IntegerField(blank=True)
+    id_certificado = models.BigAutoField(primary_key=True,auto_created=True)
+    num_folio = models.IntegerField(blank=True, unique=True)
     nombre_carrera = models.CharField(max_length=20, blank=True)
     fecha_registro = models.DateField()
     observaciones = models.TextField(max_length=45, blank=True)
@@ -58,15 +58,15 @@ class Certificados(models.Model):
 
 
 class Operaciones(models.Model):
-    id_operacion = models.IntegerField(primary_key=True)
-    nombre_operacion = models.CharField(max_length=45, blank=True)
+    id_operacion = models.BigAutoField(primary_key=True,auto_created=True)
+    nombre_operacion = models.CharField(max_length=45, blank=True, unique=True)
     def __str__(self):
         return self.nombre_operacion
 
 
 
 class Rol(models.Model):
-    id_rol = models.IntegerField(primary_key=True)
+    id_rol = models.BigAutoField(primary_key=True,auto_created=True)
     nombre_rol = models.CharField(max_length=45, blank=True)
     operaciones = models.ManyToManyField(Operaciones)
     def __str__(self):
@@ -74,7 +74,7 @@ class Rol(models.Model):
 
 
 class Usuarios(models.Model):
-    id_usuario = models.IntegerField(primary_key=True)
+    id_usuario = models.BigAutoField(primary_key=True,auto_created=True)
     username = models.CharField(max_length=20, blank=True)
     password = models.CharField(max_length=20, blank=True)
     sal = models.CharField(max_length=45, blank=True)

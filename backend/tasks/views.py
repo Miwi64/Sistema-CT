@@ -66,7 +66,8 @@ class CertificadosFilter(filters.FilterSet):
 class CertificadosView(viewsets.ModelViewSet):
     serializer_class = CertificadosSerializer
     queryset = Certificados.objects.all()
-    filter_backends = CertificadosFilter
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = CertificadosFilter
 #------------------------------------------------
 
 class OperacionesView(viewsets.ModelViewSet):
