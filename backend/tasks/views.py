@@ -1,5 +1,5 @@
 from rest_framework.decorators import action
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -12,7 +12,78 @@ from django.contrib.auth import login
 from rest_framework import permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
+from knox.models import AuthToken
+
+from django.views.generic import View
+from django.http import HttpResponse
+import os
+from django.conf import settings
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 # Create your views here.
+
+#Creacion de usuarios usando knox
+class RegisterUser(generics.GenericAPIView):
+    serializer_class = CreateUserSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)[1]
+        })
+
+
+class LoginAPI(generics.GenericAPIView):
+    serializer_class = LoginUserSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data
+        return Response({
+            "user": UserSerializer(user, context=self.get_serializer_context()).data,
+            "token": AuthToken.objects.create(user)[1]
+        })
+
+
+class UserAPI(generics.RetrieveAPIView):
+    permission_classes = [permissions.IsAuthenticated, ]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        return self.request.user
+
+
+
+
+
+
+
+#Pruebas de PDF
+class PruebaPDFView(View): 
+    def get(self, request, *args, **kwargs):
+        try: 
+            template = get_template('test.html')
+            context = {'title': 'Prueba de PDF'}
+            html = template.render(context)
+            response = HttpResponse(content_type='application/pdf')
+            #response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            pisa_status = pisa.CreatePDF(
+                html, dest=response)
+            if pisa_status.err:
+                return HttpResponse('We had some errors <pre>' + html + '</pre>')
+            return response
+        except: 
+            pass
+        return HttpResponse('Error')
+
+
+
 
 class LoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)

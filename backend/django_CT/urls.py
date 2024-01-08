@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from knox import views as knox_views
 from tasks.views import LoginView
+from tasks.views import *
 # from rest_framework import routers
 # from tasks import views
 
@@ -34,9 +35,13 @@ from tasks.views import LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path(r'login/', LoginView.as_view(), name='knox_login'),
+    path('register/', RegisterUser.as_view()),
+    path('login/', LoginAPI.as_view()),
+    path('user/', UserAPI.as_view()),
+    #path(r'login/', LoginView.as_view(), name='knox_login'),
     path(r'logout/', knox_views.LogoutView.as_view(), name='knox_logout'),
     path(r'logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
+    path(r'pdf/', PruebaPDFView.as_view(), name='pdf_test'),
     path('data/', include('tasks.urls'))
 ]
 
