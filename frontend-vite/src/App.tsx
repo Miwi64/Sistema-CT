@@ -1,12 +1,21 @@
-import "./App.css";
-import { Button } from "@/components/ui/button";
+import { ThemeProvider } from "./components/themeprovider"
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import Login from "./screens/login"
+import StudentsTable from "./screens/students-table"
+import NotFound from "./screens/not-found"
 
-function App() {
+const App = () => {
   return (
-    <div>
-      <Button>Click me</Button>
-    </div>
-  );
+    <ThemeProvider defaultTheme='dark' storageKey='vite-ui-theme'>
+      <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Login/>}/>
+        <Route path="/students-table" element={<StudentsTable />} />
+        <Route path="*" element={<NotFound/>} />
+      </Routes>
+    </BrowserRouter>
+    </ThemeProvider>
+  )
 }
 
-export default App;
+export default App
