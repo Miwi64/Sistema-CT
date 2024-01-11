@@ -17,8 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from knox import views as knox_views
-from tasks.views import LoginView
 from tasks.views import *
+from tasks import views
 # from rest_framework import routers
 # from tasks import views
 
@@ -38,7 +38,7 @@ urlpatterns = [
     path('register/', RegisterUser.as_view()),
     path('login/', LoginAPI.as_view()),
     path('user/', UserAPI.as_view()),
-    #path(r'login/', LoginView.as_view(), name='knox_login'),
+    #path('aluct/', MyView.as_view(), name='consulta'),
     path(r'logout/', knox_views.LogoutView.as_view(), name='knox_logout'),
     path(r'logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
     path(r'pdf/', PruebaPDFView.as_view(), name='pdf_test'),

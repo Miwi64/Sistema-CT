@@ -1,6 +1,7 @@
 from rest_framework.decorators import action
 from rest_framework import viewsets, generics
 from rest_framework import status
+from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -15,13 +16,17 @@ from knox.views import LoginView as KnoxLoginView
 from knox.models import AuthToken
 
 from django.views.generic import View
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import os
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
+
+from django.db import connections
+#from mysql.connector import Error, query
+from django.db.models import OuterRef, CharField, Value as V
 # Create your views here.
 
 #Creacion de usuarios usando knox
@@ -57,10 +62,6 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
-
-
-
-
 
 
 
@@ -136,12 +137,24 @@ class AlumnoFilter(filters.FilterSet):
         fields = ['nombre','apellidop','apellidom','carrera','num_control','sexo','periodo_ingreso','periodo_egreso']
 
 
+
+class MyView(View):
+    serializer_class = AlumnoSerializer
+    def get(self, request):
+        resultados = Alumnos.objects\
+            .select_related('carrera_fk')\
+            .all()
+        alumnos = AlumnoSerializer(resultados, many=True)
+        return JsonResponse(alumnos.data, safe=False)
+
 class AlumnosView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = AlumnoSerializer
     queryset = Alumnos.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = AlumnoFilter
+
+    
 
     def create(self, request:Request, ):
         data = request.data.get('items', request.data)

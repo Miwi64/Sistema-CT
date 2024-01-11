@@ -8,6 +8,31 @@ class Carreras(models.Model):
         return self.nombre_carrera
 
 
+class Titulados(models.Model):
+    id_titulo = models.BigAutoField(primary_key=True,auto_created=True)
+    num_titulo = models.IntegerField(blank=True, unique=True)
+    clave_plan = models.CharField(max_length=20, blank=True)
+    fecha_acto = models.DateField()
+    fecha_registro = models.DateField()
+    num_cedula = models.IntegerField(blank=True)
+    observaciones = models.TextField(max_length=45, blank=True)
+    def __str__(self):
+        return self.num_titulo
+
+
+class Certificados(models.Model):
+    id_certificado = models.BigAutoField(primary_key=True,auto_created=True)
+    num_folio = models.IntegerField(blank=True, unique=True)
+    nombre_carrera = models.CharField(max_length=20, blank=True)
+    fecha_registro = models.DateField()
+    observaciones = models.TextField(max_length=45, blank=True)
+    def __str__(self):
+        return self.num_folio
+
+
+
+
+
 class Alumnos(models.Model):
     id_alumno = models.BigAutoField(primary_key=True,auto_created=True)
     nombre = models.CharField(max_length=45, blank=True)
@@ -22,6 +47,8 @@ class Alumnos(models.Model):
     estado_nacimiento = models.CharField(max_length=45, blank=True)
     fecha_nacimiento = models.DateField()
     carrera_fk = models.ForeignKey(Carreras, on_delete=models.CASCADE)
+    titulo_fk = models.ForeignKey(Titulados, blank=True, null=True, on_delete=models.CASCADE, )
+    certificado_fk = models.ForeignKey(Certificados, blank=True, null=True, on_delete=models.CASCADE)
     def __str__(self) -> str:
         return f"{self.nombre} {self.apellidop} {self.apellidom}"
 
@@ -32,29 +59,6 @@ class Plan_Estudio(models.Model):
     def __str__(self):
         return self.nombre_plan
 
-
-class Titulados(models.Model):
-    id_titulo = models.BigAutoField(primary_key=True,auto_created=True)
-    num_titulo = models.IntegerField(blank=True, unique=True)
-    clave_plan = models.CharField(max_length=20, blank=True)
-    fecha_acto = models.DateField()
-    fecha_registro = models.DateField()
-    num_cedula = models.IntegerField(blank=True)
-    observaciones = models.TextField(max_length=45, blank=True)
-    alumno_fk = models.ForeignKey(Alumnos, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.num_titulo
-
-
-class Certificados(models.Model):
-    id_certificado = models.BigAutoField(primary_key=True,auto_created=True)
-    num_folio = models.IntegerField(blank=True, unique=True)
-    nombre_carrera = models.CharField(max_length=20, blank=True)
-    fecha_registro = models.DateField()
-    observaciones = models.TextField(max_length=45, blank=True)
-    alumno_fk = models.ForeignKey(Alumnos, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.num_folio
 
 
 class Operaciones(models.Model):
