@@ -23,6 +23,8 @@ import { useState } from "react"
 import { DataTablePagination } from "../datatable/datatable-pagination"
 import { DataTableViewOptions } from "../datatable/datatable-view-options"
 import DataTableSearch from "../datatable/datatable-search"
+import { Menubar, MenubarCheckboxItem, MenubarContent, MenubarItem, MenubarMenu, MenubarRadioGroup, MenubarRadioItem, MenubarSeparator, MenubarShortcut, MenubarSub, MenubarSubContent, MenubarSubTrigger, MenubarTrigger } from "./menubar"
+import { RibbonToolbar } from "../datatable/ribbon-toolbar"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -67,11 +69,8 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
-        <DataTableSearch table={table} />
-        <DataTableViewOptions table={table} />
-      </div>
-      <div className="rounded-md border">
+      <RibbonToolbar table={table} />
+      <div className="rounded-md mt-4 border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -13,12 +13,12 @@ export function DataTablePagination<TData>({
 }: DataTablePaginationProps<TData>) {
     return (
         <div className="flex items-center justify-between px-2 mt-4">
-            <div className="flex-1 text-sm text-muted-foreground">
+            <div className="hidden sm:block flex-1 text-sm text-muted-foreground">
                 {table.getFilteredSelectedRowModel().rows.length} de{" "}
                 {table.getFilteredRowModel().rows.length} fila(s) seleccionadas.
             </div>
             <div className="flex items-center space-x-6 lg:space-x-8">
-                <div className="flex items-center space-x-2">
+                <div className="hidden md:flex items-center space-x-2">
                     <p className="text-sm font-medium">Filas por página</p>
                     <Select
                         value={`${table.getState().pagination.pageSize}`}

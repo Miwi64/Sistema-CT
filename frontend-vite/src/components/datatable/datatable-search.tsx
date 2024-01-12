@@ -9,15 +9,15 @@ export function DataTableSearch<TData>({
     table,
 }: DataTableViewOptionsProps<TData>) {
     return (
-            <div className="w-full lg:max-w-6xl">
+            <div className="min-w-[200px] max-w-md">
                 <div className="absolute p-2 text-muted-foreground">
                     <Search size={18} />
                 </div>
                 <Input
                     placeholder="Buscar por número de control..."
-                    value={(table.getColumn("numeroControl")?.getFilterValue() as string) ?? ""}
+                    value={(table.getColumn("num_control")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("numeroControl")?.setFilterValue(event.target.value)
+                        table.getColumn("num_control")?.setFilterValue(event.target.value)
                     }
                     className="w-full pl-9"
                 />
