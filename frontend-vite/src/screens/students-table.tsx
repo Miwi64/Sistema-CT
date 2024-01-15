@@ -166,12 +166,14 @@ export default function StudentsTable() {
     loadData()
   }, []);
   return (
-    <div className="container mx-auto pb-5">
+    <div>
       <div className="top-0 sticky z-20">
         <NavMenu />
         <RibbonToolbar table={table} />
       </div>
-      <DataTable table={table} />
+      <div className="px-5">
+        <DataTable table={table} />
+      </div>
     </div>
   )
 }

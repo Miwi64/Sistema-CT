@@ -1,4 +1,4 @@
-import { ArrowLeftToLine, ArrowRightToLine, BookText, BookType, BookUser, CalendarIcon, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, Columns3, Contact, File, Filter, GraduationCap, Home, Pencil, Plus, Save, ScrollText, Search, Trash2, Users, XSquare } from "lucide-react"
+import { ArrowLeftToLine, ArrowRightToLine, BookText, BookType, BookUser, CalendarIcon, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, Columns3, Contact, File, Filter, GraduationCap, Home, Pencil, Plus, Printer, Save, ScrollText, Search, Trash2, Users, XSquare } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
@@ -119,7 +119,7 @@ export function RibbonToolbar<TData>({
   return (
     <Tabs defaultValue="Inicio" className="min-w-[200px]">
       <TabsList className="w-full rounded-t-lg rounded-b-none flex flex-row justify-start 
-      items-center overflow-x-auto">
+      items-center overflow-x-auto overflow-y-visible">
         <TabsTrigger value="Inicio"><Home size={14} className="mr-2" />Inicio</TabsTrigger>
         <TabsTrigger value="Filtrar"><Filter size={14} className="mr-2" />Filtrar</TabsTrigger>
         <TabsTrigger value="Pagina"><File size={14} className="mr-2" />Página</TabsTrigger>
@@ -130,7 +130,7 @@ export function RibbonToolbar<TData>({
 
       <TabsContent className="mt-0" value="Inicio">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
-        px-4 py-3 border bg-card text-card-foreground shadow">
+        px-4 py-3 border bg-card text-card-foreground shadow-md">
           <div className="hidden md:block"><DataTableSearch table={table} /></div>
           <Popover>
             <PopoverTrigger asChild>
@@ -172,7 +172,7 @@ export function RibbonToolbar<TData>({
 
       <TabsContent className="mt-0" value="Filtrar">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
-        rounded-md px-4 py-3 border bg-card text-card-foreground shadow">
+        rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md">
           <Button variant="outline">
             <Plus className="sm:mr-2 h-5 w-5" />
             <span className="sm:block hidden">Agregar</span>
@@ -280,7 +280,7 @@ export function RibbonToolbar<TData>({
 
       <TabsContent className="mt-0" value="Pagina">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
-        rounded-md px-4 py-3 border bg-card text-card-foreground shadow">
+        rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md">
           <div className="flex items-center space-x-6 lg:space-x-8">
             <div className="flex items-center space-x-2">
               <p className="text-sm font-medium">Filas</p>
@@ -304,6 +304,12 @@ export function RibbonToolbar<TData>({
             </div>
           </div>
           <div className="flex items-center space-x-2">
+          <Button
+              variant="outline"
+            >
+              <Printer className="sm:mr-2 h-5 w-5" />
+              <span className="hidden sm:block">Imprimir</span>
+            </Button>
             <Button
               variant="outline"
               onClick={() => table.setPageIndex(0)}
@@ -342,7 +348,7 @@ export function RibbonToolbar<TData>({
 
       <TabsContent className="mt-0" value="Ver">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
-        rounded-md px-4 py-3 border bg-card text-card-foreground shadow">
+        rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
@@ -415,7 +421,7 @@ export function RibbonToolbar<TData>({
 
       <TabsContent className="mt-0" value="Seleccion">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
-        rounded-md px-4 py-3 border bg-card text-card-foreground shadow">
+        rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md">
           <Button variant="outline">
             <Pencil className="sm:mr-2 h-5 w-5" />
             <span className="hidden sm:block">Editar</span>
