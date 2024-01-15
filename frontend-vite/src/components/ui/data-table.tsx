@@ -1,14 +1,7 @@
 import {
   ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
+  Table as ReactTable,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
 } from "@tanstack/react-table";
 
 import {
@@ -19,68 +12,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useState } from "react";
 import { DataTablePagination } from "../datatable/datatable-pagination";
-import { DataTableViewOptions } from "../datatable/datatable-view-options";
-import DataTableSearch from "../datatable/datatable-search";
-import {
-  Menubar,
-  MenubarCheckboxItem,
-  MenubarContent,
-  MenubarItem,
-  MenubarMenu,
-  MenubarRadioGroup,
-  MenubarRadioItem,
-  MenubarSeparator,
-  MenubarShortcut,
-  MenubarSub,
-  MenubarSubContent,
-  MenubarSubTrigger,
-  MenubarTrigger,
-} from "./menubar";
-import { RibbonToolbar } from "../datatable/ribbon-toolbar";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps<TData> {
+  table: ReactTable<TData>;
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = useState({});
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    initialState: {
-      pagination: {
-        pageSize: 50,
-      },
-    },
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-
+export function DataTable<TData>({
+  table,
+}: DataTableProps<TData>) {
   return (
-    <div>
-      <RibbonToolbar table={table} />
       <div className="rounded-md mt-4 border">
         <Table>
           <TableHeader>
@@ -121,7 +62,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell
-                  colSpan={columns.length}
+                  
                   className="h-24 text-center"
                 >
                   Sin datos para mostrar.
@@ -130,8 +71,7 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
+        <DataTablePagination table={table} />
       </div>
-      <DataTablePagination table={table} />
-    </div>
   );
 }
