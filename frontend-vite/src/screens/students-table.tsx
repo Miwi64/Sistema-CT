@@ -165,7 +165,8 @@ export default function StudentsTable() {
         },
       ];
       setData(res);
-      // Fetch para la informacion
+
+      // Este codigo es el que nos funciono el Viernes
       /* const res = await fetch("http://localhost:8000/data/api/v1/alumnos/", {
         method: "GET",
         headers: {
