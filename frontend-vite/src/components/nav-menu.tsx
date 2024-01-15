@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -9,11 +9,19 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu"
-import { BookType, Edit2, Home, LogOut, ScrollText, Settings, User } from "lucide-react"
-import { Avatar, AvatarFallback } from "./ui/avatar"
-import { ModeToggle } from "./mode-toggle"
-import { Button } from "./ui/button"
+} from "@/components/ui/navigation-menu";
+import {
+  BookType,
+  Edit2,
+  Home,
+  LogOut,
+  ScrollText,
+  Settings,
+  User,
+} from "lucide-react";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { ModeToggle } from "./mode-toggle";
+import { Button } from "./ui/button";
 
 export function NavMenu() {
   return (
@@ -31,8 +39,24 @@ export function NavMenu() {
             <NavigationMenuTrigger>Agregar</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-1 p-2 md:w-[300px]">
-                <ListItem href="#" title={<div className="flex items-center gap-2"><ScrollText size={18} />Certificado</div>} />
-                <ListItem href="#" title={<div className="flex items-center gap-2"><BookType size={18} />Título</div>} />
+                <ListItem
+                  href="/certificate-form"
+                  title={
+                    <div className="flex items-center gap-2">
+                      <ScrollText size={18} />
+                      Certificado
+                    </div>
+                  }
+                />
+                <ListItem
+                  href="/title-form"
+                  title={
+                    <div className="flex items-center gap-2">
+                      <BookType size={18} />
+                      Título
+                    </div>
+                  }
+                />
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
@@ -40,13 +64,16 @@ export function NavMenu() {
             <NavigationMenuTrigger>Importar/Exportar</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-2 p-2 md:w-[400px]">
-                <ListItem href="#" title="Importar títulos">
+                <ListItem href="/title-import" title="Importar títulos">
                   Desde un archivo de Excel.
                 </ListItem>
-                <ListItem href="#" title="Importar certificados">
+                <ListItem
+                  href="/certificate-import"
+                  title="Importar certificados"
+                >
                   Desde un archivo de Excel.
                 </ListItem>
-                <ListItem href="#" title="Exportar">
+                <ListItem href="/export" title="Exportar">
                   Elaborar reporte de Excel y/o PDF.
                 </ListItem>
               </ul>
@@ -56,7 +83,7 @@ export function NavMenu() {
             <NavigationMenuTrigger>
               <Avatar className="h-[1.5rem] w-[1.5rem] mr-3">
                 <AvatarFallback>
-                  <User size={14}/>
+                  <User size={14} />
                 </AvatarFallback>
               </Avatar>
               Cuenta
@@ -85,10 +112,26 @@ export function NavMenu() {
                     </a>
                   </NavigationMenuLink>
                 </li>
-                <ListItem href="#" title={<div className="flex items-center gap-2"><Edit2 size={18} />Editar perfil</div>}>
+                <ListItem
+                  href="/profile"
+                  title={
+                    <div className="flex items-center gap-2">
+                      <Edit2 size={18} />
+                      Editar perfil
+                    </div>
+                  }
+                >
                   Nombre, contraseña.
                 </ListItem>
-                <ListItem href="#" title={<div className="flex items-center gap-2"><LogOut size={18} />Cerrar sesión</div>}>
+                <ListItem
+                  href="/"
+                  title={
+                    <div className="flex items-center gap-2">
+                      <LogOut size={18} />
+                      Cerrar sesión
+                    </div>
+                  }
+                >
                   Regresar a inicio de sesión.
                 </ListItem>
               </ul>
@@ -98,12 +141,14 @@ export function NavMenu() {
       </NavigationMenu>
       <div className="flex">
         <ModeToggle />
-        <Button variant="ghost" size="icon">
-          <Settings className="h-[1.2rem] w-[1.2rem]" />
+        <Button variant="ghost" size="icon" asChild>
+          <a href="/settings">
+            <Settings className="h-[1.2rem] w-[1.2rem]" />
+          </a>
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 const ListItem = React.forwardRef<
@@ -121,7 +166,6 @@ const ListItem = React.forwardRef<
           )}
           {...props}
         >
-
           <div className="text-sm font-medium leading-none">{title}</div>
           <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
@@ -129,6 +173,6 @@ const ListItem = React.forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
-ListItem.displayName = "ListItem"
+  );
+});
+ListItem.displayName = "ListItem";
