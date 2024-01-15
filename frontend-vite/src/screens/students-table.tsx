@@ -1,18 +1,21 @@
-import { Student, columns } from "@/lib/columns"
-import { DataTable } from "../components/ui/data-table"
+import { Student, columns } from "@/lib/columns";
+import { DataTable } from "../components/ui/data-table";
 import { useEffect, useState } from "react";
 import {
-  ColumnFiltersState, SortingState, VisibilityState,
-  getCoreRowModel, getFilteredRowModel, getPaginationRowModel,
-  getSortedRowModel, useReactTable
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
 import { RibbonToolbar } from "@/components/datatable/ribbon-toolbar";
 import { NavMenu } from "@/components/nav-menu";
 
-
-
 export default function StudentsTable() {
-  const [data, setData] = useState<Student[]>([])
+  const [data, setData] = useState<Student[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -160,10 +163,24 @@ export default function StudentsTable() {
           num_cedula: "CBI2022010",
           observaciones_tit: "Título expedido sin problemas",
         },
-      ]
-      setData(res)
-    }
-    loadData()
+      ];
+      setData(res);
+      // Fetch para la informacion
+      /* const res = await fetch("http://localhost:8000/data/api/v1/alumnos/", {
+        method: "GET",
+        headers: {
+          Authorization:
+            "Token " +
+            "eb4427e7a4dccde05299d0740be43ae1738b646890c69ab04de9aacc6ed3019e",
+        },
+      });
+
+      const object = await res.json();
+      console.log(object.results);
+
+      setData(object.results); */
+    };
+    loadData();
   }, []);
   return (
     <div>
@@ -175,5 +192,5 @@ export default function StudentsTable() {
         <DataTable table={table} />
       </div>
     </div>
-  )
+  );
 }
