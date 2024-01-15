@@ -27,6 +27,7 @@ from django.contrib.staticfiles import finders
 from django.db import connections
 #from mysql.connector import Error, query
 from django.db.models import OuterRef, CharField, Value as V
+from rest_framework.pagination import PageNumberPagination
 # Create your views here.
 
 #Creacion de usuarios usando knox
@@ -147,10 +148,27 @@ class MyView(View):
         alumnos = AlumnoSerializer(resultados, many=True)
         return JsonResponse(alumnos.data, safe=False)
 
+
+class CustomPagination(PageNumberPagination):
+    page_size= 50
+    page_size_query_param = 'limit'
+    def get_paginated_response(self, data):
+        return Response({
+            'total_count': self.page.paginator.count,
+            'current_page': self.page.number,
+            'total_pages': self.page.paginator.num_pages,
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
+            'first': 'http://localhost:8000/data/api/v1/alumnos/',
+            'last': 'http://localhost:8000/data/api/v1/alumnos/?page=last',
+            'results': data
+        })
+
 class AlumnosView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = AlumnoSerializer
     queryset = Alumnos.objects.all()
+    pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = AlumnoFilter
 
