@@ -7,12 +7,12 @@ interface PageLayoutProps {
 
 const PageLayout = ({ children }: PageLayoutProps) => {
   return (
-    <div>
-      <div className="top-0 sticky z-20">
+    <>
+      <nav className="top-0 sticky z-20">
         <NavMenu />
-      </div>
-      <div className="px-5">{children}</div>
-    </div>
+      </nav>
+      <main className="px-5">{children}</main>
+    </>
   );
 };
 
