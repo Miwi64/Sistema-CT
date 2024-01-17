@@ -19,3 +19,13 @@ export const STATES = [
     { text: 'Durango', value: 'durango' },
     { text: 'Guanajuato', value: 'guanajuato' }
 ]
+
+export const REPORTS:{[key:string]:string} = {
+    gob: "Gobierno del estado",
+    est911: "Estadística 911"
+}
+
+export const FORMATS:{[key:string]:string} = {
+    pdf: "Archivo PDF",
+    xls: "Archivo de Excel (xlsx)"
+}
