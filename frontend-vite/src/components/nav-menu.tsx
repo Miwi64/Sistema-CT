@@ -25,7 +25,7 @@ import { Button } from "./ui/button";
 
 export function NavMenu() {
   return (
-    <div className="hidden md:flex justify-between pl-3 w-full py-2">
+    <div className="hidden md:flex justify-between pl-1 w-full py-2">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
