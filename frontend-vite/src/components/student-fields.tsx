@@ -20,6 +20,19 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         <>
             <FormField
                 control={form.control}
+                name="num_control"
+                render={({ field }) => (
+                    <FormItem className="">
+                        <FormLabel>Número de control</FormLabel>
+                        <FormControl>
+                            <Input placeholder="Número de control" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
+            <FormField
+                control={form.control}
                 name="nombre"
                 render={({ field }) => (
                     <FormItem className="">
@@ -105,7 +118,7 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
                             <SelectContent>
                                 {STATES.map((
                                     { value, text }, key) =>
-                                    (<SelectItem value={value}>{text}</SelectItem>))}
+                                    (<SelectItem key={key} value={value}>{text}</SelectItem>))}
                             </SelectContent>
                         </Select>
                         <FormMessage />
@@ -159,9 +172,9 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
                 name="periodo_ingreso"
                 render={({ field }) => (
                     <FormItem className="">
-                        <FormLabel>Periódo de ingreso</FormLabel>
+                        <FormLabel>Periodo de ingreso</FormLabel>
                         <FormControl>
-                            <Input placeholder="Periódo de ingreso" {...field} />
+                            <Input placeholder="Periodo de ingreso" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -172,9 +185,9 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
                 name="periodo_egreso"
                 render={({ field }) => (
                     <FormItem className="">
-                        <FormLabel>Periódo de egreso</FormLabel>
+                        <FormLabel>Periodo de egreso</FormLabel>
                         <FormControl>
-                            <Input placeholder="Periódo de egreso" {...field} />
+                            <Input placeholder="Periodo de egreso" {...field} />
                         </FormControl>
                         <FormMessage />
                     </FormItem>

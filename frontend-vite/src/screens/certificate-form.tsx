@@ -11,12 +11,13 @@ import { CARREERS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
-import { CalendarIcon, LogIn } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod"
 
 const formSchema = z.object({
-  num_control: z.string().min(8, "Mínimo 8 caracteres").max(10, "Máximo 10 caracteres"),
+  num_control: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
+  .pipe(z.string().min(8, { message: "Minimo 8 caracteres" }).max(10, "Máximo 10 caracteres")),
   nombre: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
     .pipe(z.string().min(1, { message: "Campo requerido" }).max(50, "Máximo 50 caracteres")),
   apellidop: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
@@ -88,7 +89,7 @@ const CertificateForm = () => {
                       <SelectContent>
                         {CARREERS.map((
                           { value, text }, key) =>
-                          (<SelectItem value={value}>{text}</SelectItem>))}
+                          (<SelectItem key={key} value={value}>{text}</SelectItem>))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
