@@ -13,11 +13,10 @@ import {
 } from "@tanstack/react-table";
 import { RibbonToolbar } from "@/components/datatable/ribbon-toolbar";
 import { NavMenu } from "@/components/nav-menu";
-import { useToken } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 
 export default function StudentsTable() {
-  const is = useToken();
+  const navigate = useNavigate();
   const [data, setData] = useState<Student[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -50,11 +49,6 @@ export default function StudentsTable() {
 
   useEffect(() => {
     const loadData = async () => {
-      /*       console.log(is);
-      if (is) {
-        console.log("Token caducada");
-      } */
-
       //const res = getAllStudents()
       /* const res = [
         {
@@ -183,8 +177,13 @@ export default function StudentsTable() {
         },
       });
 
+      if (!res.ok) {
+        //console.log(is);
+        navigate("/");
+      }
+
       const object = await res.json();
-      console.log(object.results);
+      //console.log(object.results);
 
       setData(object.results);
     };

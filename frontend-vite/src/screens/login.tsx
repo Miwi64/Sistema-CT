@@ -52,16 +52,14 @@ const Login = () => {
     });
 
     if (!res.ok) {
-      throw new Error("Error: " + res.status);
+      throw new Error(res.status + " Credenciales Incorrectas");
     }
 
     const object = await res.json();
-    const { token, expiry } = object;
+    const { token } = object;
     //console.log(token);
     localStorage.setItem("jwt", token);
-    localStorage.setItem("exp", expiry);
     //console.log(values);
-    //console.log(object.expiry);
     navigate("/students-table");
   };
   const imgUrl = new URL("../assets/558866.jpg", import.meta.url).href;

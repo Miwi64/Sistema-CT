@@ -55,12 +55,9 @@ class LoginAPI(generics.GenericAPIView):
         user = serializer.validated_data
         data = UserSerializer(user, context=self.get_serializer_context()).data
         token = AuthToken.objects.create(user)[1]
-        tokendata = AuthToken.objects.get(user=user)
-        exp = tokendata.expiry
         return Response({
             "user": data,
-            "token": token,
-            "expiry": exp,
+            "token": token
         })
 
 
