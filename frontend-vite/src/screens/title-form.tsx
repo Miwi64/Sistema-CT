@@ -6,6 +6,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { CARREERS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -63,7 +64,8 @@ const TitleForm = () => {
             <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <StudentFields form={form} />
             </section>
-            <h2 className="my-5 text-lg leading-none tracking-tight">Datos del Título</h2>
+            <Separator className="my-8"/>
+            <h2 className="mb-5 text-lg leading-none tracking-tight">Datos del título</h2>
             <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <FormField
                 control={form.control}

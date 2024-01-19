@@ -13,15 +13,22 @@ import {
 import {
   BookType,
   Edit2,
-  Home,
+  FileDown,
+  FileUp,
   LogOut,
+  Menu,
+  Plus,
   ScrollText,
   Settings,
+  Table,
   User,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
+import { Label } from "./ui/label";
+import { Separator } from "./ui/separator";
 
 export function NavMenu() {
   return (
@@ -29,11 +36,9 @@ export function NavMenu() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <a href="/students-table">
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              <NavigationMenuLink href="/students-table" className={navigationMenuTriggerStyle()}>
                 Tabla
               </NavigationMenuLink>
-            </a>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuTrigger>Agregar</NavigationMenuTrigger>
@@ -176,3 +181,99 @@ const ListItem = React.forwardRef<
   );
 });
 ListItem.displayName = "ListItem";
+
+export function NavMobile() {
+  return (
+    <div className="pt-2 pl-3 bg-background md:hidden w-full">
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <Menu className="h-[1.2rem] w-[1.2rem]" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="overflow-y-auto">
+          <SheetHeader className="text-left mb-2">
+            <SheetTitle>Sistema Títulos y Certificados</SheetTitle>
+          </SheetHeader>
+          <Separator />
+          <div className="my-2 flex flex-col gap-3">
+            <Button variant="ghost" className="justify-start text-lg" asChild>
+              <a href="/">
+                <Table size={20} className="mr-2" />
+                Tabla
+              </a>
+            </Button>
+            <div>
+              <div className="px-4 flex flex-row items-center mb-2 text-muted-foreground">
+                <Plus size={20} className="mr-2" />
+                <Label className="text-lg">
+                  Agregar
+                </Label>
+              </div>
+              <Separator />
+              <div className="ml-10 flex flex-col">
+                <Button variant="ghost" className="justify-start text-md" asChild>
+                  <a href="/certificate-form">
+                    Certificado
+                  </a>
+                </Button>
+                <Button variant="ghost" className="justify-start text-md" asChild>
+                  <a href="/title-form">
+                    Título
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <div>
+              <div className="px-4 flex flex-row items-center mb-2 text-muted-foreground">
+                <FileUp size={20} className="mr-2" />
+                <Label className="text-lg">
+                  Importar
+                </Label>
+              </div>
+              <Separator />
+              <div className="ml-10 flex flex-col">
+                <Button variant="ghost" className="justify-start text-md" asChild>
+                  <a href="/certificate-import">
+                    Certificado
+                  </a>
+                </Button>
+                <Button variant="ghost" className="justify-start text-md" asChild>
+                  <a href="/title-import">
+                    Título
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <Button variant="ghost" className="justify-start text-lg" asChild>
+              <a href="/export">
+                <FileDown size={20} className="mr-2" />
+                Exportar
+              </a>
+            </Button>
+
+            <Button variant="ghost" className="justify-start text-lg" asChild>
+              <a href="/profile">
+                <Avatar className="w-[22px] h-[22px] mr-2">
+                  <AvatarFallback>
+                    <User size={14} />
+                  </AvatarFallback>
+                </Avatar>
+                Cuenta
+              </a>
+            </Button>
+
+            <Button variant="ghost" className="justify-start text-lg" asChild>
+              <a href="/settings">
+                <Settings size={20} className="mr-2" />
+                Configuración
+              </a>
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
+}
