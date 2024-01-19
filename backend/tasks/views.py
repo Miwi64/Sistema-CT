@@ -14,6 +14,8 @@ from rest_framework import permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from knox.models import AuthToken
+from django.utils import timezone
+from django.utils.timezone import timedelta
 
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
@@ -51,9 +53,14 @@ class LoginAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
+        data = UserSerializer(user, context=self.get_serializer_context()).data
+        token = AuthToken.objects.create(user)[1]
+        tokendata = AuthToken.objects.get(user=user)
+        exp = tokendata.expiry
         return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1]
+            "user": data,
+            "token": token,
+            "expiry": exp,
         })
 
 

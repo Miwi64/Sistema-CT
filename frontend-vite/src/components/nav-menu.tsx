@@ -129,6 +129,16 @@ export function NavMenu() {
                   Nombre, contraseña.
                 </ListItem>
                 <ListItem
+                  onClick={async () => {
+                    const AuthToken = localStorage.getItem("jwt");
+                    await fetch("http://localhost:8000/logout/", {
+                      method: "POST",
+                      headers: {
+                        Authorization: "Token " + AuthToken,
+                      },
+                    });
+                    localStorage.removeItem("jwt");
+                  }}
                   href="/"
                   title={
                     <div className="flex items-center gap-2">

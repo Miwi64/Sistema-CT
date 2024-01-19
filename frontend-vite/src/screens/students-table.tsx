@@ -13,8 +13,11 @@ import {
 } from "@tanstack/react-table";
 import { RibbonToolbar } from "@/components/datatable/ribbon-toolbar";
 import { NavMenu } from "@/components/nav-menu";
+import { useToken } from "@/lib/utils";
+import { useNavigate } from "react-router-dom";
 
 export default function StudentsTable() {
+  const is = useToken();
   const [data, setData] = useState<Student[]>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -47,8 +50,13 @@ export default function StudentsTable() {
 
   useEffect(() => {
     const loadData = async () => {
+      /*       console.log(is);
+      if (is) {
+        console.log("Token caducada");
+      } */
+
       //const res = getAllStudents()
-      const res = [
+      /* const res = [
         {
           num_control: "2022001",
           nombre: "Carlos",
@@ -164,22 +172,21 @@ export default function StudentsTable() {
           observaciones_tit: "Título expedido sin problemas",
         },
       ];
-      setData(res);
+      setData(res); */
 
+      const AuthToken = localStorage.getItem("jwt");
       // Este codigo es el que nos funciono el Viernes
-      /* const res = await fetch("http://localhost:8000/data/api/v1/alumnos/", {
+      const res = await fetch("http://localhost:8000/data/api/v1/alumnos/", {
         method: "GET",
         headers: {
-          Authorization:
-            "Token " +
-            "eb4427e7a4dccde05299d0740be43ae1738b646890c69ab04de9aacc6ed3019e",
+          Authorization: "Token " + AuthToken,
         },
       });
 
       const object = await res.json();
       console.log(object.results);
 
-      setData(object.results); */
+      setData(object.results);
     };
     loadData();
   }, []);
