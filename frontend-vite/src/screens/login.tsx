@@ -23,6 +23,7 @@ import {
 import { ModeToggle } from "../components/mode-toggle";
 import { useNavigate } from "react-router-dom";
 import { getExpires } from "@/lib/utils";
+import { useEffect } from "react";
 
 const formSchema = z.object({
   username: z
@@ -39,6 +40,25 @@ const formSchema = z.object({
 
 const Login = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const AuthToken = localStorage.getItem("jwt");
+      const res = await fetch("http://localhost:8000/data/api/v1/usuarios/", {
+        method: "GET",
+        headers: {
+          Authorization: "Token " + AuthToken,
+        },
+      });
+
+      if (res.ok) {
+        //console.log(is);
+        navigate("/students-table");
+      }
+    };
+    checkToken();
+  }, []);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const res = await fetch("http://localhost:8000/login/", {
       method: "POST",
