@@ -36,9 +36,9 @@ export function NavMenu() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-              <NavigationMenuLink href="/students-table" className={navigationMenuTriggerStyle()}>
-                Tabla
-              </NavigationMenuLink>
+            <NavigationMenuLink href="/students-table" className={navigationMenuTriggerStyle()}>
+              Tabla
+            </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuTrigger>Agregar</NavigationMenuTrigger>
@@ -46,21 +46,11 @@ export function NavMenu() {
               <ul className="grid gap-1 p-2 md:w-[300px]">
                 <ListItem
                   href="/certificate-form"
-                  title={
-                    <div className="flex items-center gap-2">
-                      <ScrollText size={18} />
-                      Certificado
-                    </div>
-                  }
+                  title="Certificado"
                 />
                 <ListItem
                   href="/title-form"
-                  title={
-                    <div className="flex items-center gap-2">
-                      <BookType size={18} />
-                      Título
-                    </div>
-                  }
+                  title="Título"
                 />
               </ul>
             </NavigationMenuContent>
@@ -119,12 +109,7 @@ export function NavMenu() {
                 </li>
                 <ListItem
                   href="/profile"
-                  title={
-                    <div className="flex items-center gap-2">
-                      <Edit2 size={18} />
-                      Editar perfil
-                    </div>
-                  }
+                  title="Editar perfil"
                 >
                   Nombre, contraseña.
                 </ListItem>
@@ -140,12 +125,7 @@ export function NavMenu() {
                     localStorage.removeItem("jwt");
                   }}
                   href="/"
-                  title={
-                    <div className="flex items-center gap-2">
-                      <LogOut size={18} />
-                      Cerrar sesión
-                    </div>
-                  }
+                  title="Cerrar Sesión"
                 >
                   Regresar a inicio de sesión.
                 </ListItem>
@@ -165,32 +145,6 @@ export function NavMenu() {
     </div>
   );
 }
-
-const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
-      </NavigationMenuLink>
-    </li>
-  );
-});
-ListItem.displayName = "ListItem";
 
 export function NavMobile() {
   return (
@@ -287,3 +241,29 @@ export function NavMobile() {
     </div>
   );
 }
+
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";
