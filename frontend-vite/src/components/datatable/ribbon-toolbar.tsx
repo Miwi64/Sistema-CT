@@ -188,7 +188,7 @@ export function RibbonToolbar<TData>({
               <DropdownMenuLabel>Mostrar</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {careers.map((career, index) => (
-                <DropdownMenuCheckboxItem checked={career.value} onCheckedChange={
+                <DropdownMenuCheckboxItem key={index} checked={career.value} onCheckedChange={
                   (checked) => {
                     const newArray = [...careers];
                     newArray[index].value = checked;
