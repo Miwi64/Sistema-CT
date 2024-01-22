@@ -11,7 +11,7 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import {
-  BookType,
+  BookText,
   Edit2,
   FileDown,
   FileUp,
@@ -68,8 +68,8 @@ export function NavMenu() {
                 >
                   Desde un archivo de Excel.
                 </ListItem>
-                <ListItem href="/export" title="Exportar">
-                  Elaborar reporte de Excel y/o PDF.
+                <ListItem href="/export" title="Crear reporte">
+                  Elaborar reporte de Excel o PDF.
                 </ListItem>
               </ul>
             </NavigationMenuContent>
@@ -152,95 +152,93 @@ export function NavMobile() {
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon">
-            <Menu className="h-[1.2rem] w-[1.2rem]" />
+            <Menu className="h-[1.5rem] w-[1.5rem]" />
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="overflow-y-auto">
-          <SheetHeader className="text-left mb-2">
-            <SheetTitle>Sistema Títulos y Certificados</SheetTitle>
+        <SheetContent side="left" className="overflow-y-auto p-0">
+          <SheetHeader>
+            <div
+              className="flex h-full w-full flex-col justify-end 
+              bg-gradient-to-b from-muted/20 to-muted py-4 no-underline 
+              focus:shadow-md text-center"
+            >
+              <div className="w-full flex justify-center">
+                <a href="/profile">
+                  <Avatar className="w-[60px] h-[60px]">
+                    <AvatarFallback>
+                      <User size={30} />
+                    </AvatarFallback>
+                  </Avatar>
+                </a>
+              </div>
+              <div className="my-2 text-lg font-medium">
+                Usuario1
+                <p className="text-sm leading-tight text-muted-foreground">
+                  Administrador
+                </p>
+              </div>
+              <div className="w-full flex justify-center gap-2">
+                <Button variant="outline" asChild>
+                  <a href="/profile"><Edit2 size={20} /></a>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a href="/"><LogOut size={20} /></a>
+                </Button>
+                <Button variant="outline" asChild>
+                  <a href="/settings"><Settings size={20} /></a>
+                </Button>
+              </div>
+            </div>
           </SheetHeader>
-          <Separator />
-          <div className="my-2 flex flex-col gap-3">
-            <Button variant="ghost" className="justify-start text-lg" asChild>
-              <a href="/">
-                <Table size={20} className="mr-2" />
-                Tabla
-              </a>
-            </Button>
-            <div>
-              <div className="px-4 flex flex-row items-center mb-2 text-muted-foreground">
-                <Plus size={20} className="mr-2" />
-                <Label className="text-lg">
-                  Agregar
-                </Label>
-              </div>
-              <Separator />
-              <div className="ml-10 flex flex-col">
-                <Button variant="ghost" className="justify-start text-md" asChild>
-                  <a href="/certificate-form">
-                    Certificado
-                  </a>
-                </Button>
-                <Button variant="ghost" className="justify-start text-md" asChild>
-                  <a href="/title-form">
-                    Título
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            <div>
-              <div className="px-4 flex flex-row items-center mb-2 text-muted-foreground">
-                <FileUp size={20} className="mr-2" />
-                <Label className="text-lg">
-                  Importar
-                </Label>
-              </div>
-              <Separator />
-              <div className="ml-10 flex flex-col">
-                <Button variant="ghost" className="justify-start text-md" asChild>
-                  <a href="/certificate-import">
-                    Certificado
-                  </a>
-                </Button>
-                <Button variant="ghost" className="justify-start text-md" asChild>
-                  <a href="/title-import">
-                    Título
-                  </a>
-                </Button>
-              </div>
-            </div>
-
-            <Button variant="ghost" className="justify-start text-lg" asChild>
-              <a href="/export">
-                <FileDown size={20} className="mr-2" />
-                Exportar
-              </a>
-            </Button>
-
-            <Button variant="ghost" className="justify-start text-lg" asChild>
-              <a href="/profile">
-                <Avatar className="w-[22px] h-[22px] mr-2">
-                  <AvatarFallback>
-                    <User size={14} />
-                  </AvatarFallback>
-                </Avatar>
-                Cuenta
-              </a>
-            </Button>
-
-            <Button variant="ghost" className="justify-start text-lg" asChild>
-              <a href="/settings">
-                <Settings size={20} className="mr-2" />
-                Configuración
-              </a>
-            </Button>
+          <div className="px-4 py-6 grid grid-cols-3 text-muted-foreground gap-3">
+            {navLinks.map(({ title, icon, path }, index) => (
+              <Button variant="ghost" className="flex-col h-auto gap-2 
+              text-center whitespace-normal" asChild>
+                <a href={path}>
+                  {icon}
+                  {title}
+                </a>
+              </Button>
+            ))}
           </div>
         </SheetContent>
       </Sheet>
     </div>
   );
 }
+
+const navLinks = [
+  {
+    title: "Tabla de estudiantes",
+    icon: <Table size={40} />,
+    path: "/students-table"
+  },
+  {
+    title: "Agregar Certificado",
+    icon: <ScrollText size={40} />,
+    path: "/certificate-form"
+  },
+  {
+    title: "Agregar Título",
+    icon: <BookText size={40} />,
+    path: "/title-form"
+  },
+  {
+    title: "Importar Certificados",
+    icon: <FileUp size={40} />,
+    path: "/certificate-import"
+  },
+  {
+    title: "Importar Título",
+    icon: <FileUp size={40} />,
+    path: "/title-import"
+  },
+  {
+    title: "Crear Reporte",
+    icon: <FileDown size={40} />,
+    path: "/export"
+  },
+]
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
