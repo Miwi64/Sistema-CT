@@ -46,8 +46,8 @@ class Alumnos(models.Model):
     periodo_egreso = models.DateField()
     estado_nacimiento = models.CharField(max_length=45, blank=True)
     fecha_nacimiento = models.DateField()
-    carrera_fk = models.ForeignKey(Carreras, on_delete=models.CASCADE)
-    titulo_fk = models.ForeignKey(Titulados, blank=True, null=True, on_delete=models.CASCADE, )
+    carrera_fk = models.ForeignKey(Carreras, blank=True, null=True, on_delete=models.CASCADE)
+    titulo_fk = models.ForeignKey(Titulados, blank=True, null=True, on_delete=models.CASCADE)
     certificado_fk = models.ForeignKey(Certificados, blank=True, null=True, on_delete=models.CASCADE)
     def __str__(self) -> str:
         return f"{self.nombre} {self.apellidop} {self.apellidom}"

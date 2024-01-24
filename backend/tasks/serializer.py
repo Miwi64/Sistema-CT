@@ -58,21 +58,21 @@ class CertificadosSerializer(serializers.ModelSerializer):
 
 class AlumnoSerializer(serializers.ModelSerializer):
     carrera_fk=serializers.PrimaryKeyRelatedField(read_only=True)
-    nombre_carrera=serializers.CharField(source='carrera_fk.nombre_carrera')
+    nombre_carrera=serializers.CharField(source='carrera_fk.nombre_carrera',read_only=True)
 
     certificado_fk=serializers.PrimaryKeyRelatedField(read_only=True)
-    num_folio=serializers.CharField(source='certificado_fk.num_folio')
-    carrera_cert=serializers.CharField(source='certificado_fk.nombre_carrera')
-    fecha_registro_cert=serializers.CharField(source='certificado_fk.fecha_registro')
-    observaciones_cert=serializers.CharField(source='certificado_fk.observaciones')
+    num_folio=serializers.CharField(source='certificado_fk.num_folio',read_only=True)
+    carrera_cert=serializers.CharField(source='certificado_fk.nombre_carrera',read_only=True)
+    fecha_registro_cert=serializers.CharField(source='certificado_fk.fecha_registro',read_only=True)
+    observaciones_cert=serializers.CharField(source='certificado_fk.observaciones',read_only=True)
 
     titulo_fk=serializers.PrimaryKeyRelatedField(read_only=True)
-    num_titulo=serializers.CharField(source='titulo_fk.num_titulo')
-    clave_plan=serializers.CharField(source='titulo_fk.clave_plan')
-    fecha_acto=serializers.CharField(source='titulo_fk.fecha_acto')
-    fecha_registro_tit=serializers.CharField(source='titulo_fk.fecha_registro')
-    num_cedula=serializers.CharField(source='titulo_fk.num_cedula')
-    observaciones_tit=serializers.CharField(source='titulo_fk.observaciones')
+    num_titulo=serializers.CharField(source='titulo_fk.num_titulo',read_only=True)
+    clave_plan=serializers.CharField(source='titulo_fk.clave_plan',read_only=True)
+    fecha_acto=serializers.CharField(source='titulo_fk.fecha_acto',read_only=True)
+    fecha_registro_tit=serializers.CharField(source='titulo_fk.fecha_registro',read_only=True)
+    num_cedula=serializers.CharField(source='titulo_fk.num_cedula',read_only=True)
+    observaciones_tit=serializers.CharField(source='titulo_fk.observaciones',read_only=True)
 
 
     class Meta:
