@@ -56,17 +56,33 @@ class CertificadosSerializer(serializers.ModelSerializer):
 
 #---------------------------------------------------------------
 
+class DottedSourceField(serializers.Field):
+    def __init__(self, dotted_source_field, **kwargs):
+        self.dotted_source_field = dotted_source_field
+        super().__init__(**kwargs)
+    def to_internal_value(self, data):
+        source_value = data
+        for field in self.dotted_source_field.split('.'):
+            if source_value and field in source_value:
+                source_value = source_value[field]
+            else: 
+                source_value = None
+                break
+        return source_value
+    def to_representation(self, value):
+        return value
+
 class AlumnoSerializer(serializers.ModelSerializer):
-    carrera_fk=serializers.PrimaryKeyRelatedField(read_only=True)
+    carrera_fk=serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Carreras.objects.all())
     nombre_carrera=serializers.CharField(source='carrera_fk.nombre_carrera',read_only=True)
 
-    certificado_fk=serializers.PrimaryKeyRelatedField(read_only=True)
+    certificado_fk=serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Certificados.objects.all())
     num_folio=serializers.CharField(source='certificado_fk.num_folio',read_only=True)
     carrera_cert=serializers.CharField(source='certificado_fk.nombre_carrera',read_only=True)
     fecha_registro_cert=serializers.CharField(source='certificado_fk.fecha_registro',read_only=True)
     observaciones_cert=serializers.CharField(source='certificado_fk.observaciones',read_only=True)
 
-    titulo_fk=serializers.PrimaryKeyRelatedField(read_only=True)
+    titulo_fk=serializers.PrimaryKeyRelatedField( allow_null=True, queryset=Titulados.objects.all())
     num_titulo=serializers.CharField(source='titulo_fk.num_titulo',read_only=True)
     clave_plan=serializers.CharField(source='titulo_fk.clave_plan',read_only=True)
     fecha_acto=serializers.CharField(source='titulo_fk.fecha_acto',read_only=True)
@@ -89,8 +105,7 @@ class AlumnoSerializer(serializers.ModelSerializer):
                   'periodo_egreso',
                   'estado_nacimiento',
                   'fecha_nacimiento',
-                  'carrera_fk', 
-                  'nombre_carrera', 
+                  'carrera_fk', 'nombre_carrera', 
                   'certificado_fk','num_folio','carrera_cert','fecha_registro_cert','observaciones_cert',
                   'titulo_fk','num_titulo','clave_plan','fecha_acto','fecha_registro_tit','num_cedula','observaciones_tit',
                   ]
