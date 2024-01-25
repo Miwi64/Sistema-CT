@@ -3,6 +3,7 @@ import { Inter as FontSans } from "next/font/google";
 import "../styles/globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import SessionAuthProvider from "@/context/SessionAuthProvider";
 
 const fontSans = FontSans({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -18,10 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn("min-h-screen bg-background font-sans antialiased",
-        fontSans.variable
-      )}>
-        <ThemeProvider
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          fontSans.variable
+        )}
+      >
+        <SessionAuthProvider>
+          <ThemeProvider
             attribute="class"
             defaultTheme="system"
             enableSystem
@@ -29,6 +34,7 @@ export default function RootLayout({
           >
             {children}
           </ThemeProvider>
+        </SessionAuthProvider>
       </body>
     </html>
   );

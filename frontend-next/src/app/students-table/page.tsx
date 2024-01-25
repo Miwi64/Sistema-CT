@@ -2,7 +2,7 @@ import PageLayout from "@/components/page-layout";
 import { DataTable } from "@/components/ui/data-table";
 import { Student, columns } from "@/lib/columns";
 
-async function getData(): Promise<Student[]>{
+async function getData(): Promise<Student[]> {
   return [
     {
       num_control: "2022001",
@@ -123,6 +123,7 @@ async function getData(): Promise<Student[]>{
 
 export default async function StudentsTable() {
   const data = await getData();
+
   return (
     <PageLayout>
       <DataTable columns={columns} data={data} />

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { LogIn, User } from "lucide-react";
 import { Button } from "../components/ui/button";
 import {
@@ -23,7 +23,7 @@ import {
 } from "../components/ui/form";
 import { ModeToggle } from "../components/mode-toggle";
 import { useRouter } from "next/navigation";
-
+import { signIn } from "next-auth/react";
 const formSchema = z.object({
   username: z
     .string()
@@ -41,10 +41,21 @@ const Login = () => {
   const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const username = values.username;
+    const password = values.password;
+    const responseNextAuth = await signIn("credentials", {
+      username,
+      password,
+      redirect: false,
+    });
+
+    if (responseNextAuth?.error) {
+      return responseNextAuth?.error;
+    }
     router.push("/students-table");
   };
 
-  const imgUrl = "/backgrounds/558866.jpg"
+  const imgUrl = "/backgrounds/558866.jpg";
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
