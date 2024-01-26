@@ -5,6 +5,7 @@ import { authOptions } from "../api/auth/[...nextauth]/route";
 
 const Profile = async () => {
   const session = await getServerSession(authOptions);
+  console.log(session)
   return (
     <PageLayout>
       <div>Hola</div>

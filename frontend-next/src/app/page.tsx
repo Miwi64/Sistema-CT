@@ -15,7 +15,6 @@ import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -25,16 +24,10 @@ import { ModeToggle } from "../components/mode-toggle";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 const formSchema = z.object({
-  username: z
-    .string()
-    .min(1, "Campo requerido")
-    .max(50, "Límite de caracteres excedido"),
-  password: z
-    .string()
-    .regex(
-      /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-      "Mínimo 8 caracteres, al menos una letra y un número"
-    ),
+  username: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
+    .pipe(z.string().min(1, "Campo requerido")),
+  password: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
+    .pipe(z.string().min(1, "Campo requerido")),
 });
 
 const Login = () => {
@@ -50,18 +43,15 @@ const Login = () => {
     });
 
     if (responseNextAuth?.error) {
-      return responseNextAuth?.error;
+      console.log(responseNextAuth?.error);
+      return;
     }
-    router.push("/students-table", {scroll: false});
+    router.push("/students-table", { scroll: false });
   };
 
   const imgUrl = "/backgrounds/558866.jpg";
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-      password: "",
-    },
   });
 
   return (
@@ -114,9 +104,6 @@ const Login = () => {
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription>
-                        Mínimo 8 caracteres, al menos una letra y un número
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}

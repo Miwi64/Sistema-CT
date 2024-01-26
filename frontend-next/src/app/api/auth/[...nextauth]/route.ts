@@ -21,11 +21,8 @@ export const authOptions  = {
                 }),
             });
             const user = await res.json();
-            console.log(user);
-            if(user.error) throw user;
-
-            return user;
-            
+            if(res.status===200) return user;
+            return null;
           }
         }),
       ],
@@ -33,10 +30,10 @@ export const authOptions  = {
         signIn: "/"
       },
       callbacks:{
-        async jwt({token, user}){
+        async jwt({token, user}:any){
             return { ...token, ...user};
         },
-        async session({session, token}){
+        async session({session, token}:any){
             session.user = token.user as any;
             session.token = token.token as any;
             return session;

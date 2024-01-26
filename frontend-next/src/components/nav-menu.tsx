@@ -26,9 +26,10 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export function NavMenu() {
+  const {data: session} = useSession()
   return (
     <div className="bg-background hidden md:flex justify-between pl-1 w-full py-2">
       <NavigationMenu>
@@ -97,7 +98,7 @@ export function NavMenu() {
                         </Avatar>
                       </div>
                       <div className="mb-2 mt-4 text-lg font-medium">
-                        Usuario1
+                        {session?.user.username}
                       </div>
                       <p className="text-sm leading-tight text-muted-foreground">
                         Administrador
@@ -113,7 +114,6 @@ export function NavMenu() {
                 </ListItem>
                 <ListItem
                   onClick={async () => signOut()}
-                  href="/"
                   title="Cerrar Sesión"
                 >
                   Regresar a inicio de sesión.
@@ -136,6 +136,7 @@ export function NavMenu() {
 }
 
 export function NavMobile() {
+  const {data:session} = useSession();
   return (
     <div className="my-2 ml-3 bg-background md:hidden w-full">
       <Sheet>
@@ -161,7 +162,7 @@ export function NavMobile() {
                 </a>
               </div>
               <div className="my-2 text-lg font-medium">
-                Usuario1
+                {session?.user.username}
                 <p className="text-sm leading-tight text-muted-foreground">
                   Administrador
                 </p>
