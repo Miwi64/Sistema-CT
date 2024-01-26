@@ -23,6 +23,9 @@ import {
 import { ModeToggle } from "../components/mode-toggle";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useState } from "react";
+import { toast } from "sonner";
+
 const formSchema = z.object({
   username: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
     .pipe(z.string().min(1, "Campo requerido")),
@@ -35,7 +38,10 @@ const Login = () => {
   const callbackUrl = params.get("callbackUrl") || "/students-table";
   const router = useRouter();
 
+  const [signing, setSigning] = useState(false);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setSigning(true);
     const username = values.username;
     const password = values.password;
     const responseNextAuth = await signIn("credentials", {
@@ -43,17 +49,26 @@ const Login = () => {
       password,
       redirect: false,
     });
-
+    
     if (responseNextAuth?.error) {
       console.log(responseNextAuth?.error);
+      setSigning(false);
+      toast(`Error al intentar iniciar sesión (${responseNextAuth.status})`, {
+        description: "Verifica que tu nombre de usuario y contraseña sean correctos.",
+      });
       return;
     }
     router.push(callbackUrl, { scroll: false });
+    setSigning(false);
   };
 
   const imgUrl = "/backgrounds/558866.jpg";
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: "",
+      password: ""
+    },
   });
 
   return (
@@ -110,8 +125,8 @@ const Login = () => {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full">
-                  <LogIn className="mr-2 h-4 w-4" /> Iniciar sesión
+                <Button type="submit" className="w-full" disabled={signing}>
+                  {!signing ? <><LogIn className="mr-2 h-4 w-4" />Iniciar sesión</> : "Iniciando sesión..."}
                 </Button>
               </form>
             </Form>
