@@ -26,6 +26,7 @@ import { Avatar, AvatarFallback } from "./ui/avatar";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
+import { signOut } from "next-auth/react";
 
 export function NavMenu() {
   return (
@@ -111,16 +112,7 @@ export function NavMenu() {
                   Nombre, contraseña.
                 </ListItem>
                 <ListItem
-                  onClick={async () => {
-                    const AuthToken = localStorage.getItem("jwt");
-                    await fetch("http://localhost:8000/logout/", {
-                      method: "POST",
-                      headers: {
-                        Authorization: "Token " + AuthToken,
-                      },
-                    });
-                    localStorage.removeItem("jwt");
-                  }}
+                  onClick={async () => signOut()}
                   href="/"
                   title="Cerrar Sesión"
                 >
@@ -178,8 +170,8 @@ export function NavMobile() {
                 <Button variant="outline" asChild>
                   <a href="/profile"><Edit2 size={20} /></a>
                 </Button>
-                <Button variant="outline" asChild>
-                  <a href="/"><LogOut size={20} /></a>
+                <Button variant="outline" onClick={() => signOut()}>
+                  <LogOut size={20} />
                 </Button>
                 <Button variant="outline" asChild>
                   <a href="/settings"><Settings size={20} /></a>

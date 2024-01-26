@@ -27,7 +27,7 @@ import { signIn } from "next-auth/react";
 const formSchema = z.object({
   username: z
     .string()
-    .min(5, "Mínimo 5 caracteres")
+    .min(1, "Campo requerido")
     .max(50, "Límite de caracteres excedido"),
   password: z
     .string()
@@ -52,7 +52,7 @@ const Login = () => {
     if (responseNextAuth?.error) {
       return responseNextAuth?.error;
     }
-    router.push("/students-table");
+    router.push("/students-table", {scroll: false});
   };
 
   const imgUrl = "/backgrounds/558866.jpg";
@@ -70,8 +70,10 @@ const Login = () => {
         className="hidden md:block w-full h-screen bg-no-repeat bg-cover absolute"
         style={{ backgroundImage: `url(${imgUrl})` }}
       />
-      <section className="w-full h-screen flex justify-center items-center overflow-y-auto absolute md:bg-[rgba(255,255,255,0.9)] md:dark:bg-[rgba(0,0,0,0.9)] backdrop-blur-3xl">
-        <Card className="rounded-none md:rounded-lg bg-transparent md:bg-card w-full h-full md:w-[420px] md:h-auto">
+      <section className="w-full h-screen flex justify-center items-center overflow-y-auto absolute 
+      md:bg-[rgba(255,255,255,0.9)] md:dark:bg-[rgba(0,0,0,0.9)] backdrop-blur-3xl">
+        <Card className="rounded-none md:rounded-lg bg-transparent md:bg-card w-full h-full
+         md:w-[420px] md:h-auto">
           <div className="text-right">
             <ModeToggle />
           </div>

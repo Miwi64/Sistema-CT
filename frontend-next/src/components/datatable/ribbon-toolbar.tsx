@@ -114,9 +114,6 @@ export function RibbonToolbar<TData>({
       text: "Observaciones"
     },
   ]
-
-
-
   return (
     <Tabs defaultValue="Inicio" className="min-w-[200px]">
       <TabsList className="w-full rounded-t-lg rounded-b-none flex flex-row justify-start 
