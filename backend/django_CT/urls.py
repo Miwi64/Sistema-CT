@@ -40,7 +40,7 @@ urlpatterns = [
     path('user/', UserAPI.as_view()),
     path(r'logout/', knox_views.LogoutView.as_view(), name='knox_logout'),
     path(r'logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
-    path(r'pdf/', PruebaPDFView.as_view(), name='pdf_test'),
+    #path(r'pdf/', PruebaPDFView.as_view(), name='pdf_test'),
     path('data/', include('tasks.urls'))
 ]
 

@@ -23,7 +23,6 @@ import os
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
-from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
 
 from django.db import connections
@@ -70,7 +69,7 @@ class UserAPI(generics.RetrieveAPIView):
 
 
 
-#Pruebas de PDF
+""" #Pruebas de PDF
 class PruebaPDFView(View): 
     def get(self, request, *args, **kwargs):
         try: 
@@ -87,8 +86,7 @@ class PruebaPDFView(View):
         except: 
             pass
         return HttpResponse('Error')
-
-
+ """
 
 
 class LoginView(KnoxLoginView):
