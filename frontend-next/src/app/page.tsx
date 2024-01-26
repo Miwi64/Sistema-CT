@@ -21,7 +21,7 @@ import {
   FormMessage,
 } from "../components/ui/form";
 import { ModeToggle } from "../components/mode-toggle";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 const formSchema = z.object({
   username: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
@@ -31,6 +31,8 @@ const formSchema = z.object({
 });
 
 const Login = () => {
+  const params = useSearchParams();
+  const callbackUrl = params.get("callbackUrl") || "/students-table";
   const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -46,7 +48,7 @@ const Login = () => {
       console.log(responseNextAuth?.error);
       return;
     }
-    router.push("/students-table", { scroll: false });
+    router.push(callbackUrl, { scroll: false });
   };
 
   const imgUrl = "/backgrounds/558866.jpg";
