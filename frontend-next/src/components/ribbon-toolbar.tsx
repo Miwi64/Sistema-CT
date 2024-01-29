@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { CAREERS } from "@/lib/constants"
 import { PaginationData } from "./pagination-handler"
 
-interface RibbonTooolbarProps{
+interface RibbonTooolbarProps {
   data: PaginationData,
   setData: React.Dispatch<React.SetStateAction<PaginationData>>
 }
@@ -33,7 +33,7 @@ export function RibbonToolbar({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
   })
-  const {current_page, page_size, total_pages, next, previous} = data
+  const { current_page, page_size, total_pages, next, previous } = data
 
   return (
     <Tabs defaultValue="Inicio" className="min-w-[200px]">
@@ -202,16 +202,38 @@ export function RibbonToolbar({
               <Select
                 value={`${page_size}`}
                 onValueChange={(value) => {
-                  setData({...data, page_size: Number(value), current_page: "1"})
+                  setData({ ...data, page_size: Number(value), current_page: "1" })
                 }}
               >
-                <SelectTrigger className="h-8 w-[70px]">
+                <SelectTrigger className="h-8 w-[80px]">
                   <SelectValue placeholder={`${page_size}`} />
                 </SelectTrigger>
                 <SelectContent side="top">
                   {[10, 20, 30, 40, 50].map((pageSize) => (
                     <SelectItem key={pageSize} value={`${pageSize}`}>
                       {pageSize}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex items-center space-x-6 lg:space-x-8">
+            <div className="flex items-center space-x-2">
+              <p className="text-sm font-medium">Página</p>
+              <Select
+                value={`${current_page}`}
+                onValueChange={(value) => {
+                  setData({ ...data, current_page: value })
+                }}
+              >
+                <SelectTrigger className="h-8 w-[80px]">
+                  <SelectValue placeholder={current_page === "last" ? `${total_pages}` : `${current_page}`} />
+                </SelectTrigger>
+                <SelectContent side="top">
+                  {Array.from({ length: total_pages }, (_, index) => index + 1).map((page) => (
+                    <SelectItem key={page} value={`${page}`}>
+                      {page}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -227,7 +249,7 @@ export function RibbonToolbar({
             </Button>
             <Button
               variant="outline"
-              onClick={() => setData({...data, current_page: "1"})}
+              onClick={() => setData({ ...data, current_page: "1" })}
               disabled={!previous}
             >
               <ArrowLeftToLine className="sm:mr-2 h-5 w-5" />
@@ -235,7 +257,7 @@ export function RibbonToolbar({
             </Button>
             <Button
               variant="outline"
-              onClick={() => setData({...data, current_page: `${Number(current_page) - 1}`})}
+              onClick={() => setData({ ...data, current_page: `${Number(current_page) - 1}` })}
               disabled={!previous}
             >
               <ChevronLeft className="sm:mr-2 h-5 w-5" />
@@ -243,7 +265,7 @@ export function RibbonToolbar({
             </Button>
             <Button
               variant="outline"
-              onClick={() => setData({...data, current_page: `${Number(current_page) + 1}`})}
+              onClick={() => setData({ ...data, current_page: `${Number(current_page) + 1}` })}
               disabled={!next}
             >
               <ChevronRight className="sm:mr-2 h-5 w-5" />
@@ -251,7 +273,7 @@ export function RibbonToolbar({
             </Button>
             <Button
               variant="outline"
-              onClick={() => setData({...data, current_page: "last"})}
+              onClick={() => setData({ ...data, current_page: "last" })}
               disabled={!next}
             >
               <ArrowRightToLine className="sm:mr-2 h-5 w-5" />
