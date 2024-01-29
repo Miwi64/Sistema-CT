@@ -22,8 +22,8 @@ export function DataTableViewOptions<TData>({
           size="sm"
           className="flex ml-auto mr-2 mt-2"
         >
-          <Columns className="mr-2 h-4 w-4" />
-          Mostrar/Ocultar
+          <Columns className="sm:mr-2 h-4 w-4" />
+          <span className="hidden sm:block">Mostrar/Ocultar</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[150px]">
