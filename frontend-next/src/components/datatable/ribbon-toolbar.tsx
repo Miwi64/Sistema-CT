@@ -1,5 +1,5 @@
 "use client"
-import { ArrowLeftToLine, ArrowRightToLine, BookText, BookType, BookUser, CalendarIcon, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, Columns3, Contact, File, Filter, GraduationCap, Home, Pencil, Plus, Printer, Save, ScrollText, Search, Trash2, Users, XSquare } from "lucide-react"
+import { ArrowLeftToLine, ArrowRightToLine, BookText, BookType, BookUser, CalendarIcon, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, Columns3, Contact, File, FileDown, Filter, GraduationCap, Home, Pencil, Plus, Printer, Save, ScrollText, Search, Trash2, Users, XSquare } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
@@ -14,106 +14,26 @@ import { Calendar } from "../ui/calendar"
 import { DateRange } from "react-day-picker"
 import { Toggle } from "../ui/toggle"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { CAREERS, CERTIFICATE_COLUMNS, STUDENT_COLUMNS, TITLE_COLUMNS } from "@/lib/constants"
 
 interface RibbonTooolbarProps<TData> {
   table: Table<TData>
 }
-
-type Checked = DropdownMenuCheckboxItemProps["checked"]
 
 export function RibbonToolbar<TData>({
   table,
 }: RibbonTooolbarProps<TData>) {
 
   const [dateRange, setDateRange] = useState(false)
-  const [doc, setDoc] = useState("C")
+  const [doc, setDoc] = useState("CT")
   const [sex, setSex] = useState("M")
   const [careers, setCareers] = useState(
-    [
-      { value: true, text: "Sistemas" },
-      { value: true, text: "Administración" },
-      { value: true, text: "Agrícola" },
-      { value: true, text: "Industrial" },
-      { value: true, text: "Mecatrónica" },
-      { value: true, text: "Electromecánica" },
-    ])
+    CAREERS.map((career) => ({ text: career.text, value: true })))
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
   })
 
-  const student = [
-    {
-      value: "num_control",
-      text: "Número de control"
-    },
-    {
-      value: "nombre",
-      text: "Nombre"
-    },
-    {
-      value: "apellidop",
-      text: "Apellido Paterno"
-    },
-    {
-      value: "apellidom",
-      text: "Apellido Materno"
-    },
-    {
-      value: "carrera",
-      text: "Carrera"
-    },
-    {
-      value: "sexo",
-      text: "Sexo"
-    },
-    {
-      value: "CURP",
-      text: "CURP"
-    }
-  ]
-
-  const cert = [
-    {
-      value: "num_folio",
-      text: "Número de folio"
-    },
-    {
-      value: "fecha_registro_cert",
-      text: "Fecha de registro"
-    },
-    {
-      value: "observaciones_cert",
-      text: "Observaciones"
-    }
-  ]
-
-  const title = [
-    {
-      value: "num_titulo",
-      text: "Número de título"
-    },
-    {
-      value: "fecha_acto",
-      text: "Fecha del acto"
-    },
-    {
-      value: "clave_plan",
-      text: "Plan de estudios"
-    },
-    {
-      value: "fecha_registro_tit",
-      text: "Fecha de registro"
-    },
-    {
-      value: "num_cedula",
-      text: "Número de cédula"
-    },
-    {
-      value: "observaciones_tit",
-      text: "Observaciones"
-    },
-  ]
   return (
     <Tabs defaultValue="Inicio" className="min-w-[200px]">
       <TabsList className="w-full rounded-t-lg rounded-b-none flex flex-row justify-start 
@@ -121,7 +41,6 @@ export function RibbonToolbar<TData>({
         <TabsTrigger value="Inicio"><Home size={14} className="mr-2" />Inicio</TabsTrigger>
         <TabsTrigger value="Filtrar"><Filter size={14} className="mr-2" />Filtrar</TabsTrigger>
         <TabsTrigger value="Pagina"><File size={14} className="mr-2" />Página</TabsTrigger>
-        <TabsTrigger value="Ver"><Columns3 size={14} className="mr-2" />Ver</TabsTrigger>
         <TabsTrigger value="Seleccion"><CheckSquare size={14} className="mr-2" />Selección</TabsTrigger>
       </TabsList>
 
@@ -129,7 +48,7 @@ export function RibbonToolbar<TData>({
       <TabsContent className="mt-0" value="Inicio">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
         px-4 py-3 border bg-card text-card-foreground shadow-md">
-          <div className="hidden md:block"><DataTableSearch table={table} /></div>
+          <div className="hidden md:block"><DataTableSearch /></div>
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" className="flex md:hidden">
@@ -138,19 +57,20 @@ export function RibbonToolbar<TData>({
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <DataTableSearch table={table} />
+              <DataTableSearch />
             </PopoverContent>
           </Popover>
-          <Button variant="outline">
-            <Plus className="sm:mr-2 h-5 w-5" />
-            <span className="sm:block hidden">Agregar</span>
+          <Button variant="outline" asChild>
+            <a href="/export">
+              <FileDown className="sm:mr-2 h-5 w-5" />
+              <span className="sm:block hidden">Generar Reporte</span>
+            </a>
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                variant="default"
-                size="sm"
-                className="h-8 flex"
+                variant="secondary"
+                className="flex"
               >
                 <Save className="sm:mr-2 h-5 w-5" />
                 <span className="hidden sm:block">Guardar como</span>
@@ -171,10 +91,6 @@ export function RibbonToolbar<TData>({
       <TabsContent className="mt-0" value="Filtrar">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
         rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md">
-          <Button variant="outline">
-            <Plus className="sm:mr-2 h-5 w-5" />
-            <span className="sm:block hidden">Agregar</span>
-          </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
@@ -302,7 +218,7 @@ export function RibbonToolbar<TData>({
             </div>
           </div>
           <div className="flex items-center space-x-2">
-          <Button
+            <Button
               variant="outline"
             >
               <Printer className="sm:mr-2 h-5 w-5" />
@@ -343,79 +259,6 @@ export function RibbonToolbar<TData>({
           </div>
         </div>
       </TabsContent>
-
-      <TabsContent className="mt-0" value="Ver">
-        <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
-        rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <Contact className="sm:mr-2 h-5 w-5" />
-                <span className="hidden sm:block">Estudiante</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Mostrar u ocultar</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {
-                student.map((s) => (<DropdownMenuCheckboxItem
-                  key={table.getColumn(s.value)?.id}
-                  className="capitalize"
-                  checked={table.getColumn(s.value)?.getIsVisible()}
-                  onCheckedChange={(value) => table.getColumn(s.value)?.toggleVisibility(!!value)}
-                >
-                  {s.text}
-                </DropdownMenuCheckboxItem>))
-              }
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <ScrollText className="sm:mr-2 h-5 w-5" />
-                <span className="hidden sm:block">Certificado</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Mostrar u ocultar</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {
-                cert.map((c) => (<DropdownMenuCheckboxItem
-                  key={table.getColumn(c.value)?.id}
-                  className="capitalize"
-                  checked={table.getColumn(c.value)?.getIsVisible()}
-                  onCheckedChange={(value) => table.getColumn(c.value)?.toggleVisibility(!!value)}
-                >
-                  {c.text}
-                </DropdownMenuCheckboxItem>))
-              }
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                <BookType className="sm:mr-2 h-5 w-5" />
-                <span className="hidden sm:block">Título</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Mostrar u ocultar</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {
-                title.map((t) => (<DropdownMenuCheckboxItem
-                  key={table.getColumn(t.value)?.id}
-                  className="capitalize"
-                  checked={table.getColumn(t.value)?.getIsVisible()}
-                  onCheckedChange={(value) => table.getColumn(t.value)?.toggleVisibility(!!value)}
-                >
-                  {t.text}
-                </DropdownMenuCheckboxItem>))
-              }
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </TabsContent>
-
 
       <TabsContent className="mt-0" value="Seleccion">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 

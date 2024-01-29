@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { CARREERS } from "@/lib/constants";
+import { CAREERS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -81,7 +81,7 @@ const TitleForm = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {CARREERS.map((
+                        {CAREERS.map((
                           { value, text }, key) =>
                           (<SelectItem key={key} value={value}>{text}</SelectItem>))}
                       </SelectContent>
