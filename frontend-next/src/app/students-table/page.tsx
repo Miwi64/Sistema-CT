@@ -1,6 +1,7 @@
 "use client"
 import PageLayout from "@/components/page-layout";
 import PaginationHandler, { PaginationData } from "@/components/pagination-handler";
+import { RibbonToolbar } from "@/components/ribbon-toolbar";
 import { DataTable } from "@/components/ui/data-table";
 import { Student, columns } from "@/lib/columns";
 import { useSession } from "next-auth/react";
@@ -41,6 +42,7 @@ export default function StudentsTable() {
   }, [paginationData.current_page, session])
   return (
     <PageLayout>
+      <RibbonToolbar data={paginationData} setData={setPaginationData}/>
       <DataTable columns={columns} data={studentData} />
       <section className="my-5 flex justify-center">
       <PaginationHandler data={paginationData} setData={setPaginationData}/>

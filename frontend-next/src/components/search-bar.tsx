@@ -1,9 +1,8 @@
 "use client"
-import { Table } from "@tanstack/react-table"
-import { Input } from "../ui/input"
+import { Input } from "./ui/input"
 import { Search } from "lucide-react"
 
-export function DataTableSearch() {
+export function SearchBar() {
     return (
         <div className="min-w-[200px] max-w-md">
             <div className="absolute p-3 text-muted-foreground">
@@ -21,4 +20,4 @@ export function DataTableSearch() {
     )
 }
 
-export default DataTableSearch
+export default SearchBar

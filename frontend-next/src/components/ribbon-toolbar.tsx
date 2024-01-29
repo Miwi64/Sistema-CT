@@ -1,28 +1,28 @@
 "use client"
-import { ArrowLeftToLine, ArrowRightToLine, BookText, BookType, BookUser, CalendarIcon, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, Columns3, Contact, File, FileDown, Filter, GraduationCap, Home, Pencil, Plus, Printer, Save, ScrollText, Search, Trash2, Users, XSquare } from "lucide-react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
-import { Button } from "../ui/button"
-import { Table } from "@tanstack/react-table"
-import DataTableSearch from "./datatable-search"
-import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover"
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
+import { ArrowLeftToLine, ArrowRightToLine, BookText, BookUser, CalendarIcon, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, File, FileDown, Filter, GraduationCap, Home, Pencil, Printer, Save, Search, Trash2, Users, XSquare } from "lucide-react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { Button } from "./ui/button"
+import { SearchBar } from "./search-bar"
+import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { addDays, format } from "date-fns"
-import { Calendar } from "../ui/calendar"
+import { Calendar } from "./ui/calendar"
 import { DateRange } from "react-day-picker"
-import { Toggle } from "../ui/toggle"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { CAREERS, CERTIFICATE_COLUMNS, STUDENT_COLUMNS, TITLE_COLUMNS } from "@/lib/constants"
+import { Toggle } from "./ui/toggle"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { CAREERS } from "@/lib/constants"
+import { PaginationData } from "./pagination-handler"
 
-interface RibbonTooolbarProps<TData> {
-  table: Table<TData>
+interface RibbonTooolbarProps{
+  data: PaginationData,
+  setData: React.Dispatch<React.SetStateAction<PaginationData>>
 }
 
-export function RibbonToolbar<TData>({
-  table,
-}: RibbonTooolbarProps<TData>) {
+export function RibbonToolbar({
+  data, setData
+}: RibbonTooolbarProps) {
 
   const [dateRange, setDateRange] = useState(false)
   const [doc, setDoc] = useState("CT")
@@ -33,6 +33,7 @@ export function RibbonToolbar<TData>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
   })
+  const {current_page, page_size, total_pages, next, previous} = data
 
   return (
     <Tabs defaultValue="Inicio" className="min-w-[200px]">
@@ -48,7 +49,7 @@ export function RibbonToolbar<TData>({
       <TabsContent className="mt-0" value="Inicio">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
         px-4 py-3 border bg-card text-card-foreground shadow-md">
-          <div className="hidden md:block"><DataTableSearch /></div>
+          <div className="hidden md:block"><SearchBar /></div>
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" className="flex md:hidden">
@@ -57,7 +58,7 @@ export function RibbonToolbar<TData>({
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <DataTableSearch />
+              <SearchBar />
             </PopoverContent>
           </Popover>
           <Button variant="outline" asChild>
@@ -199,13 +200,13 @@ export function RibbonToolbar<TData>({
             <div className="flex items-center space-x-2">
               <p className="text-sm font-medium">Filas</p>
               <Select
-                value={`${table.getState().pagination.pageSize}`}
+                value={`${page_size}`}
                 onValueChange={(value) => {
-                  table.setPageSize(Number(value))
+                  setData({...data, page_size: Number(value), current_page: "1"})
                 }}
               >
                 <SelectTrigger className="h-8 w-[70px]">
-                  <SelectValue placeholder={table.getState().pagination.pageSize} />
+                  <SelectValue placeholder={`${page_size}`} />
                 </SelectTrigger>
                 <SelectContent side="top">
                   {[10, 20, 30, 40, 50].map((pageSize) => (
@@ -226,32 +227,32 @@ export function RibbonToolbar<TData>({
             </Button>
             <Button
               variant="outline"
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
+              onClick={() => setData({...data, current_page: "1"})}
+              disabled={!previous}
             >
               <ArrowLeftToLine className="sm:mr-2 h-5 w-5" />
               <span className="hidden sm:block">Primera</span>
             </Button>
             <Button
               variant="outline"
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
+              onClick={() => setData({...data, current_page: `${Number(current_page) - 1}`})}
+              disabled={!previous}
             >
               <ChevronLeft className="sm:mr-2 h-5 w-5" />
               <span className="hidden sm:block">Anterior</span>
             </Button>
             <Button
               variant="outline"
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
+              onClick={() => setData({...data, current_page: `${Number(current_page) + 1}`})}
+              disabled={!next}
             >
               <ChevronRight className="sm:mr-2 h-5 w-5" />
               <span className="hidden sm:block">Siguiente</span>
             </Button>
             <Button
               variant="outline"
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
+              onClick={() => setData({...data, current_page: "last"})}
+              disabled={!next}
             >
               <ArrowRightToLine className="sm:mr-2 h-5 w-5" />
               <span className="hidden sm:block">Última</span>
