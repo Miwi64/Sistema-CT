@@ -22,20 +22,21 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { RibbonToolbar } from "../ribbon-toolbar"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DataTableViewOptions } from "../datatable/datatable-view-options"
 import { DataTableSelection } from "../datatable/datatable-selection"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  setSelection: React.Dispatch<React.SetStateAction<number>>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  setSelection
 }: DataTableProps<TData, TValue>) {
-
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
@@ -60,13 +61,18 @@ export function DataTable<TData, TValue>({
       rowSelection
     },
   })
-
+  useEffect(() => {
+    setSelection(table.getFilteredSelectedRowModel().rows.length)
+  }, [table.getFilteredSelectedRowModel().rows.length])
+  
   return (
-    <div>
       <div className="rounded-md border">
         {table.getRowModel().rows?.length ? (
           <div>
+            <div className="flex my-3 mx-1 justify-between">
             <DataTableViewOptions table={table} />
+            <DataTableSelection table={table} />
+            </div>
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -113,7 +119,5 @@ export function DataTable<TData, TValue>({
           </Table>
         }
       </div>
-      <DataTableSelection table={table} />
-    </div>
   )
 }

@@ -20,7 +20,7 @@ export function DataTableViewOptions<TData>({
         <Button
           variant="ghost"
           size="sm"
-          className="flex ml-auto mr-2 mt-2"
+          className="flex text-muted-foreground"
         >
           <Columns className="sm:mr-2 h-4 w-4" />
           <span className="hidden sm:block">Mostrar/Ocultar</span>

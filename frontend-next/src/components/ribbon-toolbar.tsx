@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Button } from "./ui/button"
 import { SearchBar } from "./search-bar"
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { addDays, format } from "date-fns"
 import { Calendar } from "./ui/calendar"
@@ -18,10 +18,11 @@ import { PaginationData } from "./pagination-handler"
 interface RibbonTooolbarProps {
   data: PaginationData,
   setData: React.Dispatch<React.SetStateAction<PaginationData>>
+  selection: number
 }
 
 export function RibbonToolbar({
-  data, setData
+  data, setData, selection
 }: RibbonTooolbarProps) {
 
   const [dateRange, setDateRange] = useState(false)
@@ -34,15 +35,26 @@ export function RibbonToolbar({
     to: addDays(new Date(2022, 0, 20), 20),
   })
   const { current_page, page_size, total_pages, next, previous } = data
+  const [tabValue, setTabValue] = useState("Inicio")
+
+  useEffect(()=>{
+    if(selection > 0) {
+      setTabValue("Seleccion")
+    }
+    else{
+      setTabValue("Inicio")
+    }
+  }, [selection])
+
 
   return (
-    <Tabs defaultValue="Inicio" className="min-w-[200px]">
-      <TabsList className="w-full rounded-t-lg rounded-b-none flex flex-row justify-start 
+    <Tabs value={tabValue} onValueChange={setTabValue} className="min-w-[200px]">
+      <TabsList className="w-full rounded-none flex flex-row justify-start 
       items-center overflow-x-auto overflow-y-visible">
         <TabsTrigger value="Inicio"><Home size={14} className="mr-2" />Inicio</TabsTrigger>
         <TabsTrigger value="Filtrar"><Filter size={14} className="mr-2" />Filtrar</TabsTrigger>
         <TabsTrigger value="Pagina"><File size={14} className="mr-2" />Página</TabsTrigger>
-        <TabsTrigger value="Seleccion"><CheckSquare size={14} className="mr-2" />Selección</TabsTrigger>
+        {selection > 0 && <TabsTrigger value="Seleccion"><CheckSquare size={14} className="mr-2" />Selección</TabsTrigger>}
       </TabsList>
 
 
@@ -297,14 +309,6 @@ export function RibbonToolbar({
           <Button variant="outline">
             <Trash2 className="sm:mr-2 h-5 w-5" />
             <span className="hidden sm:block">Eliminar</span>
-          </Button>
-          <Button variant="outline">
-            <CheckSquare className="sm:mr-2 h-5 w-5" />
-            <span className="hidden sm:block">Seleccionar todo</span>
-          </Button>
-          <Button variant="outline">
-            <XSquare className="sm:mr-2 h-5 w-5" />
-            <span className="hidden sm:block">Borrar selección</span>
           </Button>
         </div>
       </TabsContent>

@@ -138,7 +138,7 @@ export function NavMenu() {
 export function NavMobile() {
   const {data:session} = useSession();
   return (
-    <div className="my-2 ml-3 bg-background md:hidden w-full">
+    <div className="bg-background md:hidden w-full">
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="ghost" size="icon">
