@@ -1,6 +1,7 @@
 from rest_framework.decorators import action
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, exceptions
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -238,6 +239,17 @@ class TitulosFilter(filters.FilterSet):
         fields = ['num_titulo', 'clave_plan','fecha_acto','fecha_registro','num_cedula']
 
 
+class LastTitleEntryView(generics.RetrieveAPIView):
+    queryset=Titulados.objects.all()
+    serializer_class = TituladosSerializer
+    lookup_field = 'id_titulo'
+
+    def get_object(self):
+        ultima_instancia = self.queryset.last()
+        if not ultima_instancia:
+            raise exceptions.NotFound
+        return ultima_instancia
+
 class TituladosView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = TituladosSerializer
@@ -270,6 +282,20 @@ class CertificadosFilter(filters.FilterSet):
     class Meta:
         model = Certificados
         fields = ['num_folio','nombre_carrera','fecha_registro']
+
+
+class LastCertificateEntryView(generics.RetrieveAPIView):
+    queryset=Certificados.objects.all()
+    serializer_class = CertificadosSerializer
+    lookup_field = 'id_certificado'
+
+    def get_object(self):
+        ultima_instancia = self.queryset.last()
+        if not ultima_instancia:
+            raise exceptions.NotFound
+        return ultima_instancia
+    
+
 
 
 class CertificadosView(viewsets.ModelViewSet):
