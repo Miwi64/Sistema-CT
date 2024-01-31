@@ -12,30 +12,27 @@ import { Calendar } from "./ui/calendar"
 import { DateRange } from "react-day-picker"
 import { Toggle } from "./ui/toggle"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
-import { CAREERS } from "@/lib/constants"
 import { PaginationData } from "./pagination-handler"
+import { FilterData } from "./students-table/students-table"
 
 interface RibbonTooolbarProps {
   data: PaginationData,
   setData: React.Dispatch<React.SetStateAction<PaginationData>>
-  selection: number
+  filters: FilterData,
+  setFilters: React.Dispatch<React.SetStateAction<FilterData>>
 }
 
 export function RibbonToolbar({
-  data, setData
+  data, setData, filters, setFilters
 }: RibbonTooolbarProps) {
+  const {doc, sex, careers} = filters
 
   const [dateRange, setDateRange] = useState(false)
-  const [doc, setDoc] = useState("CT")
-  const [sex, setSex] = useState("M")
-  const [careers, setCareers] = useState(
-    CAREERS.map((career) => ({ text: career.text, value: true })))
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(2022, 0, 20),
     to: addDays(new Date(2022, 0, 20), 20),
   })
   const { current_page, page_size, total_pages, next, previous } = data
-  const [tabValue, setTabValue] = useState("Inicio")
 
 
   return (
@@ -51,7 +48,7 @@ export function RibbonToolbar({
       <TabsContent className="mt-0" value="Inicio">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
         px-4 py-3 border bg-card text-card-foreground shadow-md">
-          <div className="hidden md:block"><SearchBar /></div>
+          <div className="hidden md:block"><SearchBar setFilters={setFilters} filters={filters} /></div>
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" className="flex md:hidden">
@@ -60,7 +57,7 @@ export function RibbonToolbar({
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <SearchBar />
+              <SearchBar setFilters={setFilters} filters={filters}/>
             </PopoverContent>
           </Popover>
           <Button variant="outline" asChild>
@@ -94,7 +91,7 @@ export function RibbonToolbar({
       <TabsContent className="mt-0" value="Filtrar">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
         rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md">
-          <DropdownMenu>
+          <DropdownMenu >
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
                 <GraduationCap className="sm:mr-2 h-5 w-5" />
@@ -104,14 +101,14 @@ export function RibbonToolbar({
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Mostrar</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {careers.map((career, index) => (
-                <DropdownMenuCheckboxItem key={index} checked={career.value} onCheckedChange={
+              {careers.map(({text, checked}, index) => (
+                <DropdownMenuCheckboxItem key={index} checked={checked} onCheckedChange={
                   (checked) => {
                     const newArray = [...careers];
-                    newArray[index].value = checked;
-                    setCareers(newArray);
+                    newArray[index].checked = checked;
+                    setFilters({...filters, careers: newArray})
                   }}>
-                  {career.text}
+                  {text}
                 </DropdownMenuCheckboxItem>
               ))}
             </DropdownMenuContent>
@@ -126,7 +123,7 @@ export function RibbonToolbar({
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Mostrar estudiantes con:</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup value={doc} onValueChange={setDoc}>
+              <DropdownMenuRadioGroup value={doc} onValueChange={(value) => setFilters({...filters, doc: value})}>
                 <DropdownMenuRadioItem value="C">Certificado</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="T">Título</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="CT">Certificado y título</DropdownMenuRadioItem>
@@ -143,7 +140,7 @@ export function RibbonToolbar({
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Sexo</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup value={sex} onValueChange={setSex}>
+              <DropdownMenuRadioGroup value={sex} onValueChange={(value) => setFilters({...filters, sex:value})}>
                 <DropdownMenuRadioItem value="M">Masculino</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="F">Femenino</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="B">Ambos</DropdownMenuRadioItem>
