@@ -12,7 +12,7 @@ const getCareers = async (session: Session) => {
           }
         })
     const results = await fetchApi.json()
-    const careers = results.map((result: { id_carrera: number, nombre_carrera: string }) => ({ text: result.nombre_carrera, value: result.id_carrera, checked: true }))
+    const careers = results.map((result: { id_carrera: number, nombre_carrera: string }) => ({ text: result.nombre_carrera, value: result.id_carrera, checked: false }))
     return careers
 }
 

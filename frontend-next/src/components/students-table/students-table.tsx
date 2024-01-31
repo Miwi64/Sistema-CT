@@ -57,7 +57,8 @@ export default function StudentsTable({careers, session}: StudentsTableProps) {
       console.log(paginationData)
       const docFilter = filters.doc === "C" ? "&certificado_fk!=null" : filters.doc === "T" ? "&titulo_fk!=null" : ""
       const sexFilter = filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : ""
-      const careerFilter = filters.careers.length > 0 ? `&career_FK=${filters.careers.map((career) => career.value).join(",")}` : ""
+      const checkedCareers = filters.careers.filter((career => career.checked))
+      const careerFilter = checkedCareers.length > 0 ? `&career_FK=${checkedCareers.map((career) => career.value).join(",")}` : ""
       const urlFilters = `${docFilter}${sexFilter}${careerFilter}&num_control=${filters.search}`
       console.log(`http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${urlFilters}`)
       loadData(urlFilters)
