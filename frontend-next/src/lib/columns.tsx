@@ -1,7 +1,10 @@
 "use client"
 import { ColumnHeader } from "@/components/column-header"
-import { Checkbox } from "@/components/ui/checkbox"
+import OptionsButton from "@/components/options-button"
+import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ColumnDef } from "@tanstack/react-table"
+import { BookUser, MoreVertical, Pencil, Trash2 } from "lucide-react"
 
 export type Student = {
   num_control: string,
@@ -24,28 +27,6 @@ export type Student = {
 
 
 export const columns: ColumnDef<Student>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Seleccionar todo"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Seleccionar"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
   {
     accessorKey: "num_control",
     header: ({ column }) => (
@@ -141,5 +122,13 @@ export const columns: ColumnDef<Student>[] = [
     header: ({ column }) => (
       <ColumnHeader column={column} title="Observaciones(Título)" />
     ),
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => (
+      <OptionsButton id={row.getValue("num_control")}/>
+    ),
+    enableSorting: false,
+    enableHiding: false,
   },
 ]

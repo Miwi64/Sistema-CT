@@ -1,11 +1,11 @@
 "use client"
-import { ArrowLeftToLine, ArrowRightToLine, BookText, BookUser, CalendarIcon, CheckSquare, ChevronDown, ChevronLeft, ChevronRight, File, FileDown, Filter, GraduationCap, Home, Pencil, Printer, Save, Search, Trash2, Users, XSquare } from "lucide-react"
+import { ArrowLeftToLine, ArrowRightToLine, BookText, BookUser, CalendarIcon, ChevronDown, ChevronLeft, ChevronRight, File, FileDown, Filter, GraduationCap, Home, Pencil, Printer, Save, Search, Trash2, Users } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { Button } from "./ui/button"
 import { SearchBar } from "./search-bar"
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { addDays, format } from "date-fns"
 import { Calendar } from "./ui/calendar"
@@ -22,7 +22,7 @@ interface RibbonTooolbarProps {
 }
 
 export function RibbonToolbar({
-  data, setData, selection
+  data, setData
 }: RibbonTooolbarProps) {
 
   const [dateRange, setDateRange] = useState(false)
@@ -37,24 +37,14 @@ export function RibbonToolbar({
   const { current_page, page_size, total_pages, next, previous } = data
   const [tabValue, setTabValue] = useState("Inicio")
 
-  useEffect(()=>{
-    if(selection > 0) {
-      setTabValue("Seleccion")
-    }
-    else{
-      setTabValue("Inicio")
-    }
-  }, [selection])
-
 
   return (
-    <Tabs value={tabValue} onValueChange={setTabValue} className="min-w-[200px]">
+    <Tabs defaultValue="Inicio" className="min-w-[200px]">
       <TabsList className="w-full rounded-none flex flex-row justify-start 
       items-center overflow-x-auto overflow-y-visible">
         <TabsTrigger value="Inicio"><Home size={14} className="mr-2" />Inicio</TabsTrigger>
         <TabsTrigger value="Filtrar"><Filter size={14} className="mr-2" />Filtrar</TabsTrigger>
         <TabsTrigger value="Pagina"><File size={14} className="mr-2" />Página</TabsTrigger>
-        {selection > 0 && <TabsTrigger value="Seleccion"><CheckSquare size={14} className="mr-2" />Selección</TabsTrigger>}
       </TabsList>
 
 
@@ -292,24 +282,6 @@ export function RibbonToolbar({
               <span className="hidden sm:block">Última</span>
             </Button>
           </div>
-        </div>
-      </TabsContent>
-
-      <TabsContent className="mt-0" value="Seleccion">
-        <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
-        rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md">
-          <Button variant="outline">
-            <Pencil className="sm:mr-2 h-5 w-5" />
-            <span className="hidden sm:block">Editar</span>
-          </Button>
-          <Button variant="outline">
-            <BookUser className="sm:mr-2 h-5 w-5" />
-            <span className="hidden sm:block">Ver más</span>
-          </Button>
-          <Button variant="outline">
-            <Trash2 className="sm:mr-2 h-5 w-5" />
-            <span className="hidden sm:block">Eliminar</span>
-          </Button>
         </div>
       </TabsContent>
     </Tabs >

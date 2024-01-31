@@ -1,6 +1,5 @@
 "use client"
 import { NavMenu, NavMobile } from "@/components/nav-menu";
-import PageLayout from "@/components/page-layout";
 import PaginationHandler, { PaginationData } from "@/components/pagination-handler";
 import { RibbonToolbar } from "@/components/ribbon-toolbar";
 import { DataTable } from "@/components/ui/data-table";
@@ -50,7 +49,7 @@ export default function StudentsTable() {
         <RibbonToolbar selection={selection} data={paginationData} setData={setPaginationData} />
       </nav>
       <main className="my-4 mx-3">
-        <DataTable columns={columns} data={studentData} setSelection={setSelection}/>
+        <DataTable columns={columns} data={studentData} />
       </main>
       <footer className="flex justify-center mb-5">
         <PaginationHandler data={paginationData} setData={setPaginationData} />
