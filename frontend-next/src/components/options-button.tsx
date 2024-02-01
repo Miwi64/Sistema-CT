@@ -86,10 +86,10 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
           <AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>Esta seguro?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  Esta accion no se puede deshacer. Se eliminara el registros de
+                  forma permanente.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -99,7 +99,7 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
                     setShowAlert(false);
                   }}
                 >
-                  Cancel
+                  Cancelar
                 </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
@@ -134,7 +134,7 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
                     window.location.reload();
                   }}
                 >
-                  Continue
+                  Continuar
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -207,10 +207,10 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
           <AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>Esta Seguro?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  Esta accion no se puede deshacer. Se eliminara el registros de
+                  forma permanente.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -220,7 +220,7 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
                     setShowAlert(false);
                   }}
                 >
-                  Cancel
+                  Cancelar
                 </AlertDialogCancel>
                 <AlertDialogAction
                   onClick={async () => {
@@ -256,7 +256,7 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
                     window.location.reload();
                   }}
                 >
-                  Continue
+                  Continuar
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

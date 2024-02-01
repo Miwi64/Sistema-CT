@@ -1,4 +1,3 @@
-"use client";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
@@ -10,6 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import {
   Collapsible,
   CollapsibleContent,
@@ -33,6 +43,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { Session, getServerSession } from "next-auth";
+import AlertDialogClient from "@/components/AlertDialogClient";
 
 async function getData(session: Session, id: string) {
   const fetchApi = await fetch(
@@ -49,6 +60,7 @@ async function getData(session: Session, id: string) {
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
+  const dato = params.id;
   const session = await getServerSession(authOptions);
   const [
     {
@@ -98,18 +110,30 @@ export default async function Page({ params }: { params: { id: string } }) {
             <span className="hidden md:inline">Editar</span>
           </a>
         </Button>
-        <Button
-          variant="destructive"
-          asChild
-          onClick={() => {
-            console.log("ters");
-          }}
-        >
-          <a /*href={`/delete/${params.id}`}*/>
-            <Trash2 className="md:mr-2" />
-            <span className="hidden md:inline">Eliminar</span>
-          </a>
-        </Button>
+        <AlertDialogClient dato={dato} />
+        {/*         <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="destructive" asChild>
+              <a>
+                <Trash2 className="md:mr-2" />
+                <span className="hidden md:inline">Eliminar</span>
+              </a>
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                account and all your data.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog> */}
       </section>
       <section className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
         <Collapsible defaultOpen>
@@ -141,10 +165,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                         head: "Estado de nacimiento",
                         value: estado_nacimiento,
                       },
-                      {
-                        head: "Fecha de nacimiento",
-                        value: fecha_nacimiento,
-                      },
+                      { head: "Fecha de nacimiento", value: fecha_nacimiento },
                     ].map(({ head, value }) => (
                       <TableRow key={value}>
                         <TableCell>{head}</TableCell>
