@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 from django_filters import rest_framework as filters
 from .serializer import *
 from .models import *
@@ -17,7 +18,7 @@ from knox.views import LoginView as KnoxLoginView
 from knox.models import AuthToken
 from django.utils import timezone
 from django.utils.timezone import timedelta
-
+from rest_framework.views import APIView
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
 import os
@@ -25,7 +26,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
 from django.contrib.staticfiles import finders
-
+import django_filters
 from django.db import connections
 #from mysql.connector import Error, query
 from django.db.models import OuterRef, CharField, Value as V
@@ -135,22 +136,44 @@ class CarreraView(viewsets.ModelViewSet):
         delete_items.delete()
         return Response( self.serializer_class(delete_items,many=True).data, status=status.HTTP_200_OK)
 #------------------------------------------------
-class AlumnoFilter(filters.FilterSet):
-    class Meta:
-        model = Alumnos
-        fields = ['nombre','apellidop','apellidom','carrera','num_control','sexo','periodo_ingreso','periodo_egreso']
 
 
 
-class MyView(View):
-    serializer_class = AlumnoSerializer
-    def get(self, request):
-        resultados = Alumnos.objects\
-            .select_related('carrera_fk')\
-            .all()
-        alumnos = AlumnoSerializer(resultados, many=True)
-        return JsonResponse(alumnos.data, safe=False)
+class SearchViewAlumCert(APIView):
+    def post(self, request, format=None):
+        data = request.data
+        search_term_1 = data.get('num_folio')
+        search_term_2 = data.get('num_control')
 
+        if search_term_1 and search_term_2:
+            results_1 = Certificados.objects.filter(num_folio=search_term_1)
+            results_2 = Alumnos.objects.filter(num_control=search_term_2)
+
+            if results_1.exists() or results_2.exists():
+                return Response({'error': 'A record with the provided search term already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'message': 'No records found.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Both search terms are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class SearchViewAlumTit(APIView):
+    def post(self, request, format=None):
+        data = request.data
+        search_term_1 = data.get('num_titulo')
+        search_term_2 = data.get('num_control')
+
+        if search_term_1 and search_term_2:
+            results_1 = Titulados.objects.filter(num_titulo=search_term_1)
+            results_2 = Alumnos.objects.filter(num_control=search_term_2)
+
+            if results_1.exists() or results_2.exists():
+                return Response({'error': 'A record with the provided search term already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({'message': 'No records found.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Both search terms are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CustomPagination(PageNumberPagination):
     page_size = 50
@@ -168,13 +191,48 @@ class CustomPagination(PageNumberPagination):
             'results': data
         })
 
+
+def titulos(request):
+    if request is None:
+        return Titulados.objects.none()
+    return Titulados.objects.all()
+
+
+class AlumnoFilter(filters.FilterSet):
+    nombre = filters.CharFilter(lookup_expr='icontains')
+    apellidop = filters.CharFilter(lookup_expr='icontains')
+    apellidop =filters.CharFilter(lookup_expr='icontains')
+    carrera = filters.CharFilter(field_name='carrera' ,lookup_expr='in')
+    carrera_not = filters.CharFilter(field_name='carrera', lookup_expr='in', exclude=True)
+    num_control = filters.CharFilter(lookup_expr='icontains')
+    sexo = filters.CharFilter(field_name='sexo',lookup_expr='in')
+    sexo_not = filters.CharFilter(field_name='sexo', lookup_expr='in' ,exclude=True)
+    CURP = filters.CharFilter(lookup_expr='icontains')
+    periodo_ingreso = filters.CharFilter(lookup_expr='exact')
+    periodo_egreso = filters.CharFilter(lookup_expr='exact')
+    estado_nacimiento = filters.CharFilter(lookup_expr='icontains')
+    fecha_nacimiento = filters.CharFilter(lookup_expr='icontains')
+    carrera_fk = filters.NumberFilter(lookup_expr='exact')
+    certificado_fk = filters.NumberFilter(lookup_expr='exact')
+    titulo_fk = filters.NumberFilter(lookup_expr='exact')
+
+    certificado_fk_null = filters.BooleanFilter(field_name='certificado_fk', lookup_expr='isnull')
+    titulo_fk_null = filters.BooleanFilter(field_name='titulo_fk', lookup_expr='isnull')
+
+    class Meta:
+        model = Alumnos
+        fields = ['nombre','apellidop','apellidom','carrera','num_control','sexo', 'sexo_not','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk','certificado_fk_null','titulo_fk_null']
+
+    
+
 class AlumnosView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = AlumnoSerializer
-    queryset = Alumnos.objects.all()
+    queryset = Alumnos.objects.order_by('id_alumno')
     pagination_class = CustomPagination
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     filterset_class = AlumnoFilter
+    search_fields = ('nombre','apellidop','apellidom','carrera','num_control','sexo','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk')
 
     
 

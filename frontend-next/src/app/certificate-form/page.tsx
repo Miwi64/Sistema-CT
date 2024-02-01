@@ -3,6 +3,8 @@ import PageLayout from "@/components/page-layout";
 import StudentFields from "@/components/student-fields";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -123,7 +125,9 @@ const formSchema = z.object({
 const CertificateForm = () => {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [ver, setVer] = useState("");
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const router = useRouter();
   const handleBadRequest = () => {
     setOpen(true);
   };
@@ -133,6 +137,29 @@ const CertificateForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     //console.log(values);
+    /* Verificacion  */
+    const verificacion = await fetch(`http://localhost:8000/searchAC/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token" + session?.token,
+      },
+      body: JSON.stringify({
+        num_folio: values.num_folio,
+        num_control: values.num_control,
+      }),
+    });
+    if (!verificacion.ok) {
+      //setVer(verificacion.status); Solo regresa: 400
+      handleBadRequest();
+      return;
+    }
+    /*  */
+    toast(`Registro Exitoso`, {
+      description: "Redirigiendo a Tabla Principal",
+    });
+
+    /* Insertacion */
     const postCert = await fetch(
       `http://127.0.0.1:8000/data/api/v1/certificados/`,
       {
@@ -149,11 +176,12 @@ const CertificateForm = () => {
         }),
       }
     );
+    console.log(postCert);
+
     if (!postCert.ok) {
       handleBadRequest();
       return;
     }
-    console.log(postCert);
 
     //llamada a ultima entrada de certificado
     const getIdCert = await fetch(`http://localhost:8000/ultimo-cert/`, {
@@ -189,11 +217,14 @@ const CertificateForm = () => {
         certificado_fk: id_certificado,
       }),
     });
+    console.log(postAlum);
+
     if (!postAlum.ok) {
       handleBadRequest();
       return;
     }
-    console.log(postAlum);
+    /*  */
+    router.push("/students-table");
   };
 
   if (isDesktop) {

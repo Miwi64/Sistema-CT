@@ -56,6 +56,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import * as z from "zod";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   num_control: z
@@ -136,6 +138,7 @@ const TitleForm = () => {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const router = useRouter();
   const handleBadRequest = () => {
     setOpen(true);
   };
@@ -147,6 +150,28 @@ const TitleForm = () => {
     // Do something with the form values.
     // This will be type-safe and validated.
     //console.log(values);
+    /* Verificacion  */
+    const verificacion = await fetch(`http://localhost:8000/searchAT/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Token" + session?.token,
+      },
+      body: JSON.stringify({
+        num_titulo: values.num_titulo,
+        num_control: values.num_control,
+      }),
+    });
+    if (!verificacion.ok) {
+      //setVer(verificacion.status); Solo regresa: 400
+      handleBadRequest();
+      return;
+    }
+    /*  */
+    toast(`Registro Exitoso`, {
+      description: "Redirigiendo a Tabla Principal",
+    });
+
     const postTit = await fetch(
       `http://127.0.0.1:8000/data/api/v1/titulados/`,
       {
@@ -210,6 +235,8 @@ const TitleForm = () => {
       return;
     }
     console.log(postAlum);
+
+    router.push("/students-table");
   };
 
   if (isDesktop) {
