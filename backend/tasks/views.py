@@ -105,7 +105,7 @@ class LoginView(KnoxLoginView):
 class CarreraFilter(filters.FilterSet):
     class Meta:
         model = Carreras
-        fields = ['nombre_carrera']
+        fields = ['id_carrera','nombre_carrera']
 
 
 class CarreraView(viewsets.ModelViewSet):
@@ -138,7 +138,7 @@ class CarreraView(viewsets.ModelViewSet):
 class AlumnoFilter(filters.FilterSet):
     class Meta:
         model = Alumnos
-        fields = ['nombre','apellidop','apellidom','carrera','num_control','sexo','periodo_ingreso','periodo_egreso']
+        fields = ['nombre','apellidop','apellidom','carrera','num_control','sexo','periodo_ingreso','periodo_egreso', 'titulo_fk', 'certificado_fk']
 
 
 
