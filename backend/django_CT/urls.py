@@ -42,6 +42,8 @@ urlpatterns = [
     path(r'logoutall/', knox_views.LogoutAllView.as_view(), name='knox_logoutall'),
     path('ultimo-cert/', LastCertificateEntryView.as_view()),
     path('ultimo-tit/', LastTitleEntryView.as_view()),
+    path('searchAC/', SearchViewAlumCert.as_view(), name='searchac'),
+    path('searchAT/', SearchViewAlumTit.as_view(), name='searchat'),
     #path(r'pdf/', PruebaPDFView.as_view(), name='pdf_test'),
     path('data/', include('tasks.urls')),
 ]
