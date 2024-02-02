@@ -136,14 +136,6 @@ class CarreraView(viewsets.ModelViewSet):
         delete_items.delete()
         return Response( self.serializer_class(delete_items,many=True).data, status=status.HTTP_200_OK)
 #------------------------------------------------
-<<<<<<< HEAD
-class AlumnoFilter(filters.FilterSet):
-    class Meta:
-        model = Alumnos
-        fields = ['nombre','apellidop','apellidom','carrera','num_control','sexo','periodo_ingreso','periodo_egreso', 'titulo_fk', 'certificado_fk']
-=======
->>>>>>> 00cbf7e361dc75fc207c82b7bda27642d5a95743
-
 
 
 class SearchViewAlumCert(APIView):
