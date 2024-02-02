@@ -120,7 +120,7 @@ export const columns: ColumnDef<Student>[] = [
   {
     accessorKey: "observaciones_tit",
     header: ({ column }) => (
-      <ColumnHeader column={column} title="Observaciones(Título)" />
+      <ColumnHeader column={column} title="Observaciones (Título)" />
     ),
   },
   {

@@ -17,7 +17,11 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-export default function AlertDialogClient({ dato }) {
+interface AlertDialogProps {
+  id: string
+}
+
+export default function AlertDialogClient({ id }: AlertDialogProps) {
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -27,7 +31,7 @@ export default function AlertDialogClient({ dato }) {
         <Button variant="destructive" asChild>
           <a>
             <Trash2 className="md:mr-2" />
-            <span className="hidden md:inline">Eliminacion </span>
+            <span className="hidden md:inline">Eliminar</span>
           </a>
         </Button>
       </AlertDialogTrigger>
@@ -49,9 +53,9 @@ export default function AlertDialogClient({ dato }) {
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={async () => {
-              console.log(dato);
+              console.log(id);
               const busqueda = await fetch(
-                `http://127.0.0.1:8000/data/api/v1/alumnos/?num_control=${dato}`,
+                `http://127.0.0.1:8000/data/api/v1/alumnos/?num_control=${id}`,
                 {
                   method: "GET",
                   headers: {
