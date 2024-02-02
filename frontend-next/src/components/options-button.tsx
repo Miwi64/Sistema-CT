@@ -173,7 +173,7 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
                 className="justify-start py-6"
                 asChild
               >
-                <a href={`/edit/${id}`} target="_blank">
+                <a href={`/edit/${id}`}>
                   <Pencil className="mr-4 h-7 w-7" />
                   <span className="text-lg">Editar</span>
                 </a>

@@ -48,7 +48,7 @@ export const STUDENT_COLUMNS = [
         text: "Apellido Materno"
     },
     {
-        value: "carrera",
+        value: "nombre_carrera",
         text: "Carrera"
     },
     {

@@ -7,16 +7,25 @@ import { ColumnDef } from "@tanstack/react-table"
 import { BookUser, MoreVertical, Pencil, Trash2 } from "lucide-react"
 
 export type Student = {
+  id_alumno: string,
   num_control: string,
   nombre: string,
   apellidop: string,
   apellidom?: string,
+  carrera_fk: string,
+  periodo_ingreso: string,
+  periodo_egreso: string,
+  estado_nacimiento: string,
+  fecha_nacimiento: string,
+  nombre_carrera:string,
   carrera: string,
   sexo: string,
   CURP: string,
+  certificado_fk?: string,
   num_folio?: string,
   fecha_registro_cert?: string,
   observaciones_cert?: string,
+  titulo_fk?: string,
   num_titulo?: string,
   clave_plan?: string,
   fecha_acto?: string,
@@ -52,7 +61,7 @@ export const columns: ColumnDef<Student>[] = [
     ),
   },
   {
-    accessorKey: "carrera",
+    accessorKey: "nombre_carrera",
     header: ({ column }) => (
       <ColumnHeader column={column} title="Carrera" />
     ),
