@@ -1,21 +1,13 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
 import {
   BookType,
   ChevronsUpDown,
@@ -92,7 +84,9 @@ export default async function Page({ params }: { params: { id: string } }) {
             <span className="hidden md:inline">Editar</span>
           </a>
         </Button>
+        {/*Eliminacion */}
         <AlertDialogClient id={params.id} />
+        {/*Eliminacion */}
       </section>
       <section className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
         <Collapsible defaultOpen>

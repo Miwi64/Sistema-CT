@@ -29,14 +29,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { CAREERS } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { cn, getData } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import * as z from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import {
   Dialog,
@@ -58,6 +59,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import { getServerSession } from "next-auth";
 import { Label } from "@/components/ui/label";
 
 const formSchema = z.object({
@@ -112,7 +114,7 @@ const formSchema = z.object({
     .string({ required_error: "Campo requerido" })
     .transform((value) => value.replace(/\s+/g, ""))
     .pipe(z.string().min(1, { message: "Campo requerido" })),
-  carrera: z.string({ required_error: "Campo requerido" }),
+  carrera_fk: z.string({ required_error: "Campo requerido" }),
   fecha_registro_cert: z
     .date({ required_error: "Campo requerido" })
     .transform((value) => value.toISOString().split("T")[0]),
@@ -125,9 +127,10 @@ const formSchema = z.object({
 const CertificateForm = () => {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
-  const [ver, setVer] = useState("");
+  const [careers, setCareers] = useState([]);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter();
+
   const handleBadRequest = () => {
     setOpen(true);
   };
@@ -135,8 +138,17 @@ const CertificateForm = () => {
     resolver: zodResolver(formSchema),
   });
 
+  // useEffect(() => {
+  //   async function fetch() {
+  //     const datos = getData();
+  //     setCareers(datos);
+  //   }
+  //   fetch();
+  // }, []);
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    //console.log(values);
+    console.log(values);
+    //return;
     /* Verificacion  */
     const verificacion = await fetch(`http://localhost:8000/searchAC/`, {
       method: "POST",
@@ -170,7 +182,6 @@ const CertificateForm = () => {
         },
         body: JSON.stringify({
           num_folio: values.num_folio,
-          nombre_carrera: values.carrera,
           fecha_registro: values.fecha_registro_cert,
           observaciones: values.observaciones_cert,
         }),
@@ -204,7 +215,7 @@ const CertificateForm = () => {
         nombre: values.nombre,
         apellidop: values.apellidop,
         apellidom: values.apellidom,
-        carrera: values.carrera,
+        carrera_fk: values.carrera_fk,
         num_control: values.num_control,
         sexo: values.sexo,
         CURP: values.CURP,
@@ -212,7 +223,6 @@ const CertificateForm = () => {
         periodo_egreso: values.periodo_egreso,
         estado_nacimiento: values.estado_nacimiento,
         fecha_nacimiento: values.fecha_nacimiento,
-        carrera_fk: null,
         titulo_fk: null,
         certificado_fk: id_certificado,
       }),
@@ -264,7 +274,7 @@ const CertificateForm = () => {
                   />
                   <FormField
                     control={form.control}
-                    name="carrera"
+                    name="carrera_fk"
                     render={({ field }) => (
                       <FormItem className="">
                         <FormLabel>Carrera</FormLabel>
@@ -283,6 +293,14 @@ const CertificateForm = () => {
                                 {text}
                               </SelectItem>
                             ))}
+                            {/*                             {careers.map(({ id_carrera, nombre_carrera }) => (
+                              <SelectItem
+                                key={id_carrera}
+                                value={`${id_carrera}`}
+                              >
+                                {nombre_carrera}
+                              </SelectItem>
+                            ))} */}
                           </SelectContent>
                         </Select>
                         <FormMessage />

@@ -23,7 +23,6 @@ class Titulados(models.Model):
 class Certificados(models.Model):
     id_certificado = models.BigAutoField(primary_key=True,auto_created=True)
     num_folio = models.IntegerField(blank=True, unique=True)
-    nombre_carrera = models.CharField(max_length=20, blank=True)
     fecha_registro = models.DateField()
     observaciones = models.TextField(max_length=45, blank=True)
     def __str__(self):
@@ -38,7 +37,6 @@ class Alumnos(models.Model):
     nombre = models.CharField(max_length=45, blank=True)
     apellidop = models.CharField(max_length=45, blank=True)
     apellidom = models.CharField(max_length=45, blank=True)
-    carrera = models.CharField(max_length=45, blank=True)
     num_control = models.CharField(max_length=45, blank=True, unique=True)
     sexo = models.CharField(max_length=1, blank=True)
     CURP = models.CharField(max_length=45,blank=True)

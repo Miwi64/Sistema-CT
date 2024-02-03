@@ -78,7 +78,6 @@ class AlumnoSerializer(serializers.ModelSerializer):
 
     certificado_fk=serializers.PrimaryKeyRelatedField(allow_null=True, queryset=Certificados.objects.all())
     num_folio=serializers.CharField(source='certificado_fk.num_folio',read_only=True)
-    carrera_cert=serializers.CharField(source='certificado_fk.nombre_carrera',read_only=True)
     fecha_registro_cert=serializers.CharField(source='certificado_fk.fecha_registro',read_only=True)
     observaciones_cert=serializers.CharField(source='certificado_fk.observaciones',read_only=True)
 
@@ -97,7 +96,6 @@ class AlumnoSerializer(serializers.ModelSerializer):
                   'nombre',
                   'apellidop',
                   'apellidom',
-                  'carrera',
                   'num_control',
                   'sexo',
                   'CURP',
@@ -106,7 +104,7 @@ class AlumnoSerializer(serializers.ModelSerializer):
                   'estado_nacimiento',
                   'fecha_nacimiento',
                   'carrera_fk', 'nombre_carrera', 
-                  'certificado_fk','num_folio','carrera_cert','fecha_registro_cert','observaciones_cert',
+                  'certificado_fk','num_folio','fecha_registro_cert','observaciones_cert',
                   'titulo_fk','num_titulo','clave_plan','fecha_acto','fecha_registro_tit','num_cedula','observaciones_tit',
                   ]
     

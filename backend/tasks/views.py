@@ -112,7 +112,7 @@ class CarreraFilter(filters.FilterSet):
 class CarreraView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = CarreraSerializer
-    queryset = Carreras.objects.all()
+    queryset = Carreras.objects.order_by('id_carrera')
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = CarreraFilter
 
@@ -201,8 +201,6 @@ class AlumnoFilter(filters.FilterSet):
     nombre = filters.CharFilter(lookup_expr='icontains')
     apellidop = filters.CharFilter(lookup_expr='icontains')
     apellidop =filters.CharFilter(lookup_expr='icontains')
-    carrera = filters.CharFilter(field_name='carrera' ,lookup_expr='in')
-    carrera_not = filters.CharFilter(field_name='carrera', lookup_expr='in', exclude=True)
     num_control = filters.CharFilter(lookup_expr='icontains')
     sexo = filters.CharFilter(field_name='sexo',lookup_expr='in')
     sexo_not = filters.CharFilter(field_name='sexo', lookup_expr='in' ,exclude=True)
@@ -214,13 +212,13 @@ class AlumnoFilter(filters.FilterSet):
     carrera_fk = filters.NumberFilter(lookup_expr='exact')
     certificado_fk = filters.NumberFilter(lookup_expr='exact')
     titulo_fk = filters.NumberFilter(lookup_expr='exact')
-
+    carrera = filters.CharFilter(field_name='carrera_fk.nombre_carrera', lookup_expr='in')
     certificado_fk_null = filters.BooleanFilter(field_name='certificado_fk', lookup_expr='isnull')
     titulo_fk_null = filters.BooleanFilter(field_name='titulo_fk', lookup_expr='isnull')
 
     class Meta:
         model = Alumnos
-        fields = ['nombre','apellidop','apellidom','carrera','num_control','sexo', 'sexo_not','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk','certificado_fk_null','titulo_fk_null']
+        fields = ['nombre','apellidop','apellidom','num_control','sexo','carrera', 'sexo_not','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk','certificado_fk_null','titulo_fk_null']
 
     
 
@@ -231,7 +229,7 @@ class AlumnosView(viewsets.ModelViewSet):
     pagination_class = CustomPagination
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     filterset_class = AlumnoFilter
-    search_fields = ('nombre','apellidop','apellidom','carrera','num_control','sexo','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk')
+    search_fields = ('nombre','apellidop','apellidom','num_control','sexo','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk')
 
     
 
@@ -338,7 +336,7 @@ class TituladosView(viewsets.ModelViewSet):
 class CertificadosFilter(filters.FilterSet):
     class Meta:
         model = Certificados
-        fields = ['num_folio','nombre_carrera','fecha_registro']
+        fields = ['num_folio','fecha_registro']
 
 
 class LastCertificateEntryView(generics.RetrieveAPIView):

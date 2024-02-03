@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface AlertDialogProps {
-  id: string
+  id: string;
 }
 
 export default function AlertDialogClient({ id }: AlertDialogProps) {
@@ -65,8 +65,14 @@ export default function AlertDialogClient({ id }: AlertDialogProps) {
                 }
               );
               const { results } = await busqueda.json();
+
               console.log(results?.[0].id_alumno);
+              console.log(results?.[0].certificado_fk);
+              console.log(results?.[0].titulo_fk);
               const data = results?.[0].id_alumno;
+              const datac = results?.[0].certificado_fk;
+              const datat = results?.[0].titulo_fk;
+
               await fetch(
                 `http://127.0.0.1:8000/data/api/v1/alumnos/${data}/`,
                 {
@@ -77,6 +83,28 @@ export default function AlertDialogClient({ id }: AlertDialogProps) {
                   },
                 }
               );
+              /*Eliminacion de Certificado y Titulo*/
+              // await fetch(
+              //   `http://127.0.0.1:8000/data/api/v1/certificados/${datac}/`,
+              //   {
+              //     method: "DELETE",
+              //     headers: {
+              //       "Content-Type": "application/json",
+              //       Authorization: "Token " + session?.token,
+              //     },
+              //   }
+              // );
+              // await fetch(
+              //   `http://127.0.0.1:8000/data/api/v1/titulados/${datat}/`,
+              //   {
+              //     method: "DELETE",
+              //     headers: {
+              //       "Content-Type": "application/json",
+              //       Authorization: "Token " + session?.token,
+              //     },
+              //   }
+              // );
+
               toast(`Eliminacion Exitosa`, {
                 description: "Actualizando y redirigiendo a la Tabla Principal",
               });
