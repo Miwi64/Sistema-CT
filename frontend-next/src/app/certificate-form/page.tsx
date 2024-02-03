@@ -138,13 +138,27 @@ const CertificateForm = () => {
     resolver: zodResolver(formSchema),
   });
 
-  // useEffect(() => {
-  //   async function fetch() {
-  //     const datos = getData();
-  //     setCareers(datos);
-  //   }
-  //   fetch();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    console.log(session?.token.toString());
+    const fetchCareers = await fetch(
+      `http://127.0.0.1:8000/data/api/v1/carreras/`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: "Token " + session?.token,
+        },
+      }
+    );
+    const data = await fetchCareers.json();
+    setCareers(data);
+    console.log("interno");
+    console.log(data);
+    console.log(careers);
+  };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
@@ -154,7 +168,7 @@ const CertificateForm = () => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Token" + session?.token,
+        Authorization: "Token " + session?.token,
       },
       body: JSON.stringify({
         num_folio: values.num_folio,
