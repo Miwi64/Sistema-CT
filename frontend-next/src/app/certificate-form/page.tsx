@@ -293,7 +293,7 @@ const CertificateForm = () => {
                                 {text}
                               </SelectItem>
                             ))}
-                            {/*                             {careers.map(({ id_carrera, nombre_carrera }) => (
+                            {/* {careers.map(({ id_carrera, nombre_carrera }) => (
                               <SelectItem
                                 key={id_carrera}
                                 value={`${id_carrera}`}
@@ -430,7 +430,7 @@ const CertificateForm = () => {
                 />
                 <FormField
                   control={form.control}
-                  name="carrera"
+                  name="carrera_fk"
                   render={({ field }) => (
                     <FormItem className="">
                       <FormLabel>Carrera</FormLabel>
@@ -449,6 +449,14 @@ const CertificateForm = () => {
                               {text}
                             </SelectItem>
                           ))}
+                          {/* {careers.map(({ id_carrera, nombre_carrera }) => (
+                              <SelectItem
+                                key={id_carrera}
+                                value={`${id_carrera}`}
+                              >
+                                {nombre_carrera}
+                              </SelectItem>
+                            ))} */}
                         </SelectContent>
                       </Select>
                       <FormMessage />
