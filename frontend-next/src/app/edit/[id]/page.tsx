@@ -22,20 +22,23 @@ async function getData(session: Session, id: string) {
       },
     }
   );
-  const careersData = await fetchCareers.json()
+  const careersData = await fetchCareers.json();
   const { results: studentData } = await fetchStudent.json();
-  return {studentData, careersData};
+  return { studentData, careersData };
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-  const {studentData: [student], careersData: careers} = await getData(session, params.id);
+  const {
+    studentData: [student],
+    careersData: careers,
+  } = await getData(session, params.id);
   return (
     <PageLayout>
       <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
         Editar
       </h1>
-      <EditForm session={session} data={student} careers={careers}/>
+      <EditForm session={session} data={student} careers={careers} />
     </PageLayout>
   );
 }

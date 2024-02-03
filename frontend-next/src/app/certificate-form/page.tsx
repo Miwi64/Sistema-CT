@@ -124,10 +124,19 @@ const formSchema = z.object({
     .optional(),
 });
 
-const CertificateForm = () => {
+type Career = {
+  id_carrera: number;
+  nombre_carrera: string;
+};
+
+interface EditFormProps {
+  session: Session;
+  careers: Career[];
+}
+
+const CertificateForm = ({ careers }: EditFormProps) => {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
-  const [careers, setCareers] = useState([]);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter();
 
@@ -139,25 +148,26 @@ const CertificateForm = () => {
   });
 
   useEffect(() => {
-    fetchData();
+    careers = fetchData();
+    console.log(careers);
   }, []);
 
   const fetchData = async () => {
-    console.log(session?.token.toString());
-    const fetchCareers = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/carreras/`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: "Token " + session?.token,
-        },
-      }
+    const fetchCareers = await fetch(`http://127.0.0.1:8000/carrera/`, {
+      method: "GET",
+    });
+    const results = await fetchCareers.json();
+    const careers = results.map(
+      (result: { id_carrera: number; nombre_carrera: string }) => ({
+        text: result.nombre_carrera,
+        value: result.id_carrera,
+        checked: false,
+      })
     );
-    const data = await fetchCareers.json();
-    setCareers(data);
+    //console.log(results);
     console.log("interno");
-    console.log(data);
-    console.log(careers);
+    //console.log(careers);
+    return careers;
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -302,19 +312,19 @@ const CertificateForm = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {CAREERS.map(({ value, text }, key) => (
+                            {/* {CAREERS.map(({ value, text }, key) => (
                               <SelectItem key={key} value={value}>
                                 {text}
                               </SelectItem>
-                            ))}
-                            {/* {careers.map(({ id_carrera, nombre_carrera }) => (
+                            ))} */}
+                            {careers.map(({ id_carrera, nombre_carrera }) => (
                               <SelectItem
                                 key={id_carrera}
                                 value={`${id_carrera}`}
                               >
                                 {nombre_carrera}
                               </SelectItem>
-                            ))} */}
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
@@ -458,19 +468,19 @@ const CertificateForm = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {CAREERS.map(({ value, text }, key) => (
+                          {/* {CAREERS.map(({ value, text }, key) => (
                             <SelectItem key={key} value={value}>
                               {text}
                             </SelectItem>
+                          ))} */}
+                          {careers.map(({ id_carrera, nombre_carrera }) => (
+                            <SelectItem
+                              key={id_carrera}
+                              value={`${id_carrera}`}
+                            >
+                              {nombre_carrera}
+                            </SelectItem>
                           ))}
-                          {/* {careers.map(({ id_carrera, nombre_carrera }) => (
-                              <SelectItem
-                                key={id_carrera}
-                                value={`${id_carrera}`}
-                              >
-                                {nombre_carrera}
-                              </SelectItem>
-                            ))} */}
                         </SelectContent>
                       </Select>
                       <FormMessage />

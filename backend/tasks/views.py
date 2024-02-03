@@ -137,6 +137,11 @@ class CarreraView(viewsets.ModelViewSet):
         return Response( self.serializer_class(delete_items,many=True).data, status=status.HTTP_200_OK)
 #------------------------------------------------
 
+class CarrerasView(generics.ListAPIView):
+    serializer_class = CarreraSerializer
+    queryset = Carreras.objects.order_by('id_carrera')
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = CarreraFilter
 
 class SearchViewAlumCert(APIView):
     def post(self, request, format=None):
