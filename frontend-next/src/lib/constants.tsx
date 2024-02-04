@@ -102,3 +102,13 @@ export const TITLE_COLUMNS = [
         text: "Observaciones"
     },
 ]
+
+export const ORDER_CRITERIAS = [
+    { text: "Número de control", value: "num_control" },
+    { text: "Nombre", value: "nombre" },
+    { text: "Apellido paterno", value: "apellidop" },
+    { text: "Apellido materno", value: "apellidom" },
+    { text: "Fecha de nacimiento", value: "fecha_nacimiento" },
+    { text: "Periodo de ingreso", value: "periodo_ingreso" },
+    { text: "Periodo de egreso", value: "periodo_egreso" },
+]

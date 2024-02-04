@@ -1,5 +1,5 @@
 "use client"
-import { ArrowLeftToLine, ArrowRightToLine, BookText, CalendarIcon, ChevronDown, ChevronLeft, ChevronRight, File, FileDown, Filter, GraduationCap, Home, Printer, Save, Search, Users } from "lucide-react"
+import { ArrowLeftToLine, ArrowRightToLine, BookText, CalendarIcon, ChevronDown, ChevronLeft, ChevronRight, File, FileDown, Filter, GraduationCap, Home, Printer, Save, Search, SortDesc, Users } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { Button } from "./ui/button"
@@ -7,6 +7,7 @@ import { SearchBar } from "./search-bar"
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { ORDER_CRITERIAS } from '@/lib/constants'
 import { addDays, format } from "date-fns"
 import { Calendar } from "./ui/calendar"
 import { DateRange } from "react-day-picker"
@@ -25,7 +26,7 @@ interface RibbonTooolbarProps {
 export function RibbonToolbar({
   data, setData, filters, setFilters
 }: RibbonTooolbarProps) {
-  const {doc, sex, careers} = filters
+  const { doc, sex, careers } = filters
 
   const [dateRange, setDateRange] = useState(false)
   const [date, setDate] = useState<DateRange | undefined>({
@@ -57,7 +58,7 @@ export function RibbonToolbar({
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <SearchBar setFilters={setFilters} filters={filters}/>
+              <SearchBar setFilters={setFilters} filters={filters} />
             </PopoverContent>
           </Popover>
           <Button variant="outline" asChild>
@@ -91,6 +92,38 @@ export function RibbonToolbar({
       <TabsContent className="mt-0" value="Filtrar">
         <div className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
         rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md">
+          <div className="flex items-center space-x-6 lg:space-x-8">
+            <div className="flex items-center space-x-2">
+              <p className="text-sm font-medium">Ordenar</p>
+              <Select
+                value={filters.order.criteria}
+                onValueChange={(value) => {
+                  setFilters({ ...filters, order: { criteria: value, type: filters.order.type } })
+                  setData({ ...data, current_page: "1" })
+                }}
+              >
+                <SelectTrigger className="h-9">
+                  <SelectValue placeholder={filters.order.criteria} />
+                </SelectTrigger>
+                <SelectContent side="top">
+                  {ORDER_CRITERIAS.map(({ text, value }) => (
+                    <SelectItem key={value} value={value}>
+                      {text}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Toggle variant="outline" size="sm"
+                pressed={filters.order.type === "-"}
+                onPressedChange={(pressed) => {
+                  const type = pressed ? "-" : ""
+                  setFilters({ ...filters, order: { criteria: filters.order.criteria, type: type } })
+                }
+                }>
+                <SortDesc size={18} />
+              </Toggle>
+            </div>
+          </div>
           <DropdownMenu >
             <DropdownMenuTrigger asChild>
               <Button variant="outline">
@@ -101,12 +134,12 @@ export function RibbonToolbar({
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Mostrar</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {careers.map(({text, checked}, index) => (
+              {careers.map(({ text, checked }, index) => (
                 <DropdownMenuCheckboxItem key={index} checked={checked} onCheckedChange={
                   (checked) => {
                     const newArray = [...careers];
                     newArray[index].checked = checked;
-                    setFilters({...filters, careers: newArray})
+                    setFilters({ ...filters, careers: newArray })
                   }}>
                   {text}
                 </DropdownMenuCheckboxItem>
@@ -123,7 +156,7 @@ export function RibbonToolbar({
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Mostrar estudiantes con:</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup value={doc} onValueChange={(value) => setFilters({...filters, doc: value})}>
+              <DropdownMenuRadioGroup value={doc} onValueChange={(value) => setFilters({ ...filters, doc: value })}>
                 <DropdownMenuRadioItem value="C">Certificado</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="T">Título</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="CT">Certificado y título</DropdownMenuRadioItem>
@@ -140,7 +173,7 @@ export function RibbonToolbar({
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>Sexo</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuRadioGroup value={sex} onValueChange={(value) => setFilters({...filters, sex:value})}>
+              <DropdownMenuRadioGroup value={sex} onValueChange={(value) => setFilters({ ...filters, sex: value })}>
                 <DropdownMenuRadioItem value="M">Masculino</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="F">Femenino</DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="B">Ambos</DropdownMenuRadioItem>
