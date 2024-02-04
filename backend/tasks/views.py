@@ -205,7 +205,7 @@ def titulos(request):
 class AlumnoFilter(filters.FilterSet):
     nombre = filters.CharFilter(lookup_expr='icontains')
     apellidop = filters.CharFilter(lookup_expr='icontains')
-    apellidop =filters.CharFilter(lookup_expr='icontains')
+    apellidom =filters.CharFilter(lookup_expr='icontains')
     num_control = filters.CharFilter(lookup_expr='icontains')
     sexo = filters.CharFilter(field_name='sexo',lookup_expr='in')
     sexo_not = filters.CharFilter(field_name='sexo', lookup_expr='in' ,exclude=True)
@@ -214,16 +214,31 @@ class AlumnoFilter(filters.FilterSet):
     periodo_egreso = filters.CharFilter(lookup_expr='exact')
     estado_nacimiento = filters.CharFilter(lookup_expr='icontains')
     fecha_nacimiento = filters.CharFilter(lookup_expr='icontains')
-    carrera_fk = filters.NumberFilter(lookup_expr='exact')
+    carrera_fk = filters.CharFilter(method='filter_carrera_fk')
     certificado_fk = filters.NumberFilter(lookup_expr='exact')
     titulo_fk = filters.NumberFilter(lookup_expr='exact')
-    carrera = filters.CharFilter(field_name='carrera_fk.nombre_carrera', lookup_expr='in')
     certificado_fk_null = filters.BooleanFilter(field_name='certificado_fk', lookup_expr='isnull')
     titulo_fk_null = filters.BooleanFilter(field_name='titulo_fk', lookup_expr='isnull')
 
+    def filter_carrera_fk(self, queryset, name, value):
+        values = [int(val) for val in value.split(',')]
+        return queryset.filter(**{name + '__in': values})
+
+    order_by = filters.OrderingFilter(
+        fields=(
+            ('num_control', 'num_control'),
+            ('nombre', 'nombre'),
+            ('fecha_nacimiento', 'fecha_nacimiento'),
+            ('apellidop', 'apellidop'),
+            ('apellidom', 'apellidom'),
+            ('periodo_ingreso', 'periodo_ingreso'),
+            ('periodo_egreso', 'periodo_egreso'),
+        )
+    )
+
     class Meta:
         model = Alumnos
-        fields = ['nombre','apellidop','apellidom','num_control','sexo','carrera', 'sexo_not','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk','certificado_fk_null','titulo_fk_null']
+        fields = ['nombre','apellidop','apellidom','num_control','sexo', 'sexo_not','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk','certificado_fk_null','titulo_fk_null']
 
     
 

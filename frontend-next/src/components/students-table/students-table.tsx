@@ -8,8 +8,8 @@ import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 
 interface StudentsTableProps {
-    careers: Career[],
-    session: Session
+  careers: Career[],
+  session: Session
 }
 
 type Career = {
@@ -21,11 +21,15 @@ type Career = {
 export type FilterData = {
   doc: string,
   sex: string,
-  search:string,
+  search: string,
   careers: Career[]
+  order: {
+    criteria: string,
+    type: string
+  }
 }
 
-export default function StudentsTable({careers, session}: StudentsTableProps) {
+export default function StudentsTable({ careers, session }: StudentsTableProps) {
   const [paginationData, setPaginationData] = useState<PaginationData>({
     total_count: 0,
     current_page: "1",
@@ -38,7 +42,9 @@ export default function StudentsTable({careers, session}: StudentsTableProps) {
   })
 
   const [studentData, setStudentData] = useState<Student[]>([])
-  const [filters, setFilters] = useState<FilterData>({ doc: "C", sex: "M", careers: careers, search: "" })
+  const [filters, setFilters] = useState<FilterData>({
+    doc: "C", sex: "M", careers: careers, search: "", order: { criteria: "num_control", type: "" }
+  })
 
   useEffect(() => {
     const loadData = async (urlFilters: string) => {
@@ -54,14 +60,15 @@ export default function StudentsTable({careers, session}: StudentsTableProps) {
       setPaginationData(pagination)
       setStudentData(results)
     }
-      console.log(paginationData)
-      const docFilter = filters.doc === "C" ? "&certificado_fk!=null" : filters.doc === "T" ? "&titulo_fk!=null" : ""
-      const sexFilter = filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : ""
-      const checkedCareers = filters.careers.filter((career => career.checked))
-      const careerFilter = checkedCareers.length > 0 ? `&career_FK=${checkedCareers.map((career) => career.value).join(",")}` : ""
-      const urlFilters = `${docFilter}${sexFilter}${careerFilter}&num_control=${filters.search}`
-      console.log(`http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${urlFilters}`)
-      loadData(urlFilters)
+    console.log(paginationData)
+    const orderFilter = `&order_by=${filters.order.type}${filters.order.criteria}`
+    const docFilter = filters.doc === "C" ? "&certificado_fk_null=false" : filters.doc === "T" ? "&titulo_fk_null=false" : ""
+    const sexFilter = filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : ""
+    const checkedCareers = filters.careers.filter((career => career.checked))
+    const careerFilter = checkedCareers.length > 0 ? `&carrera_fk=${checkedCareers.map((career) => career.value).join(",")}` : ""
+    const urlFilters = `${docFilter}${sexFilter}${careerFilter}${orderFilter}&num_control=${filters.search}`
+    console.log(`http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${urlFilters}`)
+    loadData(urlFilters)
 
   }, [paginationData.current_page, filters])
   return (
