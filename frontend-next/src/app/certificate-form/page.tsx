@@ -129,14 +129,10 @@ type Career = {
   nombre_carrera: string;
 };
 
-interface EditFormProps {
-  session: Session;
-  careers: Career[];
-}
-
-const CertificateForm = ({ careers }: EditFormProps) => {
+const CertificateForm = () => {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [careers, setCareers] = useState<Career[]>([]);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter();
 
@@ -148,27 +144,23 @@ const CertificateForm = ({ careers }: EditFormProps) => {
   });
 
   useEffect(() => {
-    careers = fetchData();
-    console.log(careers);
-  }, []);
+    const fetchData = async () => {
+      const fetchCareers = await fetch(`http://127.0.0.1:8000/carrera/`, {
+        method: "GET",
+      });
+      const results = await fetchCareers.json();
+      console.log(results);
+      setCareers(
+        results.map((item: Career) => ({
+          id_carrera: item.id_carrera,
+          nombre_carrera: item.nombre_carrera,
+        }))
+      );
+      console.log(careers);
+    };
 
-  const fetchData = async () => {
-    const fetchCareers = await fetch(`http://127.0.0.1:8000/carrera/`, {
-      method: "GET",
-    });
-    const results = await fetchCareers.json();
-    const careers = results.map(
-      (result: { id_carrera: number; nombre_carrera: string }) => ({
-        text: result.nombre_carrera,
-        value: result.id_carrera,
-        checked: false,
-      })
-    );
-    //console.log(results);
-    console.log("interno");
-    //console.log(careers);
-    return careers;
-  };
+    fetchData();
+  }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);

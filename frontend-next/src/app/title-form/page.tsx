@@ -55,7 +55,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import * as z from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -111,7 +111,7 @@ const formSchema = z.object({
     .string({ required_error: "Campo requerido" })
     .transform((value) => value.replace(/\s+/g, ""))
     .pipe(z.string().min(8, { message: "Minimo 8 caracteres" })),
-  carrera: z.string({ required_error: "Campo requerido" }),
+  carrera_fk: z.string({ required_error: "Campo requerido" }),
   num_cedula: z
     .string({ required_error: "Campo requerido" })
     .transform((value) => value.replace(/\s+/g, ""))
@@ -134,9 +134,15 @@ const formSchema = z.object({
     .transform((value) => value.toISOString().split("T")[0]),
 });
 
+type Career = {
+  id_carrera: number;
+  nombre_carrera: string;
+};
+
 const TitleForm = () => {
   const { data: session } = useSession();
   const [open, setOpen] = useState(false);
+  const [careers, setCareers] = useState<Career[]>([]);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter();
   const handleBadRequest = () => {
@@ -145,6 +151,25 @@ const TitleForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchCareers = await fetch(`http://127.0.0.1:8000/carrera/`, {
+        method: "GET",
+      });
+      const results = await fetchCareers.json();
+      console.log(results);
+      setCareers(
+        results.map((item: Career) => ({
+          id_carrera: item.id_carrera,
+          nombre_carrera: item.nombre_carrera,
+        }))
+      );
+      console.log(careers);
+    };
+
+    fetchData();
+  }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
@@ -217,7 +242,6 @@ const TitleForm = () => {
         nombre: values.nombre,
         apellidop: values.apellidop,
         apellidom: values.apellidom,
-        carrera: values.carrera,
         num_control: values.num_control,
         sexo: values.sexo,
         CURP: values.CURP,
@@ -225,7 +249,7 @@ const TitleForm = () => {
         periodo_egreso: values.periodo_egreso,
         estado_nacimiento: values.estado_nacimiento,
         fecha_nacimiento: values.fecha_nacimiento,
-        carrera_fk: null,
+        carrera_fk: values.carrera_fk,
         titulo_fk: id_titulo,
         certificado_fk: null,
       }),
@@ -278,9 +302,12 @@ const TitleForm = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              {CAREERS.map(({ value, text }, key) => (
-                                <SelectItem key={key} value={value}>
-                                  {text}
+                              {careers.map(({ id_carrera, nombre_carrera }) => (
+                                <SelectItem
+                                  key={id_carrera}
+                                  value={`${id_carrera}`}
+                                >
+                                  {nombre_carrera}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -514,9 +541,12 @@ const TitleForm = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {CAREERS.map(({ value, text }, key) => (
-                              <SelectItem key={key} value={value}>
-                                {text}
+                            {careers.map(({ id_carrera, nombre_carrera }) => (
+                              <SelectItem
+                                key={id_carrera}
+                                value={`${id_carrera}`}
+                              >
+                                {nombre_carrera}
                               </SelectItem>
                             ))}
                           </SelectContent>
