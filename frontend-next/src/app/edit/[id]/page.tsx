@@ -1,6 +1,9 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import EditForm from "@/components/edit/edit-form";
+import EditCertificate from "@/components/edit/edit-certificate";
+import EditStudent from "@/components/edit/edit-student";
+import EditTitle from "@/components/edit/edit-title";
 import PageLayout from "@/components/page-layout";
+import { Separator } from "@/components/ui/separator";
 import { Session, getServerSession } from "next-auth";
 
 async function getData(session: Session, id: string) {
@@ -38,7 +41,19 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
         Editar
       </h1>
-      <EditForm session={session} data={student} careers={careers} />
+      <EditStudent session={session} studentData={student} careers={careers} />
+      {student.titulo_fk &&
+        <>
+          <Separator />
+          <EditTitle session={session} studentData={student} />
+        </>
+      }
+      {student.certificado_fk &&
+        <>
+          <Separator />
+          <EditCertificate session={session} studentData={student} />
+        </>
+      }
     </PageLayout>
   );
 }
