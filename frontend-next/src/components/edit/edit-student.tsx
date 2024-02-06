@@ -250,11 +250,6 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
                             </FormItem>
                         )}
                     />
-                </section>
-                <h2 className="my-5 text-lg text-muted-foreground leading-none tracking-tight">
-                    Carrera
-                </h2>
-                <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     <FormField
                         control={form.control}
                         name="carrera_fk"

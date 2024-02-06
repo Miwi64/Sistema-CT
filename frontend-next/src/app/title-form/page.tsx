@@ -288,7 +288,7 @@ const TitleForm = () => {
                   <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     <FormField
                       control={form.control}
-                      name="carrera"
+                      name="carrera_fk"
                       render={({ field }) => (
                         <FormItem className="">
                           <FormLabel>Carrera</FormLabel>
@@ -400,7 +400,7 @@ const TitleForm = () => {
                             >
                               <Calendar
                                 mode="single"
-                                selected={field.value}
+                                selected={new Date(field.value)}
                                 onSelect={field.onChange}
                                 disabled={(date) =>
                                   date > new Date() ||
@@ -445,7 +445,7 @@ const TitleForm = () => {
                             >
                               <Calendar
                                 mode="single"
-                                selected={field.value}
+                                selected={new Date(field.value)}
                                 onSelect={field.onChange}
                                 disabled={(date) =>
                                   date > new Date() ||
@@ -489,13 +489,11 @@ const TitleForm = () => {
             <DialogHeader>
               <DialogTitle>Error al Registrar</DialogTitle>
               <DialogDescription>
-                Puede que ya exista un registro de Certificado con el Numero de
-                Folio o un Alumno con el Numero de Control puesto, verifique la
-                tabla de Alumnos
+                Ya existe un registro con el mismo número de control y/o número de título.
               </DialogDescription>
             </DialogHeader>
             <DialogClose asChild>
-              <Button variant="outline">Entendido</Button>
+              <Button variant="outline">Aceptar</Button>
             </DialogClose>
           </DialogContent>
         </Dialog>
@@ -527,7 +525,7 @@ const TitleForm = () => {
                 <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                   <FormField
                     control={form.control}
-                    name="carrera"
+                    name="carrera_fk"
                     render={({ field }) => (
                       <FormItem className="">
                         <FormLabel>Carrera</FormLabel>
@@ -636,7 +634,7 @@ const TitleForm = () => {
                           <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
-                              selected={field.value}
+                              selected={new Date(field.value)}
                               onSelect={field.onChange}
                               disabled={(date) =>
                                 date > new Date() ||
@@ -678,7 +676,7 @@ const TitleForm = () => {
                           <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
-                              selected={field.value}
+                              selected={new Date(field.value)}
                               onSelect={field.onChange}
                               disabled={(date) =>
                                 date > new Date() ||
@@ -722,14 +720,12 @@ const TitleForm = () => {
           <DrawerHeader className="text-left">
             <DrawerTitle>Error al Registrar</DrawerTitle>
             <DrawerDescription>
-              Puede que ya exista un registro de Certificado con el Numero de
-              Folio o un Alumno con el Numero de Control puesto, verifique la
-              tabla de Alumnos
+            Ya existe un registro con el mismo número de control y/o número de título.
             </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter className="pt-2">
             <DrawerClose asChild>
-              <Button variant="outline">Entendido</Button>
+              <Button variant="outline">Aceptar</Button>
             </DrawerClose>
           </DrawerFooter>
         </DrawerContent>

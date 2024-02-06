@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { BookUser, MoreVertical, Pencil, Trash2, X } from "lucide-react";
+import { BookUser, Link, MoreVertical, Pencil, Trash2, X } from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -35,10 +35,12 @@ import {
 import { toast } from "sonner";
 
 interface OptionsButtonProps {
-  id: string;
+  id: string
+  title: string
+  certificate: string
 }
 
-const OptionsButton = ({ id }: OptionsButtonProps) => {
+const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
   const { data: session } = useSession();
   const [showAlert, setShowAlert] = useState(false);
   const [open, setOpen] = useState(false);
@@ -68,6 +70,22 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
                 <span>Editar</span>
               </a>
             </DropdownMenuItem>
+
+            {!title &&
+              <DropdownMenuItem asChild>
+                <a href={`/link-title/${id}`} target="_blank">
+                  <Link className="mr-2" />
+                  <span>Vincular título</span>
+                </a>
+              </DropdownMenuItem>}
+
+            {!certificate &&
+              <DropdownMenuItem asChild>
+                <a href={`/link-certificate/${id}`} target="_blank">
+                  <Link className="mr-2" />
+                  <span>Vincular certificado</span>
+                </a>
+              </DropdownMenuItem>}
 
             <DropdownMenuItem asChild>
               <a
@@ -165,6 +183,8 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
           </AlertDialogTrigger>
         </AlertDialog>
       </div>
+
+
       <div className="md:hidden">
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
@@ -202,6 +222,28 @@ const OptionsButton = ({ id }: OptionsButtonProps) => {
                   <span className="text-lg">Editar</span>
                 </a>
               </Button>
+              {!title &&
+                <Button
+                  variant="secondary"
+                  className="justify-start py-6"
+                  asChild
+                >
+                  <a href={`/link-title/${id}`}>
+                    <Link className="mr-4 h-7 w-7" />
+                    <span className="text-lg">Vincular título</span>
+                  </a>
+                </Button>}
+              {!certificate &&
+                <Button
+                  variant="secondary"
+                  className="justify-start py-6"
+                  asChild
+                >
+                  <a href={`/link-certificate/${id}`}>
+                    <Link className="mr-4 h-7 w-7" />
+                    <span className="text-lg">Vincular certificado</span>
+                  </a>
+                </Button>}
               <Button
                 variant="destructive"
                 className="justify-start py-6"

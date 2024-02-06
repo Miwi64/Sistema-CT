@@ -1,10 +1,7 @@
 "use client"
 import { ColumnHeader } from "@/components/column-header"
 import OptionsButton from "@/components/options-button"
-import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ColumnDef } from "@tanstack/react-table"
-import { BookUser, MoreVertical, Pencil, Trash2 } from "lucide-react"
 
 export type Student = {
   id_alumno: string,
@@ -135,7 +132,7 @@ export const columns: ColumnDef<Student>[] = [
   {
     id: "actions",
     cell: ({ row }) => (
-      <OptionsButton id={row.getValue("num_control")}/>
+      <OptionsButton id={row.getValue("num_control")} title={row.getValue("num_titulo")} certificate={row.getValue("num_folio")}/>
     ),
     enableSorting: false,
     enableHiding: false,

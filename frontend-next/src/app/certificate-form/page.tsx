@@ -29,7 +29,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { CAREERS } from "@/lib/constants";
-import { cn, getData } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
@@ -351,7 +351,7 @@ const CertificateForm = () => {
                           <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                               mode="single"
-                              selected={field.value}
+                              selected={new Date(field.value)}
                               onSelect={field.onChange}
                               disabled={(date) =>
                                 date > new Date() ||
@@ -395,14 +395,12 @@ const CertificateForm = () => {
           <DialogHeader>
             <DialogTitle>Error al Registrar</DialogTitle>
             <DialogDescription>
-              Puede que ya exista un registro de Certificado con el Numero de
-              Folio o un Alumno con el Numero de Control puesto, verifique la
-              tabla de Alumnos
+              Ya existe un registro con el mismo número de control y/o número de folio.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Entendido</Button>
+              <Button variant="outline">Aceptar</Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
@@ -507,7 +505,7 @@ const CertificateForm = () => {
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            selected={field.value}
+                            selected={new Date(field.value)}
                             onSelect={field.onChange}
                             disabled={(date) =>
                               date > new Date() || date < new Date("1900-01-01")
@@ -550,14 +548,12 @@ const CertificateForm = () => {
         <DrawerHeader className="text-left">
           <DrawerTitle>Error al Registrar</DrawerTitle>
           <DrawerDescription>
-            Puede que ya exista un registro de Certificado con el Numero de
-            Folio o un Alumno con el Numero de Control puesto, verifique la
-            tabla de Alumnos
+          Ya existe un registro con el mismo número de control y/o número de folio.
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <Button variant="outline">Entendido</Button>
+            <Button variant="outline">Aceptar</Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
