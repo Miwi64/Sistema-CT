@@ -241,6 +241,13 @@ class AlumnoFilter(filters.FilterSet):
         fields = ['nombre','apellidop','apellidom','num_control','sexo', 'sexo_not','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk','certificado_fk_null','titulo_fk_null']
 
     
+class AlumView(generics.ListAPIView):
+    serializer_class = AlumnoSerializer
+    queryset = Alumnos.objects.order_by('id_alumno')
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AlumnoFilter
+
+
 
 class AlumnosView(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)

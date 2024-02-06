@@ -45,6 +45,7 @@ urlpatterns = [
     path('searchAC/', SearchViewAlumCert.as_view(), name='searchac'),
     path('searchAT/', SearchViewAlumTit.as_view(), name='searchat'),
     path('carrera/', CarrerasView.as_view(), name='carrera'),
+    path('alumnos/', AlumView.as_view(), name='alumnos'),
     #path(r'pdf/', PruebaPDFView.as_view(), name='pdf_test'),
     path('data/', include('tasks.urls')),
 ]
