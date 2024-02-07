@@ -112,3 +112,9 @@ export const ORDER_CRITERIAS = [
     { text: "Periodo de ingreso", value: "periodo_ingreso" },
     { text: "Periodo de egreso", value: "periodo_egreso" },
 ]
+
+export const DATE_CRITERIAS = [
+    { text: "Fecha de nacimiento", value: "nacimiento" },
+    { text: "Registro de certificado", value: "registro_cert" },
+    { text: "Registro de título", value: "registro_tit" }
+]

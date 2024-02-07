@@ -6,6 +6,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { Student, columns } from "@/lib/columns";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
+import DateFilter from "./date-filter";
 
 interface StudentsTableProps {
   careers: Career[],
@@ -26,6 +27,12 @@ export type FilterData = {
   order: {
     criteria: string,
     type: string
+  },
+  date: {
+    enable: boolean
+    criteria: string,
+    min: Date,
+    max: Date
   }
 }
 
@@ -43,7 +50,8 @@ export default function StudentsTable({ careers, session }: StudentsTableProps) 
 
   const [studentData, setStudentData] = useState<Student[]>([])
   const [filters, setFilters] = useState<FilterData>({
-    doc: "C", sex: "M", careers: careers, search: "", order: { criteria: "num_control", type: "" }
+    doc: "C", sex: "M", careers: careers, search: "", order: { criteria: "num_control", type: "" },
+    date: { enable: false, criteria: "nacimiento", min: new Date("1963-01-01"), max: new Date() }
   })
 
   useEffect(() => {
@@ -66,7 +74,10 @@ export default function StudentsTable({ careers, session }: StudentsTableProps) 
     const sexFilter = filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : ""
     const checkedCareers = filters.careers.filter((career => career.checked))
     const careerFilter = checkedCareers.length > 0 ? `&carrera_fk=${checkedCareers.map((career) => career.value).join(",")}` : ""
-    const urlFilters = `${docFilter}${sexFilter}${careerFilter}${orderFilter}&num_control=${filters.search}`
+    const min = new Date(filters.date.min.getTime() - (filters.date.min.getTimezoneOffset() * 60 * 1000)).toISOString().split('T')[0]
+    const max = new Date(filters.date.max.getTime() - (filters.date.max.getTimezoneOffset() * 60 * 1000)).toISOString().split('T')[0]
+    const dateFilter = filters.date.enable ? `&${filters.date.criteria}_min=${min}&${filters.date.criteria}_max=${max}` : ""
+    const urlFilters = `${docFilter}${sexFilter}${careerFilter}${dateFilter}${orderFilter}&num_control=${filters.search}`
     console.log(`http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${urlFilters}`)
     loadData(urlFilters)
 
@@ -76,6 +87,7 @@ export default function StudentsTable({ careers, session }: StudentsTableProps) 
       <nav className="top-0 sticky z-20">
         <NavMenu />
         <NavMobile />
+        <DateFilter filters={filters} setFilters={setFilters} />
         <RibbonToolbar data={paginationData} setData={setPaginationData} filters={filters} setFilters={setFilters} />
       </nav>
       <main className="my-4 mx-3">
