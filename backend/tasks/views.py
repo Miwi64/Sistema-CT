@@ -219,12 +219,12 @@ class AlumnoFilter(filters.FilterSet):
     titulo_fk = filters.NumberFilter(lookup_expr='exact')
     certificado_fk_null = filters.BooleanFilter(field_name='certificado_fk', lookup_expr='isnull')
     titulo_fk_null = filters.BooleanFilter(field_name='titulo_fk', lookup_expr='isnull')
-    nacimiento_max = django_filters.DateFilter(field_name='fecha_nacimiento', lookup_expr='gte')
-    nacimiento_min = django_filters.DateFilter(field_name='fecha_nacimiento', lookup_expr='lte')
-    registro_cert_max = django_filters.DateFilter(field_name='certificado_fk__fecha_registro', lookup_expr='gte')
-    registro_cert_min = django_filters.DateFilter(field_name='certificado_fk__fecha_registro', lookup_expr='lte')
-    registro_tit_max = django_filters.DateFilter(field_name='titulo_fk__fecha_registro', lookup_expr='gte')
-    registro_tit_min = django_filters.DateFilter(field_name='titulo_fk__fecha_registro', lookup_expr='lte')
+    nacimiento_max = django_filters.DateFilter(field_name='fecha_nacimiento', lookup_expr='lte')
+    nacimiento_min = django_filters.DateFilter(field_name='fecha_nacimiento', lookup_expr='gte')
+    registro_cert_max = django_filters.DateFilter(field_name='certificado_fk__fecha_registro', lookup_expr='lte')
+    registro_cert_min = django_filters.DateFilter(field_name='certificado_fk__fecha_registro', lookup_expr='gte')
+    registro_tit_max = django_filters.DateFilter(field_name='titulo_fk__fecha_registro', lookup_expr='lte')
+    registro_tit_min = django_filters.DateFilter(field_name='titulo_fk__fecha_registro', lookup_expr='gte')
 
     def filter_carrera_fk(self, queryset, name, value):
         values = [int(val) for val in value.split(',')]
