@@ -1,12 +1,11 @@
 "use client"
 import { NavMenu, NavMobile } from "@/components/nav-menu";
 import PaginationHandler, { PaginationData } from "@/components/pagination-handler";
-import { RibbonToolbar } from "@/components/ribbon-toolbar";
+import { RibbonToolbar } from "@/components/ribbon-toolbar/ribbon-toolbar";
 import { DataTable } from "@/components/ui/data-table";
 import { Student, columns } from "@/lib/columns";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
-import DateFilter from "./date-filter";
 
 interface StudentsTableProps {
   careers: Career[],
@@ -87,7 +86,6 @@ export default function StudentsTable({ careers, session }: StudentsTableProps) 
       <nav className="top-0 sticky z-20">
         <NavMenu />
         <NavMobile />
-        <DateFilter filters={filters} setFilters={setFilters} />
         <RibbonToolbar data={paginationData} setData={setPaginationData} filters={filters} setFilters={setFilters} />
       </nav>
       <main className="my-4 mx-3">
