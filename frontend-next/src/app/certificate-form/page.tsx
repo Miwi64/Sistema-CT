@@ -3,7 +3,7 @@ import PageLayout from "@/components/page-layout";
 import StudentFields from "@/components/student-fields";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import {
   Form,
