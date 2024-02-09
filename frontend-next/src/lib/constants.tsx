@@ -125,13 +125,13 @@ export const REPORT_EXAMPLE_DATA = [
         "count": 7,
         "year": 2020,
         "students": [
-            { "name": "Alice", "last_name": "Smith", "title_date": "2020-05-10" },
-            { "name": "Bob", "last_name": "Johnson", "title_date": "2020-07-15" },
-            { "name": "Charlie", "last_name": "Williams", "title_date": "2020-03-20" },
-            { "name": "David", "last_name": "Jones", "title_date": "2020-09-05" },
-            { "name": "Emma", "last_name": "Brown", "title_date": "2020-11-30" },
-            { "name": "Frank", "last_name": "Davis", "title_date": "2020-04-25" },
-            { "name": "Grace", "last_name": "Miller", "title_date": "2020-08-12" }
+            { name: "Alice", last_name: "Smith", title_date: "2020-05-10" },
+            { name: "Bob", last_name: "Johnson", title_date: "2020-07-15" },
+            { name: "Charlie", last_name: "Williams", title_date: "2020-03-20" },
+            { name: "David", last_name: "Jones", title_date: "2020-09-05" },
+            { name: "Emma", last_name: "Brown", title_date: "2020-11-30" },
+            { name: "Frank", last_name: "Davis", title_date: "2020-04-25" },
+            { name: "Grace", last_name: "Miller", title_date: "2020-08-12" }
         ]
     },
     {
