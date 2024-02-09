@@ -1,11 +1,11 @@
 import { type ClassValue, clsx } from "clsx";
-import jsPDF from "jspdf";
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 
 import { twMerge } from "tailwind-merge";
 import { Student } from "./columns";
+import { TDocumentDefinitions } from "pdfmake/interfaces";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -15,10 +15,36 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
   //CSV
   function jsonToCsv(jsonData: Student[]) {
-    const headers = Object.keys(jsonData[0]);
+
+    const data = jsonData.map((item)=>(
+      {
+        "No. Control" : item.num_control,
+        "Nombre" : item.nombre,
+        "Apellido Paterno" : item.apellidop,
+        "Apellido Materno" : item.apellidom,
+        "Sexo" : item.sexo==='m'?"Masculino":item.sexo==='f'?"Femenino":"No Definido",
+        "CURP" : item.CURP,
+        "Periodo Ingreso" : item.periodo_ingreso,
+        "Periodo Egreso" : item.periodo_egreso,
+        "Estado Nacimiento" : item.estado_nacimiento,
+        "Fecha Nacimiento" : item.fecha_nacimiento,
+        "Carrera" : item.nombre_carrera,
+        "No. Folio" : item.num_folio,
+        "Fecha Registro Certificado" : item.fecha_registro_cert,
+        "Observaciones Certificado" : item.observaciones_cert,
+        "No. Titulo" : item.num_titulo,
+        "Clave Plan" : item.clave_plan,
+        "Fecha Acto" : item.fecha_acto,
+        "Fecha Registro Titulo" : item.fecha_registro_tit,
+        "No. Cedula" : item.num_cedula,
+        "Observaciones Titulo" : item.observaciones_tit
+      }
+    ))
+
+    const headers = Object.keys(data[0]);
     let csvContent = headers.join(",") + "\n";
 
-    jsonData.forEach((item) => {
+    data.forEach((item) => {
         let values = headers
             .map((header) => {
                 const cell = item[header] || "";
@@ -63,41 +89,6 @@ export const handleExcelDownload = async (filters: { doc: any; sex: any; search:
 };
 
 
-export const handlePdfDownload = async (filters: { order: { type: any; criteria: any; }; doc: string; sex: string; careers: any[]; date: { min: { getTime: () => number; getTimezoneOffset: () => number; }; max: { getTime: () => number; getTimezoneOffset: () => number; }; enable: any; criteria: any; }; search: any; }) => {
-  const orderFilter = `&order_by=${filters.order.type}${filters.order.criteria}`
-  const docFilter = filters.doc === "C" ? "&certificado_fk_null=false" : filters.doc === "T" ? "&titulo_fk_null=false" : ""
-  const sexFilter = filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : ""
-  const checkedCareers = filters.careers.filter(((career: { checked: any; }) => career.checked))
-  const careerFilter = checkedCareers.length > 0 ? `&carrera_fk=${checkedCareers.map((career: { value: any; }) => career.value).join(",")}` : ""
-  const min = new Date(filters.date.min.getTime() - (filters.date.min.getTimezoneOffset() * 60 * 1000)).toISOString().split('T')[0]
-  const max = new Date(filters.date.max.getTime() - (filters.date.max.getTimezoneOffset() * 60 * 1000)).toISOString().split('T')[0]
-  const dateFilter = filters.date.enable ? `&${filters.date.criteria}_min=${min}&${filters.date.criteria}_max=${max}` : ""
-  const urlFilters = `${docFilter}${sexFilter}${careerFilter}${dateFilter}${orderFilter}&num_control=${filters.search}`
-    fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilters}`)
-        .then((response) => response.json())
-        .then((data) => {
-            const csv = jsonToCsv(data);
-            const doc = new jsPDF();
-            const lines = csv.trim().split("\n");
-            const colCount = lines[0].split(",").length;
-            const cellWidth = (doc.internal.pageSize.width - 10) / colCount;
-            lines.shift();
-            
-
-            lines.forEach((line) => {
-                const cells = line.split(",");
-
-                cells.forEach((cell, idx) => {
-                    doc.text(cell, 10, (idx + 1) * 10);
-                });
-
-                doc.addPage();
-            });
-
-            doc.save("archivo.pdf");
-        });
-};
-
 
 export const handlePdfDownload2 = async (filters: { doc: any; sex: any; search: any; careers: any; order: any; date: any; }) => {
   const orderFilter = `&order_by=${filters.order.type}${filters.order.criteria}`
@@ -112,7 +103,7 @@ export const handlePdfDownload2 = async (filters: { doc: any; sex: any; search: 
   const datos = await fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilters}`);
   const data = await datos.json();
 
-  const docDefinition = {
+  const docDefinition:TDocumentDefinitions = {
     pageSize: 'A4',
     pageOrientation: 'landscape',
     content: [
@@ -145,10 +136,7 @@ export const handlePdfDownload2 = async (filters: { doc: any; sex: any; search: 
               { text: row.observaciones_tit, style: 'body' },
             ]
           )),
-          willDrawCell: (cell: { borderWidth: number; borderColor: string; }) => {
-            cell.borderWidth = 5;
-            cell.borderColor = '#000000';
-          },
+        
         },
         layout: 'headerLineOnly',
       },

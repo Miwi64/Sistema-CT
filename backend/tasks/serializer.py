@@ -89,6 +89,9 @@ class AlumnoSerializer(serializers.ModelSerializer):
     num_cedula=serializers.CharField(source='titulo_fk.num_cedula',read_only=True)
     observaciones_tit=serializers.CharField(source='titulo_fk.observaciones',read_only=True)
 
+    periodo_ingreso = serializers.DateField(read_only=True)
+    periodo_egreso = serializers.DateField(read_only=True)  # Fecha de ingreso al programa
+    fecha_nacimiento = serializers.DateField(read_only=True)
 
     class Meta:
         model = Alumnos
@@ -109,6 +112,36 @@ class AlumnoSerializer(serializers.ModelSerializer):
                   ]
     
 #---------------------------------------------------------------
+class GraduationSerializer(serializers.Serializer):
+    gen = serializers.SerializerMethodField()
+    count = serializers.SerializerMethodField()
+    year = serializers.SerializerMethodField()
+    students = AlumnoSerializer(many=True, read_only=True)
+
+    def get_gen(self, obj):
+        # You can define the gen value here based on your needs
+        return 1
+
+    def get_count(self, obj):
+        return self.get_students().count()
+
+    def get_year(self, obj):
+        try:
+            return self.get_students().first().periodo_ingreso.year
+        except IndexError:
+            return None
+
+    def get_students(self, obj=None):
+        carrera_fk = self.context.get('carrera_fk', None)
+
+        if carrera_fk:
+            students = Alumnos.objects.filter(carrera_fk=carrera_fk, titulo_fk__isnull=False)
+            return students
+        return Alumnos.objects.none()
+
+
+
+
 
 class PlanEtudioSerializer(serializers.ModelSerializer):
     class Meta:

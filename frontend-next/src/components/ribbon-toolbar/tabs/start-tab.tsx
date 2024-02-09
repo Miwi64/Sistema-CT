@@ -15,13 +15,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { TabsContent } from "@/components/ui/tabs";
-import { Student } from "@/lib/columns";
-import {
-  handleExcelDownload,
-  handlePdfDownload,
-  handlePdfDownload2,
-} from "@/lib/utils";
-import jsPDF from "jspdf";
+import { handleExcelDownload, handlePdfDownload2 } from "@/lib/utils";
 import { ChevronDown, FileDown, Save, Search } from "lucide-react";
 import React from "react";
 
@@ -31,133 +25,6 @@ interface StartTabProps {
 }
 
 const StartTab = ({ filters, setFilters }: StartTabProps) => {
-  /*     //PDF
-    const fetchData = async () => {
-        const orderFilter = `&order_by=${filters.order.type}${filters.order.criteria}`;
-        const docFilter =
-            filters.doc === "C"
-                ? "&certificado_fk_null=false"
-                : filters.doc === "T"
-                    ? "&titulo_fk_null=false"
-                    : "";
-        const sexFilter =
-            filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : "";
-        const checkedCareers = filters.careers.filter((career) => career.checked);
-        const careerFilter =
-            checkedCareers.length > 0
-                ? `&carrera_fk=${checkedCareers
-                    .map((career) => career.value)
-                    .join(",")}`
-                : "";
-        const urlFilters = `${docFilter}${sexFilter}${careerFilter}${orderFilter}&num_control=${filters.search}`;
-        //console.log(urlFilters);
-        const res = await fetch(
-            "http://127.0.0.1:8000/alumnos/?" + `${urlFilters}`
-        );
-        const data = await res.json();
-        return data;
-    }; */
-
-  /*   //CSV
-    function jsonToCsv(jsonData: Student[]) {
-        const headers = Object.keys(jsonData[0]);
-        let csvContent = headers.join(",") + "\n";
-
-        jsonData.forEach((item) => {
-            let values = headers
-                .map((header) => {
-                    const cell = item[header] || "";
-                    return typeof cell === "string"
-                        ? `"${cell.replace(/"/g, '""')}"`
-                        : cell;
-                })
-                .join(",");
-
-            csvContent += values + "\n";
-        });
-
-        return csvContent;
-    }
-
-    const handleExcelDownload = async () => {
-        const orderFilter = `&order_by=${filters.order.type}${filters.order.criteria}`;
-        const docFilter =
-            filters.doc === "C"
-                ? "&certificado_fk_null=false"
-                : filters.doc === "T"
-                    ? "&titulo_fk_null=false"
-                    : "";
-        const sexFilter =
-            filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : "";
-        const checkedCareers = filters.careers.filter((career) => career.checked);
-        const careerFilter =
-            checkedCareers.length > 0
-                ? `&carrera_fk=${checkedCareers
-                    .map((career) => career.value)
-                    .join(",")}`
-                : "";
-        const urlFilters = `${docFilter}${sexFilter}${careerFilter}${orderFilter}&num_control=${filters.search}`;
-        //console.log(urlFilters);
-        fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilters}`)
-            .then((response) => response.json())
-            .then((data) => {
-                const csv = jsonToCsv(data);
-                const blob = new Blob([csv], { type: "text/csv" });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.style.display = "none";
-                a.href = url;
-                a.download = "archivo.csv";
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            });
-    };
-
-    
-    const handlePdfDownload = async () => {
-        const orderFilter = `&order_by=${filters.order.type}${filters.order.criteria}`;
-        const docFilter =
-            filters.doc === "C"
-                ? "&certificado_fk_null=false"
-                : filters.doc === "T"
-                    ? "&titulo_fk_null=false"
-                    : "";
-        const sexFilter =
-            filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : "";
-        const checkedCareers = filters.careers.filter((career) => career.checked);
-        const careerFilter =
-            checkedCareers.length > 0
-                ? `&carrera_fk=${checkedCareers
-                    .map((career) => career.value)
-                    .join(",")}`
-                : "";
-        const urlFilters = `${docFilter}${sexFilter}${careerFilter}${orderFilter}&num_control=${filters.search}`;
-        fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilters}`)
-            .then((response) => response.json())
-            .then((data) => {
-                const csv = jsonToCsv(data);
-                const doc = new jsPDF();
-                const lines = csv.trim().split("\n");
-                const colCount = lines[0].split(",").length;
-                const cellWidth = (doc.internal.pageSize.width - 10) / colCount;
-                lines.shift();
-
-                lines.forEach((line) => {
-                    const cells = line.split(",");
-
-                    cells.forEach((cell, idx) => {
-                        doc.text(cell, 10, (idx + 1) * 10);
-                    });
-
-                    doc.addPage();
-                });
-
-                doc.save("archivo.pdf");
-            });
-    }; */
-
   return (
     <TabsContent className="mt-0" value="Inicio">
       <div

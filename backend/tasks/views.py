@@ -11,6 +11,8 @@ from rest_framework.filters import SearchFilter
 from django_filters import rest_framework as filters
 from .serializer import *
 from .models import *
+from collections import defaultdict
+from datetime import datetime
 from django.contrib.auth import login
 from rest_framework import permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -32,6 +34,9 @@ from django.db import connections
 from django.db.models import OuterRef, CharField, Value as V
 from rest_framework.pagination import PageNumberPagination
 # Create your views here.
+from django.db.models.functions import ExtractYear
+from django.db.models import Count
+import json
 
 #Creacion de usuarios usando knox
 class RegisterUser(generics.GenericAPIView):
@@ -91,6 +96,9 @@ class PruebaPDFView(View):
  """
 
 
+
+
+
 class LoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
 
@@ -142,6 +150,36 @@ class CarrerasView(generics.ListAPIView):
     queryset = Carreras.objects.order_by('id_carrera')
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = CarreraFilter
+
+
+
+class GraduationView(APIView):
+    def get(self, request, carrera_fk):
+        alumnos = Alumnos.objects.filter(carrera_fk=carrera_fk, titulo_fk__isnull=False)
+        alumnos_por_year = defaultdict(list)
+        gen_counter = 1
+
+        for alumno in alumnos:
+            alumnos_por_year[alumno.periodo_ingreso.year].append(alumno)
+
+        sorted_data = sorted(alumnos_por_year.items(), key=lambda x: x[0])
+
+        result = []
+        for year, alumnos_this_year in sorted_data:
+            students = [{
+                'name': alumno.nombre,
+                'last_name': f"{alumno.apellidop} {alumno.apellidom}",
+                'title_date': alumno.titulo_fk.fecha_registro.strftime('%Y-%m-%d')
+            } for alumno in alumnos_this_year]
+            result.append({
+                'gen': gen_counter,  # Generación, puedes calcularlo según tus reglas
+                'count': len(alumnos_this_year),
+                'year': year,
+                'students': students
+            })
+            gen_counter += 1
+
+        return Response(result)
 
 class SearchViewAlumCert(APIView):
     def post(self, request, format=None):
