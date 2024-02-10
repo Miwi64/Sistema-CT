@@ -116,29 +116,55 @@ export const handlePdfDownload2 = async (filters: { doc: any; sex: any; search: 
           widths: ['7%','7%','7%','7%','8%','1%','6%','5%','5%','5%','6%','5%','5%','5%','5%','5%','5%','6%'],
           body: data.map((row:Student) => (
             [
-              { text: row.num_control, style: 'body' },
-              { text: row.nombre, style: 'body' },
-              { text: row.apellidop, style: 'body' },
-              { text: row.apellidom, style: 'body' },
-              { text: row.nombre_carrera, style: 'body' },
-              { text: row.sexo, style: 'body' },
-              { text: row.CURP, style: 'body' },
-              { text: row.periodo_ingreso, style: 'body' },
-              { text: row.periodo_egreso, style: 'body' },
-              { text: row.num_folio, style: 'body' },
-              { text: row.fecha_registro_cert, style: 'body' },
-              { text: row.observaciones_cert, style: 'body' },
-              { text: row.num_titulo, style: 'body' },
-              { text: row.clave_plan, style: 'body' },
-              { text: row.fecha_acto, style: 'body' },
-              { text: row.fecha_registro_tit, style: 'body' },
-              { text: row.num_cedula, style: 'body' },
-              { text: row.observaciones_tit, style: 'body' },
+              { text: row.num_control, style: 'body', border: [true, true, true, true] },
+              { text: row.nombre, style: 'body', border: [true, true, true, true] },
+              { text: row.apellidop, style: 'body', border: [true, true, true, true] },
+              { text: row.apellidom, style: 'body', border: [true, true, true, true] },
+              { text: row.nombre_carrera, style: 'body', border: [true, true, true, true] },
+              { text: row.sexo, style: 'body', border: [true, true, true, true] },
+              { text: row.CURP, style: 'body', border: [true, true, true, true] },
+              { text: row.periodo_ingreso, style: 'body', border: [true, true, true, true] },
+              { text: row.periodo_egreso, style: 'body', border: [true, true, true, true] },
+              { text: row.num_folio, style: 'body', border: [true, true, true, true] },
+              { text: row.fecha_registro_cert, style: 'body', border: [true, true, true, true] },
+              { text: row.observaciones_cert, style: 'body', border: [true, true, true, true] },
+              { text: row.num_titulo, style: 'body', border: [true, true, true, true] },
+              { text: row.clave_plan, style: 'body', border: [true, true, true, true] },
+              { text: row.fecha_acto, style: 'body', border: [true, true, true, true] },
+              { text: row.fecha_registro_tit, style: 'body', border: [true, true, true, true] },
+              { text: row.num_cedula, style: 'body', border: [true, true, true, true] },
+              { text: row.observaciones_tit, style: 'body', border: [true, true, true, true] },
             ]
           )),
-        
+          headerRows:1,
+          dontBreakRows: true,
         },
-        layout: 'headerLineOnly',
+        layout: {
+          hLineWidth: function (i, node) {
+            return 0.5; // Set the width of horizontal lines
+          },
+          vLineWidth: function (i, node) {
+            return 0.5; // Set the width of vertical lines
+          },
+          hLineColor: function (i, node) {
+            return '#aaa'; // Set the color of horizontal lines
+          },
+          vLineColor: function (i, node) {
+            return '#aaa'; // Set the color of vertical lines
+          },
+          paddingLeft: function (i, node) {
+            return 2; // Set the left padding
+          },
+          paddingRight: function (i, node) {
+            return 2; // Set the right padding
+          },
+          paddingTop: function (i, node) {
+            return 2; // Set the top padding
+          },
+          paddingBottom: function (i, node) {
+            return 2; // Set the bottom padding
+          },
+        },
       },
     ],
     styles: {
