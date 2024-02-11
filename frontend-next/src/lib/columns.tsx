@@ -31,7 +31,6 @@ export type Student = {
   observaciones_tit?: string
 }
 
-
 export const columns: ColumnDef<Student>[] = [
   {
     accessorKey: "num_control",
@@ -96,7 +95,7 @@ export const columns: ColumnDef<Student>[] = [
   {
     accessorKey: "periodo_egreso",
     header: ({ column }) => (
-      <ColumnHeader column={column} title="periodo de egreso" />
+      <ColumnHeader column={column} title="Periodo de egreso" />
     ),
   },
   {

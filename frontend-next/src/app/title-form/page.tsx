@@ -113,14 +113,8 @@ const formSchema = z.object({
     .pipe(z.string().min(8, { message: "Minimo 8 caracteres" })),
   carrera_fk: z.string({ required_error: "Campo requerido" }),
   num_cedula: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
-    .pipe(
-      z
-        .string()
-        .min(8, { message: "Minimo 8 caracteres" })
-        .max(10, "Máximo 10 caracteres")
-    ),
+    .string()
+    .max(10, "Máximo 10 caracteres").optional(),
   observaciones_tit: z
     .string()
     .max(150, "Límite de caracteres excedido")
@@ -720,7 +714,7 @@ const TitleForm = () => {
           <DrawerHeader className="text-left">
             <DrawerTitle>Error al Registrar</DrawerTitle>
             <DrawerDescription>
-            Ya existe un registro con el mismo número de control y/o número de título.
+              Ya existe un registro con el mismo número de control y/o número de título.
             </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter className="pt-2">

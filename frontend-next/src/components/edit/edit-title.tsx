@@ -15,6 +15,7 @@ import { Calendar } from '../ui/calendar'
 import { Textarea } from '../ui/textarea'
 import { Session } from 'next-auth'
 import { toast } from 'sonner'
+import { Input } from '../ui/input'
 
 const formSchema = z.object({
     observaciones_tit: z
@@ -28,6 +29,9 @@ const formSchema = z.object({
     fecha_registro_tit: z
         .date({ required_error: "Campo requerido" })
         .transform((value) => value.toISOString().split("T")[0]),
+    num_cedula: z
+        .string()
+        .max(10, "Máximo 10 caracteres").optional()
 });
 
 interface EditTitleProps {
@@ -35,8 +39,9 @@ interface EditTitleProps {
     session: Session,
 }
 
-const EditTitle = ({ studentData,  session }: EditTitleProps) => {
+const EditTitle = ({ studentData, session }: EditTitleProps) => {
     const initialValues = {
+        num_cedula: studentData.num_cedula,
         observaciones_tit: studentData.observaciones_tit,
         clave_plan: studentData.clave_plan,
         fecha_acto: new Date(studentData.fecha_acto || "1970-01-01"),
@@ -78,6 +83,19 @@ const EditTitle = ({ studentData,  session }: EditTitleProps) => {
                     Título
                 </h2>
                 <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <FormField
+                        control={form.control}
+                        name="num_cedula"
+                        render={({ field }) => (
+                            <FormItem className="">
+                                <FormLabel>Número de cedula</FormLabel>
+                                <FormControl>
+                                    <Input placeholder="Número de cédula" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <FormField
                         control={form.control}
                         name="clave_plan"
