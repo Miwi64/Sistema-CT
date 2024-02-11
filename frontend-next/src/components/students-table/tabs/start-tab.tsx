@@ -15,16 +15,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { TabsContent } from "@/components/ui/tabs";
-import { handleExcelDownload, handlePdfDownload2 } from "@/lib/utils";
+import { handleExcelDownload, handlePdfDownload2 } from "@/lib/export-functions";
 import { ChevronDown, FileDown, Save, Search } from "lucide-react";
 import React from "react";
 
 interface StartTabProps {
+  urlFilter: string;
   filters: FilterData;
   setFilters: React.Dispatch<React.SetStateAction<FilterData>>;
 }
 
-const StartTab = ({ filters, setFilters }: StartTabProps) => {
+const StartTab = ({ urlFilter, filters, setFilters }: StartTabProps) => {
   return (
     <TabsContent className="mt-0" value="Inicio">
       <div
@@ -63,14 +64,14 @@ const StartTab = ({ filters, setFilters }: StartTabProps) => {
             <DropdownMenuGroup>
               <DropdownMenuItem
                 onClick={() => {
-                  handleExcelDownload(filters);
+                  handleExcelDownload(urlFilter);
                 }}
               >
                 Excel
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  handlePdfDownload2(filters);
+                  handlePdfDownload2(urlFilter);
                 }}
               >
                 PDF

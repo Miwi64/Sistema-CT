@@ -1,28 +1,32 @@
 "use client"
 import { NavMenu, NavMobile } from "@/components/nav-menu";
 import PaginationHandler, { PaginationData } from "@/components/pagination-handler";
-import { RibbonToolbar } from "@/components/ribbon-toolbar/ribbon-toolbar";
 import { DataTable } from "@/components/ui/data-table";
 import { Student, columns } from "@/lib/columns";
+import { Tabs } from "@radix-ui/react-tabs";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
+import { TabsList, TabsTrigger } from "../ui/tabs";
+import { File, Filter, Home } from "lucide-react";
+import StartTab from "./tabs/start-tab";
+import FilterTab from "./tabs/filter-tab";
+import PageTab from "./tabs/page-tab";
 
 interface StudentsTableProps {
   careers: Career[],
   session: Session
 }
 
-type Career = {
-  text: string,
-  value: number,
-  checked: boolean
+export type Career = {
+  id_carrera: number,
+  nombre_carrera: string,
 }
 
 export type FilterData = {
   doc: string,
   sex: string,
   search: string,
-  careers: Career[]
+  career: number
   order: {
     criteria: string,
     type: string
@@ -48,15 +52,16 @@ export default function StudentsTable({ careers, session }: StudentsTableProps) 
   })
 
   const [studentData, setStudentData] = useState<Student[]>([])
+  const [urlFilter, setUrlFilter] = useState<string>("")
   const [filters, setFilters] = useState<FilterData>({
-    doc: "C", sex: "M", careers: careers, search: "", order: { criteria: "num_control", type: "" },
-    date: { enable: false, criteria: "nacimiento", min: new Date("1963-01-01"), max: new Date() }
+    doc: "C", sex: "M", career: -1, search: "", order: { criteria: "num_control", type: "" },
+    date: { enable: false, criteria: "nacimiento", min: new Date("1999-01-01"), max: new Date() }
   })
 
   useEffect(() => {
-    const loadData = async (urlFilters: string) => {
+    const loadData = async (url: string) => {
       const fetchApi =
-        await fetch(`http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${urlFilters}`,
+        await fetch(`http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${url}`,
           {
             method: "GET",
             headers: {
@@ -67,26 +72,54 @@ export default function StudentsTable({ careers, session }: StudentsTableProps) 
       setPaginationData(pagination)
       setStudentData(results)
     }
-    console.log(paginationData)
+    //console.log(paginationData)
     const orderFilter = `&order_by=${filters.order.type}${filters.order.criteria}`
     const docFilter = filters.doc === "C" ? "&certificado_fk_null=false" : filters.doc === "T" ? "&titulo_fk_null=false" : ""
     const sexFilter = filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : ""
-    const checkedCareers = filters.careers.filter((career => career.checked))
-    const careerFilter = checkedCareers.length > 0 ? `&carrera_fk=${checkedCareers.map((career) => career.value).join(",")}` : ""
+    const careerFilter = filters.career !== -1 ? `&carrera_fk=${filters.career}` : ""
     const min = new Date(filters.date.min.getTime() - (filters.date.min.getTimezoneOffset() * 60 * 1000)).toISOString().split('T')[0]
     const max = new Date(filters.date.max.getTime() - (filters.date.max.getTimezoneOffset() * 60 * 1000)).toISOString().split('T')[0]
     const dateFilter = filters.date.enable ? `&${filters.date.criteria}_min=${min}&${filters.date.criteria}_max=${max}` : ""
-    const urlFilters = `${docFilter}${sexFilter}${careerFilter}${dateFilter}${orderFilter}&num_control=${filters.search}`
-    console.log(`http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${urlFilters}`)
-    loadData(urlFilters)
-
+    const url = `${docFilter}${sexFilter}${careerFilter}${dateFilter}${orderFilter}&num_control=${filters.search}`
+    console.log(`http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${url}`)
+    setUrlFilter(url)
+    loadData(url)
   }, [paginationData.current_page, filters])
   return (
     <>
       <nav className="top-0 sticky z-20">
         <NavMenu />
         <NavMobile />
-        <RibbonToolbar data={paginationData} setData={setPaginationData} filters={filters} setFilters={setFilters} />
+        <Tabs defaultValue="Inicio" className="min-w-[200px]">
+          <TabsList
+            className="w-full rounded-none flex flex-row justify-start 
+            items-center overflow-x-auto overflow-y-visible"
+          >
+            <TabsTrigger value="Inicio">
+              <Home size={14} className="mr-2" />
+              Inicio
+            </TabsTrigger>
+            <TabsTrigger value="Filtrar">
+              <Filter size={14} className="mr-2" />
+              Filtrar
+            </TabsTrigger>
+            <TabsTrigger value="Pagina">
+              <File size={14} className="mr-2" />
+              Página
+            </TabsTrigger>
+          </TabsList>
+
+          <StartTab urlFilter={urlFilter} filters={filters} setFilters={setFilters} />
+          
+          <FilterTab
+            careers={careers}
+            filters={filters}
+            setFilters={setFilters}
+            setPaginationData={setPaginationData}
+          />
+          <PageTab paginationData={paginationData} setPaginationData={setPaginationData} />
+
+        </Tabs>
       </nav>
       <main className="my-4 mx-3">
         <DataTable columns={columns} data={studentData} />

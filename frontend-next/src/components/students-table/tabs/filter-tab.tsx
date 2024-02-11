@@ -1,25 +1,25 @@
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TabsContent } from '@/components/ui/tabs';
 import { Toggle } from '@/components/ui/toggle';
 import { DATE_CRITERIAS, ORDER_CRITERIAS } from '@/lib/constants';
 import { BookText, CalendarIcon, GraduationCap, SortDesc, Users } from 'lucide-react';
 import React from 'react'
-import { FilterData } from '@/components/students-table/students-table';
+import { Career, FilterData } from '@/components/students-table/students-table';
 import { PaginationData } from '@/components/pagination-handler';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
 
 interface FilterTabProps {
+    careers: Career[]
     filters: FilterData;
     setFilters: React.Dispatch<React.SetStateAction<FilterData>>;
     setPaginationData: React.Dispatch<React.SetStateAction<PaginationData>>;
 }
 
-const FilterTab = ({ filters, setFilters, setPaginationData }: FilterTabProps) => {
-    const { doc, sex, careers } = filters;
+const FilterTab = ({ careers, filters, setFilters, setPaginationData }: FilterTabProps) => {
     return (
         <TabsContent className="mt-0" value="Filtrar">
             <div
@@ -66,31 +66,35 @@ const FilterTab = ({ filters, setFilters, setPaginationData }: FilterTabProps) =
                         </Toggle>
                     </div>
                 </div>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
-                            <GraduationCap className="sm:mr-2 h-5 w-5" />
-                            <span className="hidden sm:block">Carrera</span>
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56">
-                        <DropdownMenuLabel>Mostrar</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        {careers.map(({ text, checked }, index) => (
-                            <DropdownMenuCheckboxItem
-                                key={index}
-                                checked={checked}
-                                onCheckedChange={(checked) => {
-                                    const newArray = [...careers];
-                                    newArray[index].checked = checked;
-                                    setFilters({ ...filters, careers: newArray });
-                                }}
-                            >
-                                {text}
-                            </DropdownMenuCheckboxItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <div className="flex items-center space-x-6 lg:space-x-8">
+                    <div className="flex items-center space-x-2">
+                        <p className="text-sm font-medium">Carreras</p>
+                        <Select
+                            value={`${filters.career}`}
+                            onValueChange={(value) => {
+                                setFilters({
+                                    ...filters,
+                                    career: Number(value),
+                                });
+                                setPaginationData((value) => ({ ...value, current_page: "1" }));
+                            }}
+                        >
+                            <SelectTrigger className="h-9">
+                                <SelectValue placeholder={filters.career} />
+                            </SelectTrigger>
+                            <SelectContent side="top">
+                                <SelectItem value="-1">
+                                    Todas
+                                </SelectItem>
+                                {careers.map(({ id_carrera, nombre_carrera }) => (
+                                    <SelectItem key={id_carrera} value={`${id_carrera}`}>
+                                        {nombre_carrera}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline">
@@ -102,7 +106,7 @@ const FilterTab = ({ filters, setFilters, setPaginationData }: FilterTabProps) =
                         <DropdownMenuLabel>Mostrar estudiantes con:</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuRadioGroup
-                            value={doc}
+                            value={filters.doc}
                             onValueChange={(value) =>
                                 setFilters({ ...filters, doc: value })
                             }
@@ -128,7 +132,7 @@ const FilterTab = ({ filters, setFilters, setPaginationData }: FilterTabProps) =
                         <DropdownMenuLabel>Sexo</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuRadioGroup
-                            value={sex}
+                            value={filters.sex}
                             onValueChange={(value) =>
                                 setFilters({ ...filters, sex: value })
                             }
