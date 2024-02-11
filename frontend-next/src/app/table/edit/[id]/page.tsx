@@ -2,7 +2,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import EditCertificate from "@/components/edit/edit-certificate";
 import EditStudent from "@/components/edit/edit-student";
 import EditTitle from "@/components/edit/edit-title";
-import PageLayout from "@/components/page-layout";
 import { Separator } from "@/components/ui/separator";
 import { Session, getServerSession } from "next-auth";
 
@@ -37,7 +36,7 @@ export default async function Page({ params }: { params: { id: string } }) {
     careersData: careers,
   } = await getData(session, params.id);
   return (
-    <PageLayout>
+    <>
       <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
         Editar
       </h1>
@@ -54,6 +53,6 @@ export default async function Page({ params }: { params: { id: string } }) {
           <EditCertificate session={session} studentData={student} />
         </>
       }
-    </PageLayout>
+    </>
   );
 }

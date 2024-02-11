@@ -35,7 +35,7 @@ const formSchema = z.object({
 
 const Login = () => {
   const params = useSearchParams();
-  const callbackUrl = params.get("callbackUrl") || "/students-table";
+  const callbackUrl = params.get("callbackUrl") || "/table";
   const router = useRouter();
 
   const [signing, setSigning] = useState(false);

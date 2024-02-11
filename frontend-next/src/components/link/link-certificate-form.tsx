@@ -110,7 +110,7 @@ const LinkCertificateForm = ({ studentData, session }: LinkCertificateFormProps)
         toast(`Actualización exitosa`, {
             description: "Redirigiendo a la tabla de estudiantes.",
         })
-        router.push("/students-table");
+        router.push("/table");
     };
 
     return (

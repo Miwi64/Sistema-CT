@@ -1,5 +1,4 @@
 "use client"
-import { NavMenu, NavMobile } from "@/components/nav-menu";
 import PaginationHandler, { PaginationData } from "@/components/pagination-handler";
 import { DataTable } from "@/components/ui/data-table";
 import { Student, columns } from "@/lib/columns";
@@ -87,46 +86,40 @@ export default function StudentsTable({ careers, session }: StudentsTableProps) 
   }, [paginationData.current_page, filters])
   return (
     <>
-      <nav className="top-0 sticky z-20">
-        <NavMenu />
-        <NavMobile />
-        <Tabs defaultValue="Inicio" className="min-w-[200px]">
-          <TabsList
-            className="w-full rounded-none flex flex-row justify-start 
+      <Tabs defaultValue="Inicio" className="min-w-[200px] mb-3">
+        <TabsList
+          className="w-full rounded-b-none flex flex-row justify-start 
             items-center overflow-x-auto overflow-y-visible"
-          >
-            <TabsTrigger value="Inicio">
-              <Home size={14} className="mr-2" />
-              Inicio
-            </TabsTrigger>
-            <TabsTrigger value="Filtrar">
-              <Filter size={14} className="mr-2" />
-              Filtrar
-            </TabsTrigger>
-            <TabsTrigger value="Pagina">
-              <File size={14} className="mr-2" />
-              Página
-            </TabsTrigger>
-          </TabsList>
+        >
+          <TabsTrigger value="Inicio">
+            <Home size={14} className="mr-2" />
+            Inicio
+          </TabsTrigger>
+          <TabsTrigger value="Filtrar">
+            <Filter size={14} className="mr-2" />
+            Filtrar
+          </TabsTrigger>
+          <TabsTrigger value="Pagina">
+            <File size={14} className="mr-2" />
+            Página
+          </TabsTrigger>
+        </TabsList>
 
-          <StartTab urlFilter={urlFilter} filters={filters} setFilters={setFilters} />
-          
-          <FilterTab
-            careers={careers}
-            filters={filters}
-            setFilters={setFilters}
-            setPaginationData={setPaginationData}
-          />
-          <PageTab paginationData={paginationData} setPaginationData={setPaginationData} />
+        <StartTab urlFilter={urlFilter} filters={filters} setFilters={setFilters} />
 
-        </Tabs>
-      </nav>
-      <main className="my-4 mx-3">
-        <DataTable columns={columns} data={studentData} />
-      </main>
-      <footer className="flex justify-center mb-5">
+        <FilterTab
+          careers={careers}
+          filters={filters}
+          setFilters={setFilters}
+          setPaginationData={setPaginationData}
+        />
+        <PageTab paginationData={paginationData} setPaginationData={setPaginationData} />
+
+      </Tabs>
+      <DataTable columns={columns} data={studentData} />
+      <section className="flex justify-center my-5">
         <PaginationHandler data={paginationData} setData={setPaginationData} />
-      </footer>
+      </section>
     </>
   );
 }

@@ -46,12 +46,6 @@ const StartTab = ({ urlFilter, filters, setFilters }: StartTabProps) => {
             <SearchBar setFilters={setFilters} filters={filters} />
           </PopoverContent>
         </Popover>
-        <Button variant="outline" asChild>
-          <a href="/export">
-            <FileDown className="sm:mr-2 h-5 w-5" />
-            <span className="sm:block hidden">Generar Reporte</span>
-          </a>
-        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="secondary" className="flex">

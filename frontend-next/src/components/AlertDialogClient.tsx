@@ -108,7 +108,7 @@ export default function AlertDialogClient({ id }: AlertDialogProps) {
               toast(`Eliminacion Exitosa`, {
                 description: "Actualizando y redirigiendo a la Tabla Principal",
               });
-              router.push("/students-table");
+              router.push("/table");
             }}
           >
             Continue

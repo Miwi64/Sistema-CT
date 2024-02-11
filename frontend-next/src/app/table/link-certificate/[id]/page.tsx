@@ -1,6 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import LinkCertificateForm from "@/components/link/link-certificate-form";
-import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
 import { Session, getServerSession } from "next-auth";
 
@@ -25,17 +24,17 @@ export default async function Page({ params }: { params: { id: string } }) {
     return <div className="flex h-screen flex-col gap-8 justify-center items-center">
       El registro proporcionado ya está vinculado con un certificado
       <Button asChild>
-        <a href="/students-table">Volver a la tabla de estudiantes</a> 
+        <a href="/table">Volver a la tabla de estudiantes</a> 
       </Button>
     </div>
   }
   else {
     return (
-      <PageLayout>
+      <>
         <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
           Vincular certificado a {`${student.nombre} ${student.apellidop} ${student.apellidom}`}
         </h1>
         <LinkCertificateForm session={session} studentData={student} />
-      </PageLayout>)
+      </>)
   }
 }

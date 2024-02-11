@@ -2,7 +2,7 @@ import { PaginationData } from '@/components/pagination-handler';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TabsContent } from '@/components/ui/tabs';
-import { ArrowLeftToLine, ArrowRightToLine, ChevronLeft, ChevronRight, Printer } from 'lucide-react';
+import { ArrowLeftToLine, ArrowRightToLine, ChevronLeft, ChevronRight} from 'lucide-react';
 
 interface PageTabProps {
     paginationData: PaginationData;
@@ -75,10 +75,6 @@ const PageTab = ({paginationData, setPaginationData}: PageTabProps) => {
                     </div>
                 </div>
                 <div className="flex items-center space-x-2">
-                    <Button variant="outline">
-                        <Printer className="sm:mr-2 h-5 w-5" />
-                        <span className="hidden sm:block">Imprimir</span>
-                    </Button>
                     <Button
                         variant="outline"
                         onClick={() => setPaginationData({ ...paginationData, current_page: "1" })}

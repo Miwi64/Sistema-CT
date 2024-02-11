@@ -1,5 +1,4 @@
 "use client";
-import PageLayout from "@/components/page-layout";
 import StudentFields from "@/components/student-fields";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -250,14 +249,12 @@ const CertificateForm = () => {
       return;
     }
     /*  */
-    router.push("/students-table");
+    router.push("/table");
   };
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        {/*  */}
-        <PageLayout>
           <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
             Agregar certificado
           </h1>
@@ -389,8 +386,6 @@ const CertificateForm = () => {
               </form>
             </Form>
           </section>
-        </PageLayout>
-        {/*  */}
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
             <DialogTitle>Error al Registrar</DialogTitle>
@@ -410,8 +405,6 @@ const CertificateForm = () => {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      {/*  */}
-      <PageLayout>
         <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
           Agregar certificado
         </h1>
@@ -542,8 +535,6 @@ const CertificateForm = () => {
             </form>
           </Form>
         </section>
-      </PageLayout>
-      {/*  */}
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>Error al Registrar</DrawerTitle>

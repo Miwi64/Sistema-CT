@@ -1,5 +1,4 @@
 import { ModeSelect } from "@/components/mode-toggle";
-import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -9,7 +8,7 @@ import { Github, InfoIcon, Paintbrush2, User2 } from "lucide-react";
 
 const Settings = () => {
   return (
-    <PageLayout>
+    <>
       <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">Configuración</h1>
       <section className="">
         <Tabs defaultValue="theme" className="w-full">
@@ -77,7 +76,7 @@ const Settings = () => {
           </TabsContent>
         </Tabs>
       </section>
-    </PageLayout>
+    </>
   );
 };
 

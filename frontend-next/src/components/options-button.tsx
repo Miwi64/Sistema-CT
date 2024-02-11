@@ -59,13 +59,13 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
           </DropdownMenuTrigger>
           <DropdownMenuContent className="text-muted-foreground">
             <DropdownMenuItem asChild>
-              <a href={`/view/${id}`} target="_blank">
+              <a href={`/table/view/${id}`} target="_blank">
                 <BookUser className="mr-2" />
                 <span>Ver más</span>
               </a>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <a href={`/edit/${id}`} target="_blank">
+              <a href={`/table/edit/${id}`} target="_blank">
                 <Pencil className="mr-2" />
                 <span>Editar</span>
               </a>
@@ -73,7 +73,7 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
 
             {!title &&
               <DropdownMenuItem asChild>
-                <a href={`/link-title/${id}`} target="_blank">
+                <a href={`/table/link-title/${id}`} target="_blank">
                   <Link className="mr-2" />
                   <span>Vincular título</span>
                 </a>
@@ -81,7 +81,7 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
 
             {!certificate &&
               <DropdownMenuItem asChild>
-                <a href={`/link-certificate/${id}`} target="_blank">
+                <a href={`/table/link-certificate/${id}`} target="_blank">
                   <Link className="mr-2" />
                   <span>Vincular certificado</span>
                 </a>
@@ -89,7 +89,6 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
 
             <DropdownMenuItem asChild>
               <a
-                /* href={`/delete/${id}`} */ target="_blank"
                 onClick={() => {
                   setShowAlert(true);
                 }}
@@ -207,7 +206,7 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
                 className="justify-start py-6"
                 asChild
               >
-                <a href={`/view/${id}`}>
+                <a href={`/table/view/${id}`}>
                   <BookUser className="mr-4 h-7 w-7" />
                   <span className="text-lg">Ver más</span>
                 </a>
@@ -217,7 +216,7 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
                 className="justify-start py-6"
                 asChild
               >
-                <a href={`/edit/${id}`}>
+                <a href={`/table/edit/${id}`}>
                   <Pencil className="mr-4 h-7 w-7" />
                   <span className="text-lg">Editar</span>
                 </a>
@@ -228,7 +227,7 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
                   className="justify-start py-6"
                   asChild
                 >
-                  <a href={`/link-title/${id}`}>
+                  <a href={`/table/link-title/${id}`}>
                     <Link className="mr-4 h-7 w-7" />
                     <span className="text-lg">Vincular título</span>
                   </a>
@@ -239,7 +238,7 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
                   className="justify-start py-6"
                   asChild
                 >
-                  <a href={`/link-certificate/${id}`}>
+                  <a href={`/table/link-certificate/${id}`}>
                     <Link className="mr-4 h-7 w-7" />
                     <span className="text-lg">Vincular certificado</span>
                   </a>

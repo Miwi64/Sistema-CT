@@ -73,13 +73,7 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h2 className="my-2  text-3xl font-bold mr-16">{`${nombre} ${apellidop} ${apellidom}`}</h2>
       <section className="my-5 flex gap-3">
         <Button variant="secondary" asChild>
-          <a href={`#`}>
-            <Printer className="md:mr-2" />
-            <span className="hidden md:inline">Imprimir</span>
-          </a>
-        </Button>
-        <Button variant="secondary" asChild>
-          <a href={`/edit/${params.id}`}>
+          <a href={`/table/edit/${params.id}`}>
             <Pencil className="md:mr-2" />
             <span className="hidden md:inline">Editar</span>
           </a>

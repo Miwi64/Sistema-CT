@@ -35,7 +35,7 @@ export function NavMenu() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuLink href="/students-table" className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink href="/table" className={navigationMenuTriggerStyle()}>
               Tabla
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -44,11 +44,11 @@ export function NavMenu() {
             <NavigationMenuContent>
               <ul className="grid gap-1 p-2 md:w-[300px]">
                 <ListItem
-                  href="/certificate-form"
+                  href="/table/certificate-form"
                   title="Certificado"
                 />
                 <ListItem
-                  href="/title-form"
+                  href="/table/title-form"
                   title="Título"
                 />
               </ul>
@@ -58,16 +58,16 @@ export function NavMenu() {
             <NavigationMenuTrigger>Importar/Exportar</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-2 p-2 md:w-[400px]">
-                <ListItem href="/title-import" title="Importar títulos">
+                <ListItem href="/table/title-import" title="Importar títulos">
                   Desde un archivo de Excel.
                 </ListItem>
                 <ListItem
-                  href="/certificate-import"
+                  href="/table/certificate-import"
                   title="Importar certificados"
                 >
                   Desde un archivo de Excel.
                 </ListItem>
-                <ListItem href="/export" title="Crear reporte">
+                <ListItem href="/table/export" title="Crear reporte">
                   Elaborar reporte de Excel o PDF.
                 </ListItem>
               </ul>
@@ -107,7 +107,7 @@ export function NavMenu() {
                   </NavigationMenuLink>
                 </li>
                 <ListItem
-                  href="/profile"
+                  href="/table/profile"
                   title="Editar perfil"
                 >
                   Nombre, contraseña.
@@ -126,7 +126,7 @@ export function NavMenu() {
       <div className="flex">
         <ModeToggle />
         <Button variant="ghost" size="icon" asChild>
-          <a href="/settings">
+          <a href="/table/settings">
             <Settings className="h-[1.2rem] w-[1.2rem]" />
           </a>
         </Button>
@@ -201,32 +201,32 @@ const navLinks = [
   {
     title: "Tabla de estudiantes",
     icon: <Table size={40} />,
-    path: "/students-table"
+    path: "/table"
   },
   {
     title: "Agregar Certificado",
     icon: <ScrollText size={40} />,
-    path: "/certificate-form"
+    path: "/table/certificate-form"
   },
   {
     title: "Agregar Título",
     icon: <BookText size={40} />,
-    path: "/title-form"
+    path: "/table/title-form"
   },
   {
     title: "Importar Certificados",
     icon: <FileUp size={40} />,
-    path: "/certificate-import"
+    path: "/table/certificate-import"
   },
   {
     title: "Importar Título",
     icon: <FileUp size={40} />,
-    path: "/title-import"
+    path: "/table/title-import"
   },
   {
     title: "Crear Reporte",
     icon: <FileDown size={40} />,
-    path: "/export"
+    path: "/table/export"
   },
 ]
 
