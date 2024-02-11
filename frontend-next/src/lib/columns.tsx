@@ -10,11 +10,11 @@ export type Student = {
   apellidop: string,
   apellidom?: string,
   carrera_fk: string,
-  periodo_ingreso: string,
-  periodo_egreso: string,
-  estado_nacimiento: string,
-  fecha_nacimiento: string,
-  nombre_carrera:string,
+  periodo_ingreso: string, //
+  periodo_egreso: string, //
+  estado_nacimiento: string, //
+  fecha_nacimiento: string, //
+  nombre_carrera: string,
   carrera: string,
   sexo: string,
   CURP: string,
@@ -58,21 +58,45 @@ export const columns: ColumnDef<Student>[] = [
     ),
   },
   {
-    accessorKey: "nombre_carrera",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Carrera" />
-    ),
-  },
-  {
     accessorKey: "sexo",
     header: ({ column }) => (
       <ColumnHeader column={column} title="Sexo" />
     ),
   },
   {
+    accessorKey: "fecha_nacimiento",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Fecha de nacimiento" />
+    ),
+  },
+  {
+    accessorKey: "estado_nacimiento",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Estado de nacimiento" />
+    ),
+  },
+  {
     accessorKey: "CURP",
     header: ({ column }) => (
       <ColumnHeader column={column} title="CURP" />
+    ),
+  },
+  {
+    accessorKey: "nombre_carrera",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Carrera" />
+    ),
+  },
+  {
+    accessorKey: "periodo_ingreso",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Periodo de ingreso" />
+    ),
+  },
+  {
+    accessorKey: "periodo_egreso",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="periodo de egreso" />
     ),
   },
   {
@@ -132,7 +156,7 @@ export const columns: ColumnDef<Student>[] = [
   {
     id: "actions",
     cell: ({ row }) => (
-      <OptionsButton id={row.getValue("num_control")} title={row.getValue("num_titulo")} certificate={row.getValue("num_folio")}/>
+      <OptionsButton id={row.getValue("num_control")} title={row.getValue("num_titulo")} certificate={row.getValue("num_folio")} />
     ),
     enableSorting: false,
     enableHiding: false,

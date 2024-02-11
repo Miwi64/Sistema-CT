@@ -3,8 +3,8 @@
 import { Table } from "@tanstack/react-table"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Button } from "../ui/button"
-import { BookText, BookType, Columns, ScrollText, UserRound, View, ViewIcon } from "lucide-react"
-import { CERTIFICATE_COLUMNS, STUDENT_COLUMNS, TITLE_COLUMNS } from "@/lib/constants"
+import { BookText, BookType, Columns, GraduationCap, ScrollText, UserRound, View, ViewIcon } from "lucide-react"
+import { CAREER_COLUMNS, CERTIFICATE_COLUMNS, STUDENT_COLUMNS, TITLE_COLUMNS } from "@/lib/constants"
 
 
 interface DataTableViewOptionsProps<TData> {
@@ -19,14 +19,13 @@ export function DataTableViewOptions<TData>({
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          size="sm"
-          className="flex text-muted-foreground"
+          className="flex w-full md:w-auto text-muted-foreground"
         >
-          <Columns className="sm:mr-2 h-4 w-4" />
-          <span className="hidden sm:block">Mostrar/Ocultar</span>
+          <Columns className="mr-2 h-4 w-4" />
+          <span className="block">Mostrar/Ocultar</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[150px]">
+      <DropdownMenuContent className="w-[150px]">
         <DropdownMenuLabel>Mostrar columnas</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuSub>
@@ -39,11 +38,29 @@ export function DataTableViewOptions<TData>({
               {
                 STUDENT_COLUMNS.map((s) => (<DropdownMenuCheckboxItem
                   key={table.getColumn(s.value)?.id}
-                  className="capitalize"
                   checked={table.getColumn(s.value)?.getIsVisible()}
                   onCheckedChange={(value) => table.getColumn(s.value)?.toggleVisibility(!!value)}
                 >
                   {s.text}
+                </DropdownMenuCheckboxItem>))
+              }
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <GraduationCap className="mr-2 h-4 w-4" />
+            <span>Carrera</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent>
+              {
+                CAREER_COLUMNS.map((c) => (<DropdownMenuCheckboxItem
+                  key={table.getColumn(c.value)?.id}
+                  checked={table.getColumn(c.value)?.getIsVisible()}
+                  onCheckedChange={(value) => table.getColumn(c.value)?.toggleVisibility(!!value)}
+                >
+                  {c.text}
                 </DropdownMenuCheckboxItem>))
               }
             </DropdownMenuSubContent>
@@ -59,7 +76,6 @@ export function DataTableViewOptions<TData>({
               {
                 TITLE_COLUMNS.map((t) => (<DropdownMenuCheckboxItem
                   key={table.getColumn(t.value)?.id}
-                  className="capitalize"
                   checked={table.getColumn(t.value)?.getIsVisible()}
                   onCheckedChange={(value) => table.getColumn(t.value)?.toggleVisibility(!!value)}
                 >
@@ -79,7 +95,6 @@ export function DataTableViewOptions<TData>({
               {
                 CERTIFICATE_COLUMNS.map((c) => (<DropdownMenuCheckboxItem
                   key={table.getColumn(c.value)?.id}
-                  className="capitalize"
                   checked={table.getColumn(c.value)?.getIsVisible()}
                   onCheckedChange={(value) => table.getColumn(c.value)?.toggleVisibility(!!value)}
                 >

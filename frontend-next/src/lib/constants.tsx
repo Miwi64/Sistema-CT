@@ -8,16 +8,16 @@ export const CAREERS = [
 ]
 
 export const STATES = [
-    { text: 'Aguascalientes', value: 'aguascalientes' },
-    { text: 'Baja California', value: 'baja_california' },
-    { text: 'Baja California Sur', value: 'baja_california_sur' },
-    { text: 'Campeche', value: 'campeche' },
-    { text: 'Chiapas', value: 'chiapas' },
-    { text: 'Chihuahua', value: 'chihuahua' },
-    { text: 'Coahuila', value: 'coahuila' },
-    { text: 'Colima', value: 'colima' },
-    { text: 'Durango', value: 'durango' },
-    { text: 'Guanajuato', value: 'guanajuato' }
+    { text: 'Aguascalientes', value: 'Aguascalientes' },
+    { text: 'Baja California', value: 'Baja California' },
+    { text: 'Baja California Sur', value: 'Baja California Sur' },
+    { text: 'Campeche', value: 'Campeche' },
+    { text: 'Chiapas', value: 'Chiapas' },
+    { text: 'Chihuahua', value: 'Chihuahua' },
+    { text: 'Coahuila', value: 'Coahuila' },
+    { text: 'Colima', value: 'Colima' },
+    { text: 'Durango', value: 'Durango' },
+    { text: 'Guanajuato', value: 'Guanajuato' }
 ]
 
 export const REPORTS: { [key: string]: string } = {
@@ -48,16 +48,35 @@ export const STUDENT_COLUMNS = [
         text: "Apellido Materno"
     },
     {
-        value: "nombre_carrera",
-        text: "Carrera"
-    },
-    {
         value: "sexo",
         text: "Sexo"
     },
     {
+        value: "estado_nacimiento",
+        text: "Estado de nacimiento"
+    },
+    {
+        value: "fecha_nacimiento",
+        text: "Fecha de nacimiento"
+    },
+    {
         value: "CURP",
         text: "CURP"
+    }
+]
+
+export const CAREER_COLUMNS = [
+    {
+        value: "nombre_carrera",
+        text: "Nombre"
+    },
+    {
+        value: "periodo_ingreso",
+        text: "Periodo de ingreso"
+    },
+    {
+        value: "periodo_egreso",
+        text: "Periodo de egreso"
     }
 ]
 

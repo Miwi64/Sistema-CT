@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { TabsContent } from '@/components/ui/tabs';
 import { Toggle } from '@/components/ui/toggle';
 import { DATE_CRITERIAS, ORDER_CRITERIAS } from '@/lib/constants';
-import { BookText, CalendarIcon, GraduationCap, SortDesc, Users } from 'lucide-react';
+import { BookText, CalendarIcon, SortDesc, Users } from 'lucide-react';
 import React from 'react'
 import { Career, FilterData } from '@/components/students-table/students-table';
 import { PaginationData } from '@/components/pagination-handler';
@@ -66,6 +66,7 @@ const FilterTab = ({ careers, filters, setFilters, setPaginationData }: FilterTa
                         </Toggle>
                     </div>
                 </div>
+
                 <div className="flex items-center space-x-6 lg:space-x-8">
                     <div className="flex items-center space-x-2">
                         <p className="text-sm font-medium">Carreras</p>
@@ -95,6 +96,8 @@ const FilterTab = ({ careers, filters, setFilters, setPaginationData }: FilterTa
                         </Select>
                     </div>
                 </div>
+
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline">
@@ -121,6 +124,8 @@ const FilterTab = ({ careers, filters, setFilters, setPaginationData }: FilterTa
                         </DropdownMenuRadioGroup>
                     </DropdownMenuContent>
                 </DropdownMenu>
+
+
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline">

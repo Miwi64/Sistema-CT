@@ -58,7 +58,7 @@ export function DataTable<TData, TValue>({
     <div className="rounded-md border">
       {table.getRowModel().rows?.length ? (
         <div>
-          <div className="flex my-3 mx-1 justify-between">
+          <div className="my-3 mx-1 ">
             <DataTableViewOptions table={table} />
           </div>
           <Table>
