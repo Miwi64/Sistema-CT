@@ -49,9 +49,21 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
             console.log("¡Plantilla no seleccionada!")
             return
         }
+        const fetchApi = await fetch(
+            `http://127.0.0.1:8000/data/api/v1/get-gob-report-data/${config.career}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: "Token " + session.token,
+              },
+            }
+        )
+
+        const data = await fetchApi.json()
         const template = await config.templateFile.arrayBuffer()
+
         if (config.formatType === "gob") {
-            await generateGobReport(template)
+            await generateGobReport(template, data)
         }
 
     }

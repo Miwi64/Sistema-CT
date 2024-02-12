@@ -8,8 +8,22 @@ import { Student } from "./columns";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { VisibilityState } from "@tanstack/react-table";
 
-export const generateGobReport = async (template: ArrayBuffer,) => {
-    const data = REPORT_EXAMPLE_DATA
+type GobReportData = [
+    {
+        gen: number,
+        count: number,
+        year: number,
+        students: [
+            {
+                name: string,
+                last_name: string,
+                title_date: string
+            }
+        ]
+    }
+]
+
+export const generateGobReport = async (template: ArrayBuffer, data: GobReportData) => {
     const years = data.map(value => value.year)
     const workbook = new ExcelJS.Workbook()
     await workbook.xlsx.load(template).then(
