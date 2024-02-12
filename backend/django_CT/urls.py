@@ -46,7 +46,7 @@ urlpatterns = [
     path('searchAT/', SearchViewAlumTit.as_view(), name='searchat'),
     path('carrera/', CarrerasView.as_view(), name='carrera'),
     path('alumnos/', AlumView.as_view(), name='alumnos'),
-    path('getGobReportData/<int:carrera_fk>/', GraduationView.as_view()),
+    path('data/api/v1/get-gob-report-data/<int:carrera_fk>/', GraduationView.as_view()),
     #path(r'pdf/', PruebaPDFView.as_view(), name='pdf_test'),
     path('data/', include('tasks.urls')),
 ]
