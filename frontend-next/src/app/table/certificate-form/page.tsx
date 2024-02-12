@@ -64,7 +64,12 @@ import { Label } from "@/components/ui/label";
 const formSchema = z.object({
   num_control: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(
       z
         .string()
@@ -73,7 +78,12 @@ const formSchema = z.object({
     ),
   nombre: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, " "))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(
       z
         .string()
@@ -82,7 +92,12 @@ const formSchema = z.object({
     ),
   apellidop: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(
       z
         .string()
@@ -103,15 +118,30 @@ const formSchema = z.object({
     .transform((value) => value.toISOString().split("T")[0]),
   periodo_ingreso: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(z.string().max(50, "Máximo 50 caracteres")),
   periodo_egreso: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(z.string().max(50, "Máximo 50 caracteres")),
   num_folio: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(z.string().min(1, { message: "Campo requerido" })),
   carrera_fk: z.string({ required_error: "Campo requerido" }),
   fecha_registro_cert: z
@@ -255,156 +285,6 @@ const CertificateForm = () => {
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-          <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
-            Agregar certificado
-          </h1>
-          <section className="">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <h2 className="my-5 text-lg leading-none tracking-tight">
-                  Datos del estudiante
-                </h2>
-                <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  <StudentFields form={form} />
-                </section>
-                <Separator className="my-8" />
-                <h2 className="mb-5 text-lg leading-none tracking-tight">
-                  Datos del certificado
-                </h2>
-                <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  <FormField
-                    control={form.control}
-                    name="num_folio"
-                    render={({ field }) => (
-                      <FormItem className="">
-                        <FormLabel>Número de folio</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Número de folio" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="carrera_fk"
-                    render={({ field }) => (
-                      <FormItem className="">
-                        <FormLabel>Carrera</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Seleccionar carrera" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {/* {CAREERS.map(({ value, text }, key) => (
-                              <SelectItem key={key} value={value}>
-                                {text}
-                              </SelectItem>
-                            ))} */}
-                            {careers.map(({ id_carrera, nombre_carrera }) => (
-                              <SelectItem
-                                key={id_carrera}
-                                value={`${id_carrera}`}
-                              >
-                                {nombre_carrera}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="fecha_registro_cert"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col gap-2">
-                        <FormLabel>Fecha de registro</FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "pl-3 text-left font-normal",
-                                  !field.value && "text-muted-foreground"
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>Fecha</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={new Date(field.value)}
-                              onSelect={field.onChange}
-                              disabled={(date) =>
-                                date > new Date() ||
-                                date < new Date("1900-01-01")
-                              }
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="observaciones_cert"
-                    render={({ field }) => (
-                      <FormItem className="">
-                        <FormLabel>Observaciones</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Máximo 150 caracteres"
-                            className="resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </section>
-                <div className="flex my-8 justify-center">
-                  <Button type="submit">Agregar</Button>
-                </div>
-              </form>
-            </Form>
-          </section>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Error al Registrar</DialogTitle>
-            <DialogDescription>
-              Ya existe un registro con el mismo número de control y/o número de folio.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Aceptar</Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
-  return (
-    <Drawer open={open} onOpenChange={setOpen}>
         <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
           Agregar certificado
         </h1>
@@ -452,10 +332,10 @@ const CertificateForm = () => {
                         </FormControl>
                         <SelectContent>
                           {/* {CAREERS.map(({ value, text }, key) => (
-                            <SelectItem key={key} value={value}>
-                              {text}
-                            </SelectItem>
-                          ))} */}
+                              <SelectItem key={key} value={value}>
+                                {text}
+                              </SelectItem>
+                            ))} */}
                           {careers.map(({ id_carrera, nombre_carrera }) => (
                             <SelectItem
                               key={id_carrera}
@@ -535,11 +415,159 @@ const CertificateForm = () => {
             </form>
           </Form>
         </section>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Error al Registrar</DialogTitle>
+            <DialogDescription>
+              Ya existe un registro con el mismo número de control y/o número de
+              folio.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Aceptar</Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
+  return (
+    <Drawer open={open} onOpenChange={setOpen}>
+      <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
+        Agregar certificado
+      </h1>
+      <section className="">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <h2 className="my-5 text-lg leading-none tracking-tight">
+              Datos del estudiante
+            </h2>
+            <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <StudentFields form={form} />
+            </section>
+            <Separator className="my-8" />
+            <h2 className="mb-5 text-lg leading-none tracking-tight">
+              Datos del certificado
+            </h2>
+            <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <FormField
+                control={form.control}
+                name="num_folio"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Número de folio</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Número de folio" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="carrera_fk"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Carrera</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Seleccionar carrera" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {/* {CAREERS.map(({ value, text }, key) => (
+                            <SelectItem key={key} value={value}>
+                              {text}
+                            </SelectItem>
+                          ))} */}
+                        {careers.map(({ id_carrera, nombre_carrera }) => (
+                          <SelectItem key={id_carrera} value={`${id_carrera}`}>
+                            {nombre_carrera}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="fecha_registro_cert"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col gap-2">
+                    <FormLabel>Fecha de registro</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP")
+                            ) : (
+                              <span>Fecha</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={new Date(field.value)}
+                          onSelect={field.onChange}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="observaciones_cert"
+                render={({ field }) => (
+                  <FormItem className="">
+                    <FormLabel>Observaciones</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Máximo 150 caracteres"
+                        className="resize-none"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </section>
+            <div className="flex my-8 justify-center">
+              <Button type="submit">Agregar</Button>
+            </div>
+          </form>
+        </Form>
+      </section>
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle>Error al Registrar</DrawerTitle>
           <DrawerDescription>
-          Ya existe un registro con el mismo número de control y/o número de folio.
+            Ya existe un registro con el mismo número de control y/o número de
+            folio.
           </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter className="pt-2">

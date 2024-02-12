@@ -61,7 +61,12 @@ import { toast } from "sonner";
 const formSchema = z.object({
   num_control: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(
       z
         .string()
@@ -70,7 +75,12 @@ const formSchema = z.object({
     ),
   nombre: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(
       z
         .string()
@@ -79,7 +89,12 @@ const formSchema = z.object({
     ),
   apellidop: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(
       z
         .string()
@@ -100,25 +115,46 @@ const formSchema = z.object({
     .transform((value) => value.toISOString().split("T")[0]),
   periodo_ingreso: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(z.string().max(50, "Máximo 50 caracteres")),
   periodo_egreso: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(z.string().max(50, "Máximo 50 caracteres")),
   num_titulo: z
     .string({ required_error: "Campo requerido" })
-    .transform((value) => value.replace(/\s+/g, ""))
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
     .pipe(z.string().min(8, { message: "Minimo 8 caracteres" })),
   carrera_fk: z.string({ required_error: "Campo requerido" }),
-  num_cedula: z
-    .string()
-    .max(10, "Máximo 10 caracteres").optional(),
+  num_cedula: z.string().max(10, "Máximo 10 caracteres").optional(),
   observaciones_tit: z
     .string()
     .max(150, "Límite de caracteres excedido")
     .optional(),
-  clave_plan: z.string({ required_error: "Campo requerido" }),
+  clave_plan: z
+    .string({ required_error: "Campo requerido" })
+    .transform((value) => {
+      if (/^(?!\s*$).+/.test(value)) {
+        return value;
+      }
+      return value.replace(/\s+/g, "");
+    })
+    .pipe(z.string().min(13, { message: "ejem.: IISC-2006-201" })),
   fecha_acto: z
     .date({ required_error: "Campo requerido" })
     .transform((value) => value.toISOString().split("T")[0]),
@@ -260,239 +296,6 @@ const TitleForm = () => {
     return (
       <>
         <Dialog open={open} onOpenChange={setOpen}>
-            <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
-              Agregar Título
-            </h1>
-            <section className="">
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                  <h2 className="my-5 text-lg leading-none tracking-tight">
-                    Datos del estudiante
-                  </h2>
-                  <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    <StudentFields form={form} />
-                  </section>
-                  <Separator className="my-8" />
-                  <h2 className="mb-5 text-lg leading-none tracking-tight">
-                    Datos del título
-                  </h2>
-                  <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    <FormField
-                      control={form.control}
-                      name="carrera_fk"
-                      render={({ field }) => (
-                        <FormItem className="">
-                          <FormLabel>Carrera</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Seleccionar carrera" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {careers.map(({ id_carrera, nombre_carrera }) => (
-                                <SelectItem
-                                  key={id_carrera}
-                                  value={`${id_carrera}`}
-                                >
-                                  {nombre_carrera}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="num_titulo"
-                      render={({ field }) => (
-                        <FormItem className="">
-                          <FormLabel>Número de título</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Número de título" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="num_cedula"
-                      render={({ field }) => (
-                        <FormItem className="">
-                          <FormLabel>Número de cédula</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Número de cédula" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="clave_plan"
-                      render={({ field }) => (
-                        <FormItem className="">
-                          <FormLabel>Plan de estudios</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Seleccionar" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {["Plan 1", "Plan 2"].map((value, key) => (
-                                <SelectItem key={key} value={value}>
-                                  {value}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="fecha_registro_tit"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col gap-2">
-                          <FormLabel>Fecha de registro</FormLabel>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button
-                                  variant={"outline"}
-                                  className={cn(
-                                    "pl-3 text-left font-normal",
-                                    !field.value && "text-muted-foreground"
-                                  )}
-                                >
-                                  {field.value ? (
-                                    format(field.value, "PPP")
-                                  ) : (
-                                    <span>Fecha</span>
-                                  )}
-                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent
-                              className="w-auto p-0"
-                              align="start"
-                            >
-                              <Calendar
-                                mode="single"
-                                selected={new Date(field.value)}
-                                onSelect={field.onChange}
-                                disabled={(date) =>
-                                  date > new Date() ||
-                                  date < new Date("1900-01-01")
-                                }
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="fecha_acto"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col gap-2">
-                          <FormLabel>Fecha del acto</FormLabel>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button
-                                  variant={"outline"}
-                                  className={cn(
-                                    "pl-3 text-left font-normal",
-                                    !field.value && "text-muted-foreground"
-                                  )}
-                                >
-                                  {field.value ? (
-                                    format(field.value, "PPP")
-                                  ) : (
-                                    <span>Fecha</span>
-                                  )}
-                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent
-                              className="w-auto p-0"
-                              align="start"
-                            >
-                              <Calendar
-                                mode="single"
-                                selected={new Date(field.value)}
-                                onSelect={field.onChange}
-                                disabled={(date) =>
-                                  date > new Date() ||
-                                  date < new Date("1900-01-01")
-                                }
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="observaciones_tit"
-                      render={({ field }) => (
-                        <FormItem className="">
-                          <FormLabel>Observaciones</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Máximo 150 caracteres"
-                              className="resize-none"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </section>
-                  <div className="flex my-8 justify-center">
-                    <Button type="submit">Agregar</Button>
-                  </div>
-                </form>
-              </Form>
-            </section>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Error al Registrar</DialogTitle>
-              <DialogDescription>
-                Ya existe un registro con el mismo número de control y/o número de título.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogClose asChild>
-              <Button variant="outline">Aceptar</Button>
-            </DialogClose>
-          </DialogContent>
-        </Dialog>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <Drawer open={open} onOpenChange={setOpen}>
           <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
             Agregar Título
           </h1>
@@ -572,23 +375,9 @@ const TitleForm = () => {
                     render={({ field }) => (
                       <FormItem className="">
                         <FormLabel>Plan de estudios</FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Seleccionar" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {["Plan 1", "Plan 2"].map((value, key) => (
-                              <SelectItem key={key} value={value}>
-                                {value}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <FormControl>
+                          <Input placeholder="Clave Plan" {...field} />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -701,11 +490,238 @@ const TitleForm = () => {
               </form>
             </Form>
           </section>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Error al Registrar</DialogTitle>
+              <DialogDescription>
+                Ya existe un registro con el mismo número de control y/o número
+                de título.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogClose asChild>
+              <Button variant="outline">Aceptar</Button>
+            </DialogClose>
+          </DialogContent>
+        </Dialog>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Drawer open={open} onOpenChange={setOpen}>
+        <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
+          Agregar Título
+        </h1>
+        <section className="">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <h2 className="my-5 text-lg leading-none tracking-tight">
+                Datos del estudiante
+              </h2>
+              <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <StudentFields form={form} />
+              </section>
+              <Separator className="my-8" />
+              <h2 className="mb-5 text-lg leading-none tracking-tight">
+                Datos del título
+              </h2>
+              <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <FormField
+                  control={form.control}
+                  name="carrera_fk"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Carrera</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar carrera" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {careers.map(({ id_carrera, nombre_carrera }) => (
+                            <SelectItem
+                              key={id_carrera}
+                              value={`${id_carrera}`}
+                            >
+                              {nombre_carrera}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="num_titulo"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Número de título</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Número de título" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="num_cedula"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Número de cédula</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Número de cédula" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="clave_plan"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Plan de estudios</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {["Plan 1", "Plan 2"].map((value, key) => (
+                            <SelectItem key={key} value={value}>
+                              {value}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="fecha_registro_tit"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-2">
+                      <FormLabel>Fecha de registro</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Fecha</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={new Date(field.value)}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="fecha_acto"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col gap-2">
+                      <FormLabel>Fecha del acto</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Fecha</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={new Date(field.value)}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="observaciones_tit"
+                  render={({ field }) => (
+                    <FormItem className="">
+                      <FormLabel>Observaciones</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Máximo 150 caracteres"
+                          className="resize-none"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </section>
+              <div className="flex my-8 justify-center">
+                <Button type="submit">Agregar</Button>
+              </div>
+            </form>
+          </Form>
+        </section>
         <DrawerContent>
           <DrawerHeader className="text-left">
             <DrawerTitle>Error al Registrar</DrawerTitle>
             <DrawerDescription>
-              Ya existe un registro con el mismo número de control y/o número de título.
+              Ya existe un registro con el mismo número de control y/o número de
+              título.
             </DrawerDescription>
           </DrawerHeader>
           <DrawerFooter className="pt-2">

@@ -36,8 +36,7 @@ export const authOptions  = {
         async session({session, token}:any){
             session.user = token.user as any;
             session.token = token.token as any;
-            session.maxAge = 10 * 60 * 60;
-            session.expires = new Date(Date.now() + session.maxAge);
+            session.expires = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
             return session;
         },
       },
