@@ -6,7 +6,7 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Student } from "./columns";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
-import { VisibilityColumn, VisibilityState } from "@tanstack/react-table";
+import { VisibilityState } from "@tanstack/react-table";
 
 export const generateGobReport = async (template: ArrayBuffer,) => {
     const data = REPORT_EXAMPLE_DATA
