@@ -1,4 +1,4 @@
-import { REPORT_EXAMPLE_DATA } from "./constants"
+import { REF_COLUMN_NAMES, REPORT_EXAMPLE_DATA } from "./constants"
 import ExcelJS from 'exceljs';
 import JsExcelTemplate from "js-excel-template";
 import { saveAs } from "file-saver";
@@ -6,6 +6,7 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 import { Student } from "./columns";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
+import { VisibilityColumn, VisibilityState } from "@tanstack/react-table";
 
 export const generateGobReport = async (template: ArrayBuffer,) => {
     const data = REPORT_EXAMPLE_DATA
@@ -56,58 +57,47 @@ export const generateGobReport = async (template: ArrayBuffer,) => {
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 //CSV
-function jsonToCsv(jsonData: Student[]) {
-
-    const data = jsonData.map((item) => (
-        {
-            "No. Control": item.num_control,
-            "Nombre": item.nombre,
-            "Apellido Paterno": item.apellidop,
-            "Apellido Materno": item.apellidom,
-            "Sexo": item.sexo === 'm' ? "Masculino" : item.sexo === 'f' ? "Femenino" : "No Definido",
-            "CURP": item.CURP,
-            "Periodo Ingreso": item.periodo_ingreso,
-            "Periodo Egreso": item.periodo_egreso,
-            "Estado Nacimiento": item.estado_nacimiento,
-            "Fecha Nacimiento": item.fecha_nacimiento,
-            "Carrera": item.nombre_carrera,
-            "No. Folio": item.num_folio,
-            "Fecha Registro Certificado": item.fecha_registro_cert,
-            "Observaciones Certificado": item.observaciones_cert,
-            "No. Titulo": item.num_titulo,
-            "Clave Plan": item.clave_plan,
-            "Fecha Acto": item.fecha_acto,
-            "Fecha Registro Titulo": item.fecha_registro_tit,
-            "No. Cedula": item.num_cedula,
-            "Observaciones Titulo": item.observaciones_tit
-        }
-    ))
-
-    const headers = Object.keys(data[0]);
+function jsonToCsv(headers: string[], jsonData: Student[]) {
+    const keys = Object.keys(jsonData[0])
     let csvContent = headers.join(",") + "\n";
-
-    data.forEach((item) => {
-        let values = headers
-            .map((header) => {
-                const cell = item[header] || "";
+    jsonData.forEach((item) => {
+        let values = keys
+            .map((key) => {
+                const cell = item[key] || "";
                 return typeof cell === "string"
                     ? `"${cell.replace(/"/g, '""')}"`
                     : cell;
             })
             .join(",");
-
         csvContent += values + "\n";
     });
 
     return csvContent;
 }
 
-export const handleExcelDownload = async (urlFilter: string) => {
-    //console.log(urlFilters);
+const filterProps = (obj: { [x: string]: any }, props: string[]) => {
+    const newObj: { [x: string]: any } = {};
+    props.forEach(prop => {
+        if (obj.hasOwnProperty(prop)) {
+            newObj[prop] = obj[prop];
+        }
+    });
+    return newObj;
+}
+
+const formatHeader = (refStrings: { [x: string]: string }, array: string[]) => {
+    const newArray: string[] = array.map(element => refStrings[element]);
+    return newArray;
+}
+
+export const handleExcelDownload = async (urlFilter: string, columnVisibility: VisibilityState) => {
+    const columns = Object.keys(columnVisibility).filter(col => columnVisibility[col] === true);
+    const headers = formatHeader(REF_COLUMN_NAMES, columns)
     fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilter}`)
         .then((response) => response.json())
         .then((data) => {
-            const csv = jsonToCsv(data);
+            const selected_data = data.map((element: { [x: string]: any }) => filterProps(element, columns));
+            const csv = jsonToCsv(headers, selected_data);
             const blob = new Blob([csv], { type: "text/csv" });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
@@ -123,63 +113,21 @@ export const handleExcelDownload = async (urlFilter: string) => {
 
 
 
-export const handlePdfDownload2 = async (urlFilter: string) => {
+export const handlePdfDownload = async (urlFilter: string, columnVisibility: VisibilityState) => {
+    const columns = Object.keys(columnVisibility).filter(col => columnVisibility[col] === true);
+    const headers = formatHeader(REF_COLUMN_NAMES, columns)
     const datos = await fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilter}`);
     const data = await datos.json();
-
     const docDefinition: TDocumentDefinitions = {
         pageSize: 'A4',
-        pageOrientation: 'landscape',
+        pageOrientation: 'portrait',
         content: [
             {
-                text: 'Tabla de Estudiantes',
-                style: 'header',
-            },
-            {
                 table: {
-                    widths: ['5%', '7%', '7%', '7%', '8%', '3%', '6%', '5%', '5%', '5%', '6%', '5%', '5%', '5%', '5%', '5%', '5%', '6%'],
                     body: [
-                        [
-                            { text: 'No. Control', style: 'head', border: [true, true, true, true] },
-                            { text: 'Nombre', style: 'head', border: [true, true, true, true] },
-                            { text: 'Apellido P', style: 'head', border: [true, true, true, true] },
-                            { text: 'Apellido M', style: 'head', border: [true, true, true, true] },
-                            { text: 'Carrera', style: 'head', border: [true, true, true, true] },
-                            { text: 'Sexo', style: 'head', border: [true, true, true, true] },
-                            { text: 'CURP', style: 'head', border: [true, true, true, true] },
-                            { text: 'Ingreso', style: 'head', border: [true, true, true, true] },
-                            { text: 'Egreso', style: 'head', border: [true, true, true, true] },
-                            { text: 'No. Folio', style: 'head', border: [true, true, true, true] },
-                            { text: 'Registro Cert.', style: 'head', border: [true, true, true, true] },
-                            { text: 'Obser. Cert.', style: 'head', border: [true, true, true, true] },
-                            { text: 'No. Titulo', style: 'head', border: [true, true, true, true] },
-                            { text: 'Clave Plan', style: 'head', border: [true, true, true, true] },
-                            { text: 'Fecha Acto', style: 'head', border: [true, true, true, true] },
-                            { text: 'Registro Tit.', style: 'head', border: [true, true, true, true] },
-                            { text: 'No. Cedula', style: 'head', border: [true, true, true, true] },
-                            { text: 'Obser. Tit.', style: 'head', border: [true, true, true, true] },
-                        ],
+                        headers.map(header => ({ text: header, style: 'head', border: [true, true, true, true] })),
                         ...data.map((row: Student) => (
-                            [
-                                { text: row.num_control, style: 'body', border: [true, true, true, true] },
-                                { text: row.nombre, style: 'body', border: [true, true, true, true] },
-                                { text: row.apellidop, style: 'body', border: [true, true, true, true] },
-                                { text: row.apellidom, style: 'body', border: [true, true, true, true] },
-                                { text: row.nombre_carrera, style: 'body', border: [true, true, true, true] },
-                                { text: row.sexo, style: 'body', border: [true, true, true, true] },
-                                { text: row.CURP, style: 'body', border: [true, true, true, true] },
-                                { text: row.periodo_ingreso, style: 'body', border: [true, true, true, true] },
-                                { text: row.periodo_egreso, style: 'body', border: [true, true, true, true] },
-                                { text: row.num_folio, style: 'body', border: [true, true, true, true] },
-                                { text: row.fecha_registro_cert, style: 'body', border: [true, true, true, true] },
-                                { text: row.observaciones_cert, style: 'body', border: [true, true, true, true] },
-                                { text: row.num_titulo, style: 'body', border: [true, true, true, true] },
-                                { text: row.clave_plan, style: 'body', border: [true, true, true, true] },
-                                { text: row.fecha_acto, style: 'body', border: [true, true, true, true] },
-                                { text: row.fecha_registro_tit, style: 'body', border: [true, true, true, true] },
-                                { text: row.num_cedula, style: 'body', border: [true, true, true, true] },
-                                { text: row.observaciones_tit, style: 'body', border: [true, true, true, true] },
-                            ]
+                            columns.map(column => ({ text: row[column], style: 'body', border: [true, true, true, true] }))
                         )),
                     ],
                     headerRows: 1,

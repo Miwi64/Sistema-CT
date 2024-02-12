@@ -190,6 +190,29 @@ export const TITLE_COLUMNS = [
     },
 ]
 
+export const REF_COLUMN_NAMES = {
+    "num_control": "Número de control",
+    "nombre": "Nombre",
+    "apellidop": "Apellido paterno",
+    "apellidom": "Apellido materno",
+    "sexo": "Sexo",
+    "CURP": "CURP",
+    "estado_nacimiento": "Estado de nacimiento",
+    "fecha_nacimiento": "Fecha de nacimiento",
+    "nombre_carrera": "Carrera",
+    "periodo_ingreso": "Periodo de ingreso",
+    "periodo_egreso": "Periodo de egreso",
+    "num_folio": "Número de folio",
+    "fecha_registro_cert": "Fecha de registro (Certificado)",
+    "observaciones_cert": "Observaciones (Certificado)",
+    "num_titulo": "Número de título",
+    "fecha_acto": "Fecha del acto",
+    "clave_plan": "Plan de estudios",
+    "num_cedula": "Número de cédula",
+    "fecha_registro_tit": "Fecha de registro (Título)",
+    "observaciones_tit": "Observaciones (Título)"
+}
+
 export const ORDER_CRITERIAS = [
     { text: "Número de control", value: "num_control" },
     { text: "Nombre", value: "nombre" },

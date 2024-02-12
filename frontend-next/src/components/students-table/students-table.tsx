@@ -130,6 +130,7 @@ export default function StudentsTable({
 
         <StartTab
           urlFilter={urlFilter}
+          columnVisibility={columnVisibility}
           filters={filters}
           setFilters={setFilters}
         />
