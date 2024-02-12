@@ -8,8 +8,22 @@ import { Student } from "./columns";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { VisibilityState } from "@tanstack/react-table";
 
-export const generateGobReport = async (template: ArrayBuffer,) => {
-    const data = REPORT_EXAMPLE_DATA
+type GobReportData = [
+    {
+        gen: number,
+        count: number,
+        year: number,
+        students: [
+            {
+                name: string,
+                last_name: string,
+                title_date: string
+            }
+        ]
+    }
+]
+
+export const generateGobReport = async (template: ArrayBuffer, data: GobReportData) => {
     const years = data.map(value => value.year)
     const workbook = new ExcelJS.Workbook()
     await workbook.xlsx.load(template).then(
@@ -56,29 +70,11 @@ export const generateGobReport = async (template: ArrayBuffer,) => {
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-//CSV
-function jsonToCsv(headers: string[], columns: string[], jsonData: Student[]) {
-    let csvContent = headers.join(",") + "\n";
-    jsonData.forEach((item) => {
-        let values = columns
-            .map((key) => {
-                const cell = item[key] || "";
-                return typeof cell === "string"
-                    ? `"${cell.replace(/"/g, '""')}"`
-                    : cell;
-            })
-            .join(",");
-        csvContent += values + "\n";
-    });
-
-    return csvContent;
-}
-
 const filterProps = (obj: { [x: string]: any }, props: string[]) => {
     const newObj: { [x: string]: any } = {};
-    props.forEach(prop => {
+    props.forEach((prop, index) => {
         if (obj.hasOwnProperty(prop)) {
-            newObj[prop] = obj[prop];
+            newObj[`column${index}`] = obj[prop];
         }
     });
     return newObj;
@@ -92,31 +88,30 @@ const formatHeader = (refStrings: { [x: string]: string }, array: string[]) => {
 export const handleExcelDownload = async (urlFilter: string, columnVisibility: VisibilityState) => {
     const columns = Object.keys(columnVisibility).filter(col => columnVisibility[col] === true);
     const headers = formatHeader(REF_COLUMN_NAMES, columns);
+    const objHeaders: { [x: string]: string } = {};
+    headers.forEach((head, index) => {
+        objHeaders[`column${index + 1}`] = head
+    });
     fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilter}`)
         .then((response) => response.json())
-        .then((data) => {
+        .then(async (data: Student[]) => {
             const selected_data = data.map((element: { [x: string]: any }) => filterProps(element, columns));
-            const csv = jsonToCsv(headers, columns, selected_data);
-            const blob = new Blob([csv], { type: "text/csv" });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.style.display = "none";
-            a.href = url;
-            a.download = "archivo.csv";
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
+            const fetchTemplate = await fetch(`http://localhost:3000/templates/export_template.xlsx`);
+            const template = await fetchTemplate.arrayBuffer();
+            const excelTemplate = await JsExcelTemplate.fromArrayBuffer(template);
+            excelTemplate.set("headers", [objHeaders]);
+            excelTemplate.set("data", selected_data);
+            const blob = await excelTemplate.toBlob();
+            saveAs(blob, "table.xlsx");
         });
-};
-
+}
 
 
 export const handlePdfDownload = async (urlFilter: string, columnVisibility: VisibilityState) => {
     const columns = Object.keys(columnVisibility).filter(col => columnVisibility[col] === true);
     const headers = formatHeader(REF_COLUMN_NAMES, columns);
-    const datos = await fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilter}`);
-    const data = await datos.json();
+    const fetchData = await fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilter}`);
+    const data = await fetchData.json();
     const docDefinition: TDocumentDefinitions = {
         pageSize: 'A4',
         pageOrientation: 'portrait',

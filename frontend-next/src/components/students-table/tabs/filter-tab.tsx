@@ -150,27 +150,25 @@ const FilterTab = ({ careers, filters, setFilters,
                                 icon: <ScrollText className="mr-2 h-4 w-4" />
                             },
                         ].map(({ label, list, icon }) => (
-                            <>
-                                <DropdownMenuSub>
-                                    <DropdownMenuSubTrigger>
-                                        {icon}
-                                        <span>{label}</span>
-                                    </DropdownMenuSubTrigger>
-                                    <DropdownMenuPortal>
-                                        <DropdownMenuSubContent>
-                                            {
-                                                list.map((element) => (<DropdownMenuCheckboxItem
-                                                    key={element.value}
-                                                    checked={columnVisibility[element.value]}
-                                                    onCheckedChange={(checked) => setColumnVisibility((prev) => updateProp(prev, element.value, checked))}
-                                                >
-                                                    {element.text}
-                                                </DropdownMenuCheckboxItem>))
-                                            }
-                                        </DropdownMenuSubContent>
-                                    </DropdownMenuPortal>
-                                </DropdownMenuSub>
-                            </>
+                            <DropdownMenuSub key={label}>
+                                <DropdownMenuSubTrigger>
+                                    {icon}
+                                    <span>{label}</span>
+                                </DropdownMenuSubTrigger>
+                                <DropdownMenuPortal>
+                                    <DropdownMenuSubContent>
+                                        {
+                                            list.map((element) => (<DropdownMenuCheckboxItem
+                                                key={element.value}
+                                                checked={columnVisibility[element.value]}
+                                                onCheckedChange={(checked) => setColumnVisibility((prev) => updateProp(prev, element.value, checked))}
+                                            >
+                                                {element.text}
+                                            </DropdownMenuCheckboxItem>))
+                                        }
+                                    </DropdownMenuSubContent>
+                                </DropdownMenuPortal>
+                            </DropdownMenuSub>
                         ))}
                     </DropdownMenuContent>
                 </DropdownMenu >
