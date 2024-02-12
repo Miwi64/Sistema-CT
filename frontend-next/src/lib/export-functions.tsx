@@ -57,11 +57,10 @@ export const generateGobReport = async (template: ArrayBuffer,) => {
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 //CSV
-function jsonToCsv(headers: string[], jsonData: Student[]) {
-    const keys = Object.keys(jsonData[0])
+function jsonToCsv(headers: string[], columns: string[], jsonData: Student[]) {
     let csvContent = headers.join(",") + "\n";
     jsonData.forEach((item) => {
-        let values = keys
+        let values = columns
             .map((key) => {
                 const cell = item[key] || "";
                 return typeof cell === "string"
@@ -92,12 +91,12 @@ const formatHeader = (refStrings: { [x: string]: string }, array: string[]) => {
 
 export const handleExcelDownload = async (urlFilter: string, columnVisibility: VisibilityState) => {
     const columns = Object.keys(columnVisibility).filter(col => columnVisibility[col] === true);
-    const headers = formatHeader(REF_COLUMN_NAMES, columns)
+    const headers = formatHeader(REF_COLUMN_NAMES, columns);
     fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilter}`)
         .then((response) => response.json())
         .then((data) => {
             const selected_data = data.map((element: { [x: string]: any }) => filterProps(element, columns));
-            const csv = jsonToCsv(headers, selected_data);
+            const csv = jsonToCsv(headers, columns, selected_data);
             const blob = new Blob([csv], { type: "text/csv" });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
@@ -115,7 +114,7 @@ export const handleExcelDownload = async (urlFilter: string, columnVisibility: V
 
 export const handlePdfDownload = async (urlFilter: string, columnVisibility: VisibilityState) => {
     const columns = Object.keys(columnVisibility).filter(col => columnVisibility[col] === true);
-    const headers = formatHeader(REF_COLUMN_NAMES, columns)
+    const headers = formatHeader(REF_COLUMN_NAMES, columns);
     const datos = await fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilter}`);
     const data = await datos.json();
     const docDefinition: TDocumentDefinitions = {

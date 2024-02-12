@@ -10,8 +10,8 @@ import { Career, FilterData } from '@/components/students-table/students-table';
 import { PaginationData } from '@/components/pagination-handler';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { Calendar } from '@/components/ui/calendar';
 import { VisibilityState } from '@tanstack/react-table';
+import { Calendar } from '@/components/ui/calendar';
 
 interface FilterTabProps {
     careers: Career[]
@@ -227,6 +227,8 @@ const FilterTab = ({ careers, filters, setFilters, setPaginationData, setColumnV
                                         <PopoverContent className="w-auto p-0" align="start">
                                             <Calendar
                                                 mode="single"
+                                                fromYear={1970}
+                                                toYear={new Date().getFullYear()}
                                                 defaultMonth={date}
                                                 selected={date}
                                                 onSelect={(selected) => {
