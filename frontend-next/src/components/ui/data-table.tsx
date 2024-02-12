@@ -4,11 +4,11 @@ import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
+  Table as ReactTable,
   VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
-  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
@@ -21,25 +21,27 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DataTableViewOptions } from "../datatable/datatable-view-options"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  columnVisibility: VisibilityState
+  setColumnVisibility: React.Dispatch<React.SetStateAction<VisibilityState>>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  columnVisibility,
+  setColumnVisibility
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-
-  const table = useReactTable({
+  const reactTable = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -56,14 +58,14 @@ export function DataTable<TData, TValue>({
   })
   return (
     <div className="rounded-md border">
-      {table.getRowModel().rows?.length ? (
+      {reactTable.getRowModel().rows?.length ? (
         <div>
           <div className="my-3 mx-1 ">
-            <DataTableViewOptions table={table} />
+            <DataTableViewOptions table={reactTable} />
           </div>
           <Table>
             <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
+              {reactTable.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
@@ -81,7 +83,7 @@ export function DataTable<TData, TValue>({
               ))}
             </TableHeader>
             <TableBody>
-              {table.getRowModel().rows.map((row) => (
+              {reactTable.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}

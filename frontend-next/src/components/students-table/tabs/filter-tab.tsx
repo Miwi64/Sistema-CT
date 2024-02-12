@@ -3,7 +3,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuRadio
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { TabsContent } from '@/components/ui/tabs';
 import { Toggle } from '@/components/ui/toggle';
-import { DATE_CRITERIAS, ORDER_CRITERIAS } from '@/lib/constants';
+import { BOTH_VISIBLE_COLUMNS, CERTIFICATE_VISIBLE_COLUMNS, DATE_CRITERIAS, ORDER_CRITERIAS, TITLE_VISIBLE_COLUMNS } from '@/lib/constants';
 import { BookText, CalendarIcon, SortDesc, Users } from 'lucide-react';
 import React from 'react'
 import { Career, FilterData } from '@/components/students-table/students-table';
@@ -11,15 +11,17 @@ import { PaginationData } from '@/components/pagination-handler';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { Calendar } from '@/components/ui/calendar';
+import { VisibilityState } from '@tanstack/react-table';
 
 interface FilterTabProps {
     careers: Career[]
     filters: FilterData;
     setFilters: React.Dispatch<React.SetStateAction<FilterData>>;
     setPaginationData: React.Dispatch<React.SetStateAction<PaginationData>>;
+    setColumnVisibility: React.Dispatch<React.SetStateAction<VisibilityState>>;
 }
 
-const FilterTab = ({ careers, filters, setFilters, setPaginationData }: FilterTabProps) => {
+const FilterTab = ({ careers, filters, setFilters, setPaginationData, setColumnVisibility }: FilterTabProps) => {
     return (
         <TabsContent className="mt-0" value="Filtrar">
             <div
@@ -110,8 +112,19 @@ const FilterTab = ({ careers, filters, setFilters, setPaginationData }: FilterTa
                         <DropdownMenuSeparator />
                         <DropdownMenuRadioGroup
                             value={filters.doc}
-                            onValueChange={(value) =>
+                            onValueChange={(value) => {
                                 setFilters({ ...filters, doc: value })
+                                setPaginationData((prev) => ({ ...prev, current_page: "1" }))
+                                if (value === "C") {
+                                    setColumnVisibility(CERTIFICATE_VISIBLE_COLUMNS)
+                                }
+                                else if (value === "T") {
+                                    setColumnVisibility(TITLE_VISIBLE_COLUMNS)
+                                }
+                                else {
+                                    setColumnVisibility(BOTH_VISIBLE_COLUMNS)
+                                }
+                            }
                             }
                         >
                             <DropdownMenuRadioItem value="C">

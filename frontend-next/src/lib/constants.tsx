@@ -30,6 +30,74 @@ export const FORMATS: { [key: string]: string } = {
     xls: "Archivo de Excel (xlsx)"
 }
 
+export const CERTIFICATE_VISIBLE_COLUMNS = {
+    "num_control": true,
+    "nombre": true,
+    "apellidop": true,
+    "apellidom": true,
+    "sexo": false,
+    "CURP": false,
+    "estado_nacimiento": false,
+    "fecha_nacimiento": true,
+    "nombre_carrera": true,
+    "periodo_ingreso": true,
+    "periodo_egreso":true,
+    "num_folio": true,
+    "fecha_registro_cert":true,
+    "observaciones_cert":true,
+    "num_titulo":false,
+    "fecha_acto":false,
+    "clave_plan":false,
+    "num_cedula":false,
+    "fecha_registro_tit":false,
+    "observaciones_tit":false
+}
+export const TITLE_VISIBLE_COLUMNS = {
+    "num_control": true,
+    "nombre": true,
+    "apellidop": true,
+    "apellidom": true,
+    "sexo": false,
+    "CURP": false,
+    "estado_nacimiento": false,
+    "fecha_nacimiento": true,
+    "nombre_carrera": true,
+    "periodo_ingreso": true,
+    "periodo_egreso":true,
+    "num_folio": false,
+    "fecha_registro_cert":false,
+    "observaciones_cert":false,
+    "num_titulo":true,
+    "fecha_acto":true,
+    "clave_plan":true,
+    "num_cedula":true,
+    "fecha_registro_tit":true,
+    "observaciones_tit":true
+}
+
+export const BOTH_VISIBLE_COLUMNS = {
+    "num_control": true,
+    "nombre": true,
+    "apellidop": true,
+    "apellidom": true,
+    "sexo": false,
+    "CURP": false,
+    "estado_nacimiento": false,
+    "fecha_nacimiento": true,
+    "nombre_carrera": true,
+    "periodo_ingreso": true,
+    "periodo_egreso":true,
+    "num_folio": true,
+    "fecha_registro_cert":true,
+    "observaciones_cert":true,
+    "num_titulo":true,
+    "fecha_acto":true,
+    "clave_plan":true,
+    "num_cedula":true,
+    "fecha_registro_tit":true,
+    "observaciones_tit":true
+}
+
 export const STUDENT_COLUMNS = [
     {
         value: "num_control",
