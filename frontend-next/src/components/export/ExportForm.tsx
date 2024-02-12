@@ -7,6 +7,7 @@ import { REPORTS } from "@/lib/constants";
 import { generateGobReport } from "@/lib/export-functions";
 import { Session } from "next-auth";
 import React, { ChangeEvent, useState } from "react";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 
 
 interface ExportFormProps {
@@ -22,6 +23,7 @@ type Career = {
 type ExportSettings = {
     formatType: string,
     career: number | null,
+    useDefaultTemplate: boolean,
     templateFile: File | null
 }
 
@@ -30,6 +32,7 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
         {
             formatType: "gob",
             career: careers[0].id_carrera,
+            useDefaultTemplate: true,
             templateFile: null
         }
     )
@@ -45,27 +48,27 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
         if (!config.career) {
             console.log("¡Carrera no seleccionada!")
         }
-        if (!config.templateFile) {
-            console.log("¡Plantilla no seleccionada!")
-            return
-        }
-        const fetchApi = await fetch(
+        const fetchData = await fetch(
             `http://127.0.0.1:8000/data/api/v1/get-gob-report-data/${config.career}`,
             {
-              method: "GET",
-              headers: {
-                Authorization: "Token " + session.token,
-              },
+                method: "GET",
+                headers: {
+                    Authorization: "Token " + session.token,
+                },
             }
         )
+        const data = await fetchData.json()
 
-        const data = await fetchApi.json()
-        const template = await config.templateFile.arrayBuffer()
 
-        if (config.formatType === "gob") {
+        if (config.templateFile && !config.useDefaultTemplate && config.formatType === "gob") {
+            const template = await config.templateFile.arrayBuffer()
             await generateGobReport(template, data)
         }
-
+        else if(config.useDefaultTemplate && config.formatType === "gob"){
+            const fetchTemplate = await fetch(`http://localhost:3000/templates/gob_template.xlsx`)
+            const template = await fetchTemplate.arrayBuffer()
+            await generateGobReport(template, data)
+        }
     }
 
 
@@ -91,12 +94,32 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
 
             <section className="">
                 <Label htmlFor="template">Plantilla</Label>
-                <Input
-                    className="my-2"
-                    accept=".xlsx"
-                    onChange={handleFileChange} id="template" type="file" placeholder="Subir plantilla"
-                />
+                <RadioGroup className="flex gap-5 my-2" defaultValue="default" onValueChange={
+                    (value) => {
+                        setConfig({ ...config, useDefaultTemplate: value === "default" })
+                    }
+                }>
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="default" id="default" />
+                        <Label htmlFor="option-one">Usar plantilla por defecto</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="custom" id="custom" />
+                        <Label htmlFor="option-two">Plantilla personalizada</Label>
+                    </div>
+                </RadioGroup>
             </section>
+
+            {!config.useDefaultTemplate &&
+                <section className="">
+                    <Label htmlFor="template">Usar plantilla personalizada</Label>
+                    <Input
+                        className="my-2"
+                        accept=".xlsx"
+                        onChange={handleFileChange} id="template" type="file" placeholder="Subir"
+                    />
+                </section>
+            }
 
             {config.formatType === "gob" &&
                 <section className="">
@@ -117,7 +140,7 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
                 </section>
             }
             <section className="w-full flex justify-center mb-5">
-                <Button disabled={!config.templateFile} onClick={handleExport}>Exportar</Button>
+                <Button disabled={!config.useDefaultTemplate && !config.templateFile} onClick={handleExport}>Exportar</Button>
             </section>
         </section>
     );

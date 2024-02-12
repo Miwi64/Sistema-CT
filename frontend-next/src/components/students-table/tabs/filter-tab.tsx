@@ -151,7 +151,7 @@ const FilterTab = ({ careers, filters, setFilters,
                             },
                         ].map(({ label, list, icon }) => (
                             <>
-                                <DropdownMenuSub>
+                                <DropdownMenuSub key={label}>
                                     <DropdownMenuSubTrigger>
                                         {icon}
                                         <span>{label}</span>
