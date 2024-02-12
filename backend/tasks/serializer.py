@@ -89,9 +89,9 @@ class AlumnoSerializer(serializers.ModelSerializer):
     num_cedula=serializers.CharField(source='titulo_fk.num_cedula',read_only=True)
     observaciones_tit=serializers.CharField(source='titulo_fk.observaciones',read_only=True)
 
-    periodo_ingreso = serializers.DateField(read_only=True)
-    periodo_egreso = serializers.DateField(read_only=True)  # Fecha de ingreso al programa
-    fecha_nacimiento = serializers.DateField(read_only=True)
+    periodo_ingreso = serializers.DateField()
+    periodo_egreso = serializers.DateField()  # Fecha de ingreso al programa
+    fecha_nacimiento = serializers.DateField()
 
     class Meta:
         model = Alumnos
