@@ -139,6 +139,7 @@ export default function StudentsTable({
           careers={careers}
           filters={filters}
           setFilters={setFilters}
+          columnVisibility={columnVisibility}
           setColumnVisibility = {setColumnVisibility}
           setPaginationData={setPaginationData}
         />

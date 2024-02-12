@@ -60,9 +60,6 @@ export function DataTable<TData, TValue>({
     <div className="rounded-md border">
       {reactTable.getRowModel().rows?.length ? (
         <div>
-          <div className="my-3 mx-1 ">
-            <DataTableViewOptions table={reactTable} />
-          </div>
           <Table>
             <TableHeader>
               {reactTable.getHeaderGroups().map((headerGroup) => (

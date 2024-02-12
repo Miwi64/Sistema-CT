@@ -14,8 +14,8 @@ const PageTab = ({paginationData, setPaginationData}: PageTabProps) => {
     return (
         <TabsContent className="mt-0" value="Pagina">
             <div
-                className="rounded-t-none rounded-b-lg overflow-x-auto flex flex-row items-center gap-4 
-                rounded-md px-4 py-3 border bg-card text-card-foreground shadow-md"
+                className="rounded-t-none rounded-b-lg flex flex-wrap items-center gap-4 
+                px-4 py-3 border bg-card text-card-foreground shadow-md"
             >
                 <div className="flex items-center space-x-6 lg:space-x-8">
                     <div className="flex items-center space-x-2">
