@@ -1,5 +1,4 @@
 "use client";
-import SearchBar from "@/components/search-bar";
 import { FilterData } from "@/components/students-table/students-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,15 +8,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { TabsContent } from "@/components/ui/tabs";
-import { handleExcelDownload, handlePdfDownload} from "@/lib/export-functions";
+import { handleExcelDownload, handlePdfDownload } from "@/lib/export-functions";
 import { VisibilityState } from "@tanstack/react-table";
-import { ChevronDown, FileDown, Save, Search } from "lucide-react";
+import { ChevronDown, Save, Search } from "lucide-react";
 import React from "react";
 
 interface StartTabProps {
@@ -28,6 +28,21 @@ interface StartTabProps {
 }
 
 const StartTab = ({ urlFilter, columnVisibility, filters, setFilters }: StartTabProps) => {
+
+  const searchBar = () => (
+    <div className="min-w-[200px] max-w-md">
+      <div className="absolute p-3 text-muted-foreground">
+        <Search size={18} />
+      </div>
+      <Input
+        placeholder="Buscar por número de control..."
+        value={filters.search}
+        onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+        className="w-full pl-9"
+      />
+    </div>
+  )
+
   return (
     <TabsContent className="mt-0" value="Inicio">
       <div
@@ -35,7 +50,7 @@ const StartTab = ({ urlFilter, columnVisibility, filters, setFilters }: StartTab
                 px-4 py-3 border bg-card text-card-foreground shadow-md"
       >
         <div className="hidden md:block">
-          <SearchBar setFilters={setFilters} filters={filters} />
+          {searchBar()}
         </div>
         <Popover>
           <PopoverTrigger asChild>
@@ -45,7 +60,7 @@ const StartTab = ({ urlFilter, columnVisibility, filters, setFilters }: StartTab
             </Button>
           </PopoverTrigger>
           <PopoverContent>
-            <SearchBar setFilters={setFilters} filters={filters} />
+            {searchBar()}
           </PopoverContent>
         </Popover>
         <DropdownMenu>
