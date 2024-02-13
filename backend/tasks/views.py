@@ -61,10 +61,14 @@ class LoginAPI(generics.GenericAPIView):
         user = serializer.validated_data
         data = UserSerializer(user, context=self.get_serializer_context()).data
         token = AuthToken.objects.create(user)[1]
+        token_obj = AuthToken.objects.get(user=user)
+        expiry = token_obj.created + timedelta(hours=10)
+        expiry_datetime = datetime.fromtimestamp(expiry.timestamp())
         return Response({
             "user": data,
-            "token": token
-        })
+            "token": token,
+            "expires": expiry_datetime.isoformat(),
+        }, status=status.HTTP_200_OK)
 
 
 class UserAPI(generics.RetrieveAPIView):

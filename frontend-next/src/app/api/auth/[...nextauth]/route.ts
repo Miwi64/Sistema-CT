@@ -36,7 +36,12 @@ export const authOptions  = {
         async session({session, token}:any){
             session.user = token.user as any;
             session.token = token.token as any;
-            session.expires = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
+            if (token.expires) {
+              // Convierte la cadena de fecha de expiración en un objeto Date
+              const expires = new Date(token.expires);
+              // Establece la propiedad expires de la sesión en la fecha de expiración de la token de Knox
+              session.expires = expires.toISOString();
+            }
             return session;
         },
       },
