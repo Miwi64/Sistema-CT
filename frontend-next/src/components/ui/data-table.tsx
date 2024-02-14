@@ -4,7 +4,6 @@ import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
-  Table as ReactTable,
   VisibilityState,
   flexRender,
   getCoreRowModel,
@@ -21,8 +20,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useEffect, useState } from "react"
-import { DataTableViewOptions } from "../datatable/datatable-view-options"
+import { useState } from "react"
+import ResponsiveContextMenu from "../responsive/context-menu"
+import { tableOptions } from "@/lib/constants"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -41,6 +41,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
+
   const reactTable = useReactTable({
     data,
     columns,
@@ -81,16 +82,21 @@ export function DataTable<TData, TValue>({
             </TableHeader>
             <TableBody>
               {reactTable.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
-                  ))}
-                </TableRow>
+                <ResponsiveContextMenu
+                  title={row.getValue("num_control")}
+                  options={tableOptions(row.getValue("num_control"), row.getValue("num_titulo"), row.getValue("num_folio"))}
+                  key={row.id}>
+                  <TableRow
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    {row.getVisibleCells().map((cell) => (
+
+                      <TableCell key={cell.id}>
+                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </ResponsiveContextMenu>
               ))}
             </TableBody>
           </Table>
