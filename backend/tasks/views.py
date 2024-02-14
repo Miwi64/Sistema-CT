@@ -62,7 +62,7 @@ class LoginAPI(generics.GenericAPIView):
         data = UserSerializer(user, context=self.get_serializer_context()).data
         token = AuthToken.objects.create(user)[1]
         token_obj = AuthToken.objects.get(user=user)
-        expiry = token_obj.created + timedelta(hours=10)
+        expiry = token_obj.expiry
         expiry_datetime = datetime.fromtimestamp(expiry.timestamp())
         return Response({
             "user": data,

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import {
@@ -34,54 +34,57 @@ const navLinks = [
     description: "Tabla de estudiantes",
     title: "Tabla de estudiantes",
     icon: <Table size={40} />,
-    path: "/table"
+    path: "/table",
   },
   {
     desktopTitle: "Certificado",
     description: "Formulario para agregar certificado",
     title: "Agregar Certificado",
     icon: <ScrollText size={40} />,
-    path: "/table/certificate-form"
+    path: "/table/certificate-form",
   },
   {
     desktopTitle: "Título",
     description: "Formulario para agregar título",
     title: "Agregar Título",
     icon: <BookText size={40} />,
-    path: "/table/title-form"
+    path: "/table/title-form",
   },
   {
     desktopTitle: "Certificado",
     description: "Subir certificados desde un archivo de Excel",
     title: "Importar Certificados",
     icon: <FileUp size={40} />,
-    path: "/table/certificate-import"
+    path: "/table/certificate-import",
   },
   {
     desktopTitle: "Título",
     description: "Subir títulos desde un archivo de Excel",
     title: "Importar Títulos",
     icon: <FileUp size={40} />,
-    path: "/table/title-import"
+    path: "/table/title-import",
   },
   {
     desktopTitle: "Crear reporte",
     description: "Generar reporte con formato",
     title: "Crear Reporte",
     icon: <FileDown size={40} />,
-    path: "/table/export"
+    path: "/table/export",
   },
-]
+];
 
 export function NavMenu() {
-  const { data: session } = useSession()
+  const { data: session } = useSession();
 
   return (
     <div className="bg-background hidden md:flex justify-between pl-1 w-full py-2">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuLink href={navLinks[0].path} className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink
+              href={navLinks[0].path}
+              className={navigationMenuTriggerStyle()}
+            >
               {navLinks[0].desktopTitle}
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -90,8 +93,8 @@ export function NavMenu() {
             <NavigationMenuTrigger>Agregar</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-1 p-2 md:w-[300px]">
-                {
-                  [navLinks[1], navLinks[2]].map(({ desktopTitle, path, description }) => (
+                {[navLinks[1], navLinks[2]].map(
+                  ({ desktopTitle, path, description }) => (
                     <ListItem
                       key={desktopTitle}
                       href={path}
@@ -99,8 +102,8 @@ export function NavMenu() {
                     >
                       {description}
                     </ListItem>
-                  ))
-                }
+                  )
+                )}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
@@ -109,8 +112,8 @@ export function NavMenu() {
             <NavigationMenuTrigger>Importar</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-2 p-2 md:w-[400px]">
-                {
-                  [navLinks[3], navLinks[4]].map(({ desktopTitle, path, description }) => (
+                {[navLinks[3], navLinks[4]].map(
+                  ({ desktopTitle, path, description }) => (
                     <ListItem
                       key={desktopTitle}
                       href={path}
@@ -118,14 +121,17 @@ export function NavMenu() {
                     >
                       {description}
                     </ListItem>
-                  ))
-                }
+                  )
+                )}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuLink href={navLinks[5].path} className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink
+              href={navLinks[5].path}
+              className={navigationMenuTriggerStyle()}
+            >
               {navLinks[5].desktopTitle}
             </NavigationMenuLink>
           </NavigationMenuItem>
@@ -163,14 +169,26 @@ export function NavMenu() {
                     </a>
                   </NavigationMenuLink>
                 </li>
-                <ListItem
-                  href="/table/profile"
-                  title="Editar perfil"
-                >
+                <ListItem href="/table/profile" title="Editar perfil">
                   Nombre, contraseña.
                 </ListItem>
                 <ListItem
-                  onClick={async () => signOut()}
+                  onClick={async () => {
+                    console.log(session?.token);
+                    const signout = await fetch(
+                      "http://127.0.0.1:8000/logoutall/",
+                      {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: "Token " + session?.token,
+                        },
+                      }
+                    );
+                    if (signout.ok) {
+                      signOut();
+                    }
+                  }}
                   title="Cerrar Sesión"
                 >
                   Regresar a inicio de sesión.
@@ -189,7 +207,7 @@ export function NavMenu() {
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 export function NavMobile() {
@@ -226,21 +244,30 @@ export function NavMobile() {
               </div>
               <div className="w-full flex justify-center gap-2">
                 <Button variant="outline" asChild>
-                  <a href="/profile"><Edit2 size={20} /></a>
+                  <a href="/profile">
+                    <Edit2 size={20} />
+                  </a>
                 </Button>
                 <Button variant="outline" onClick={() => signOut()}>
                   <LogOut size={20} />
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href="/settings"><Settings size={20} /></a>
+                  <a href="/settings">
+                    <Settings size={20} />
+                  </a>
                 </Button>
               </div>
             </div>
           </SheetHeader>
           <div className="px-4 py-6 grid grid-cols-3 text-muted-foreground gap-3">
             {navLinks.map(({ title, icon, path }, index) => (
-              <Button key={index} variant="ghost" className="flex-col h-auto gap-2 
-              text-center whitespace-normal" asChild>
+              <Button
+                key={index}
+                variant="ghost"
+                className="flex-col h-auto gap-2 
+              text-center whitespace-normal"
+                asChild
+              >
                 <a href={path}>
                   {icon}
                   {title}
@@ -251,10 +278,8 @@ export function NavMobile() {
         </SheetContent>
       </Sheet>
     </div>
-  )
+  );
 }
-
-
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
@@ -278,6 +303,6 @@ const ListItem = React.forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
-ListItem.displayName = "ListItem"
+  );
+});
+ListItem.displayName = "ListItem";
