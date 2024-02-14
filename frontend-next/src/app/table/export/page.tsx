@@ -1,6 +1,6 @@
 import { Session, getServerSession } from "next-auth"
 import { authOptions } from "../../api/auth/[...nextauth]/route"
-import ExportForm from "@/components/export/ExportForm"
+import ExportForm from "@/components/forms/export-form"
 
 const getCareers = async (session: Session) => {
   const fetchApi =

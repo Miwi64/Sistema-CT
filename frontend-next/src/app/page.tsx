@@ -25,6 +25,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { notification } from "@/components/responsive/notification";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const formSchema = z.object({
   username: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
@@ -37,6 +39,7 @@ const Login = () => {
   const params = useSearchParams();
   const callbackUrl = params.get("callbackUrl") || "/table";
   const router = useRouter();
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const [signing, setSigning] = useState(false);
 
@@ -49,17 +52,21 @@ const Login = () => {
       password,
       redirect: false,
     });
-    
+
     if (responseNextAuth?.error) {
       console.log(responseNextAuth?.error);
       setSigning(false);
-      toast(`Error al intentar iniciar sesión (${responseNextAuth.status})`, {
-        description: "Verifica que tu nombre de usuario y contraseña sean correctos.",
-      });
+      notification(
+        `Error al intentar iniciar sesión (${responseNextAuth.status})`,
+        "error", "Verifica que tu nombre de usuario y contraseña sean correctos.",
+        isDesktop);
       return;
     }
     router.push(callbackUrl, { scroll: false });
     setSigning(false);
+    notification("Inicio de sesión",
+    "success", "Accediendo a la sesión",
+    isDesktop);
   };
 
   const imgUrl = "/backgrounds/558866.jpg";

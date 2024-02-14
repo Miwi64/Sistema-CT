@@ -3,7 +3,6 @@ import StudentFields from "@/components/student-fields";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -27,39 +26,16 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { CAREERS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import * as z from "zod";
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import { getServerSession } from "next-auth";
-import { Label } from "@/components/ui/label";
+import { notification } from "@/components/responsive/notification";
 
 const formSchema = z.object({
   num_control: z
@@ -160,14 +136,15 @@ type Career = {
 
 const CertificateForm = () => {
   const { data: session } = useSession();
-  const [open, setOpen] = useState(false);
   const [careers, setCareers] = useState<Career[]>([]);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter();
 
-  const handleBadRequest = () => {
-    setOpen(true);
-  };
+  const handleError = (message: string) => {
+    return (notification("Error al intentar registrar el certificado", "error",
+      message, isDesktop));
+  }
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -177,25 +154,14 @@ const CertificateForm = () => {
       const fetchCareers = await fetch(`http://127.0.0.1:8000/carrera/`, {
         method: "GET",
       });
-      const results = await fetchCareers.json();
-      console.log(results);
-      setCareers(
-        results.map((item: Career) => ({
-          id_carrera: item.id_carrera,
-          nombre_carrera: item.nombre_carrera,
-        }))
-      );
-      console.log(careers);
+      const response = await fetchCareers.json();
+      setCareers(response);
     };
-
     fetchData();
   }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    //return;
-    /* Verificacion  */
-    const verificacion = await fetch(`http://localhost:8000/searchAC/`, {
+    const checkNotDuplicated = await fetch(`http://localhost:8000/searchAC/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -206,17 +172,12 @@ const CertificateForm = () => {
         num_control: values.num_control,
       }),
     });
-    if (!verificacion.ok) {
-      //setVer(verificacion.status); Solo regresa: 400
-      handleBadRequest();
+
+    if (!checkNotDuplicated.ok) {
+      handleError("Ya existe un registro con el mismo número de control y/o número de folio");
       return;
     }
-    /*  */
-    toast(`Registro Exitoso`, {
-      description: "Redirigiendo a Tabla Principal",
-    });
 
-    /* Insertacion */
     const postCert = await fetch(
       `http://127.0.0.1:8000/data/api/v1/certificados/`,
       {
@@ -232,25 +193,14 @@ const CertificateForm = () => {
         }),
       }
     );
-    console.log(postCert);
-
     if (!postCert.ok) {
-      handleBadRequest();
+      handleError(`Ha ocurrido un error al registrar el certificado. 
+      Revise que los datos sean correctos y vuelva a intentarlo`);
       return;
     }
+    const { id_certificado } = await postCert.json();
 
-    //llamada a ultima entrada de certificado
-    const getIdCert = await fetch(`http://localhost:8000/ultimo-cert/`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + session?.token,
-      },
-    });
-    const { id_certificado } = await getIdCert.json();
-    console.log(id_certificado);
-
-    const postAlum = await fetch(`http://127.0.0.1:8000/data/api/v1/alumnos/`, {
+    const postStudent = await fetch(`http://127.0.0.1:8000/data/api/v1/alumnos/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -272,312 +222,143 @@ const CertificateForm = () => {
         certificado_fk: id_certificado,
       }),
     });
-    console.log(postAlum);
-
-    if (!postAlum.ok) {
-      handleBadRequest();
+    if (!postStudent.ok) {
+      handleError(`Ha ocurrido un error al registrar los datos del 
+      estudiante en el certificado. Revise que los datos sean correctos y vuelva a intentarlo`);
       return;
     }
-    /*  */
+
     router.push("/table");
+    notification("Registro realizado correctamente", "success",
+      "Redirigiendo a la Tabla de estudiantes", isDesktop);
   };
 
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
-          Agregar certificado
-        </h1>
-        <section className="">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <h2 className="my-5 text-lg leading-none tracking-tight">
-                Datos del estudiante
-              </h2>
-              <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <StudentFields form={form} />
-              </section>
-              <Separator className="my-8" />
-              <h2 className="mb-5 text-lg leading-none tracking-tight">
-                Datos del certificado
-              </h2>
-              <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <FormField
-                  control={form.control}
-                  name="num_folio"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Número de folio</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Número de folio" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="carrera_fk"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Carrera</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Seleccionar carrera" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {/* {CAREERS.map(({ value, text }, key) => (
-                              <SelectItem key={key} value={value}>
-                                {text}
-                              </SelectItem>
-                            ))} */}
-                          {careers.map(({ id_carrera, nombre_carrera }) => (
-                            <SelectItem
-                              key={id_carrera}
-                              value={`${id_carrera}`}
-                            >
-                              {nombre_carrera}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="fecha_registro_cert"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-2">
-                      <FormLabel>Fecha de registro</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant={"outline"}
-                              className={cn(
-                                "pl-3 text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Fecha</span>
-                              )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={new Date(field.value)}
-                            onSelect={field.onChange}
-                            disabled={(date) =>
-                              date > new Date() || date < new Date("1900-01-01")
-                            }
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="observaciones_cert"
-                  render={({ field }) => (
-                    <FormItem className="">
-                      <FormLabel>Observaciones</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Máximo 150 caracteres"
-                          className="resize-none"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </section>
-              <div className="flex my-8 justify-center">
-                <Button type="submit">Agregar</Button>
-              </div>
-            </form>
-          </Form>
-        </section>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Error al Registrar</DialogTitle>
-            <DialogDescription>
-              Ya existe un registro con el mismo número de control y/o número de
-              folio.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Aceptar</Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    );
-  }
-
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <>
       <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
         Agregar certificado
       </h1>
-      <section className="">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <h2 className="my-5 text-lg leading-none tracking-tight">
-              Datos del estudiante
-            </h2>
-            <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <StudentFields form={form} />
-            </section>
-            <Separator className="my-8" />
-            <h2 className="mb-5 text-lg leading-none tracking-tight">
-              Datos del certificado
-            </h2>
-            <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <FormField
-                control={form.control}
-                name="num_folio"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Número de folio</FormLabel>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <h2 className="my-5 text-lg leading-none tracking-tight">
+            Datos del estudiante
+          </h2>
+          <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <StudentFields form={form} />
+          </section>
+          <Separator className="my-8" />
+          <h2 className="mb-5 text-lg leading-none tracking-tight">
+            Datos del certificado
+          </h2>
+          <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <FormField
+              control={form.control}
+              name="num_folio"
+              render={({ field }) => (
+                <FormItem className="">
+                  <FormLabel>Número de folio</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Número de folio" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="carrera_fk"
+              render={({ field }) => (
+                <FormItem className="">
+                  <FormLabel>Carrera</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
-                      <Input placeholder="Número de folio" {...field} />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Seleccionar carrera" />
+                      </SelectTrigger>
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="carrera_fk"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Carrera</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+                    <SelectContent>
+                      {careers.map(({ id_carrera, nombre_carrera }) => (
+                        <SelectItem
+                          key={id_carrera}
+                          value={`${id_carrera}`}
+                        >
+                          {nombre_carrera}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="fecha_registro_cert"
+              render={({ field }) => (
+                <FormItem className="flex flex-col gap-2">
+                  <FormLabel>Fecha de registro</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccionar carrera" />
-                        </SelectTrigger>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Fecha</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
                       </FormControl>
-                      <SelectContent>
-                        {/* {CAREERS.map(({ value, text }, key) => (
-                            <SelectItem key={key} value={value}>
-                              {text}
-                            </SelectItem>
-                          ))} */}
-                        {careers.map(({ id_carrera, nombre_carrera }) => (
-                          <SelectItem key={id_carrera} value={`${id_carrera}`}>
-                            {nombre_carrera}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="fecha_registro_cert"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col gap-2">
-                    <FormLabel>Fecha de registro</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Fecha</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={new Date(field.value)}
-                          onSelect={field.onChange}
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="observaciones_cert"
-                render={({ field }) => (
-                  <FormItem className="">
-                    <FormLabel>Observaciones</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Máximo 150 caracteres"
-                        className="resize-none"
-                        {...field}
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={new Date(field.value)}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date > new Date() || date < new Date("1900-01-01")
+                        }
+                        initialFocus
                       />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </section>
-            <div className="flex my-8 justify-center">
-              <Button type="submit">Agregar</Button>
-            </div>
-          </form>
-        </Form>
-      </section>
-      <DrawerContent>
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Error al Registrar</DrawerTitle>
-          <DrawerDescription>
-            Ya existe un registro con el mismo número de control y/o número de
-            folio.
-          </DrawerDescription>
-        </DrawerHeader>
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Aceptar</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="observaciones_cert"
+              render={({ field }) => (
+                <FormItem className="">
+                  <FormLabel>Observaciones</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Máximo 150 caracteres"
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </section >
+          <section className="flex my-8 justify-center">
+            <Button type="submit">Agregar</Button>
+          </section>
+        </form>
+      </Form>
+    </>
   );
 };
-
 export default CertificateForm;

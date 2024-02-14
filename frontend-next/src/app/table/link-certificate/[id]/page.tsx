@@ -1,5 +1,5 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import LinkCertificateForm from "@/components/link/link-certificate-form";
+import LinkCertificateForm from "@/components/forms/link-certificate-form";
 import { Button } from "@/components/ui/button";
 import { Session, getServerSession } from "next-auth";
 

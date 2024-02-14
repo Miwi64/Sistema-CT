@@ -1,5 +1,4 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import PageLayout from "@/components/page-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -13,7 +12,6 @@ import {
   ChevronsUpDown,
   GraduationCap,
   Pencil,
-  Printer,
   ScrollText,
   UserRound,
 } from "lucide-react";
@@ -36,41 +34,19 @@ async function getData(session: Session, id: string) {
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-  const [
-    {
-      nombre,
-      apellidop,
-      apellidom,
-      nombre_carrera,
-      periodo_ingreso,
-      periodo_egreso,
-      sexo,
-      CURP,
-      estado_nacimiento,
-      fecha_nacimiento,
-      num_folio,
-      fecha_registro_cert,
-      observaciones_cert,
-      num_titulo,
-      clave_plan,
-      fecha_acto,
-      fecha_registro_tit,
-      num_cedula,
-      observaciones_tit,
-    },
-  ] = await getData(session, params.id);
+  const [student] = await getData(session, params.id);
   const sexoText =
-    sexo === "m" || sexo === "M"
+    student.sexo === "m" || student.sexo === "M"
       ? "Masculino"
-      : sexo === "f" || sexo === "F"
-      ? "Femenino"
-      : "Indefinido";
+      : student.sexo === "f" || student.sexo === "F"
+        ? "Femenino"
+        : "Indefinido";
   return (
-    <PageLayout>
+    <>
       <h1 className="text-muted-foreground font-semibold mt-8 text-md">
         Número de control: {params.id}
       </h1>
-      <h2 className="my-2  text-3xl font-bold mr-16">{`${nombre} ${apellidop} ${apellidom}`}</h2>
+      <h2 className="my-2  text-3xl font-bold mr-16">{`${student.nombre} ${student.apellidop} ${student.apellidom}`}</h2>
       <section className="my-5 flex gap-3">
         <Button variant="secondary" asChild>
           <a href={`/table/edit/${params.id}`}>
@@ -78,9 +54,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             <span className="hidden md:inline">Editar</span>
           </a>
         </Button>
-        {/*Eliminacion */}
         <AlertDialogClient id={params.id} />
-        {/*Eliminacion */}
       </section>
       <section className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
         <Collapsible defaultOpen>
@@ -103,16 +77,16 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <Table>
                   <TableBody>
                     {[
-                      { head: "Nombre", value: nombre },
-                      { head: "Apellido paterno", value: apellidop },
-                      { head: "Apellido materno", value: apellidom },
+                      { head: "Nombre", value: student.nombre },
+                      { head: "Apellido paterno", value: student.apellidop },
+                      { head: "Apellido materno", value: student.apellidom },
                       { head: "Sexo", value: sexoText },
-                      { head: "CURP", value: CURP },
+                      { head: "CURP", value: student.CURP },
                       {
                         head: "Estado de nacimiento",
-                        value: estado_nacimiento,
+                        value: student.estado_nacimiento,
                       },
-                      { head: "Fecha de nacimiento", value: fecha_nacimiento },
+                      { head: "Fecha de nacimiento", value: student.fecha_nacimiento },
                     ].map(({ head, value }) => (
                       <TableRow key={value}>
                         <TableCell>{head}</TableCell>
@@ -147,9 +121,9 @@ export default async function Page({ params }: { params: { id: string } }) {
                 <Table>
                   <TableBody>
                     {[
-                      { head: "Nombre", value: nombre_carrera },
-                      { head: "Periodo de ingreso", value: periodo_ingreso },
-                      { head: "Periodo de egreso", value: periodo_egreso },
+                      { head: "Nombre", value: student.nombre_carrera },
+                      { head: "Periodo de ingreso", value: student.periodo_ingreso },
+                      { head: "Periodo de egreso", value: student.periodo_egreso },
                     ].map(({ head, value }) => (
                       <TableRow key={value}>
                         <TableCell>{head}</TableCell>
@@ -164,7 +138,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             </Card>
           </CollapsibleContent>
         </Collapsible>
-        {num_folio && (
+        {student.num_folio && (
           <Collapsible>
             <CollapsibleTrigger asChild>
               <Button
@@ -185,12 +159,12 @@ export default async function Page({ params }: { params: { id: string } }) {
                   <Table>
                     <TableBody>
                       {[
-                        { head: "Número de folio", value: num_folio },
+                        { head: "Número de folio", value: student.num_folio },
                         {
                           head: "Fecha de registro",
-                          value: fecha_registro_cert,
+                          value: student.fecha_registro_cert,
                         },
-                        { head: "Observaciones", value: observaciones_cert },
+                        { head: "Observaciones", value: student.observaciones_cert },
                       ].map(({ head, value }) => (
                         <TableRow key={value}>
                           <TableCell>{head}</TableCell>
@@ -206,7 +180,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             </CollapsibleContent>
           </Collapsible>
         )}
-        {num_titulo && (
+        {student.num_titulo && (
           <Collapsible>
             <CollapsibleTrigger asChild>
               <Button
@@ -227,15 +201,15 @@ export default async function Page({ params }: { params: { id: string } }) {
                   <Table>
                     <TableBody>
                       {[
-                        { head: "Número de título", value: num_titulo },
+                        { head: "Número de título", value: student.num_titulo },
                         {
                           head: "Fecha de registro",
-                          value: fecha_registro_tit,
+                          value: student.fecha_registro_tit,
                         },
-                        { head: "Fecha del acto", value: fecha_acto },
-                        { head: "Número de cédula", value: num_cedula },
-                        { head: "Plan de estudios", value: clave_plan },
-                        { head: "Observaciones", value: observaciones_tit },
+                        { head: "Fecha del acto", value: student.fecha_acto },
+                        { head: "Número de cédula", value: student.num_cedula },
+                        { head: "Plan de estudios", value: student.clave_plan },
+                        { head: "Observaciones", value: student.observaciones_tit },
                       ].map(({ head, value }) => (
                         <TableRow key={value}>
                           <TableCell>{head}</TableCell>
@@ -252,6 +226,6 @@ export default async function Page({ params }: { params: { id: string } }) {
           </Collapsible>
         )}
       </section>
-    </PageLayout>
+    </>
   );
 }

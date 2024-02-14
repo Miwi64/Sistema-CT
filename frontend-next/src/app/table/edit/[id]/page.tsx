@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import EditCertificate from "@/components/edit/edit-certificate";
-import EditStudent from "@/components/edit/edit-student";
-import EditTitle from "@/components/edit/edit-title";
+import EditCertificate from "@/components/forms/edit/edit-certificate";
+import EditStudent from "@/components/forms/edit/edit-student";
+import EditTitle from "@/components/forms/edit/edit-title";
 import { Separator } from "@/components/ui/separator";
 import { Session, getServerSession } from "next-auth";
 
