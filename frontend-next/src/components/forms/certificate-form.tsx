@@ -35,97 +35,11 @@ import * as z from "zod";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "@/components/responsive/notification";
 import { Session } from "next-auth";
+import { CERTIFICATE_SCHEMA, STUDENT_SCHEMA } from "@/lib/form-schemas";
 
 const formSchema = z.object({
-    num_control: z
-        .string({ required_error: "Campo requerido" })
-        .transform((value) => {
-            if (/^(?!\s*$).+/.test(value)) {
-                return value;
-            }
-            return value.replace(/\s+/g, "");
-        })
-        .pipe(
-            z
-                .string()
-                .min(8, { message: "Minimo 8 caracteres" })
-                .max(10, "Máximo 10 caracteres")
-        ),
-    nombre: z
-        .string({ required_error: "Campo requerido" })
-        .transform((value) => {
-            if (/^(?!\s*$).+/.test(value)) {
-                return value;
-            }
-            return value.replace(/\s+/g, "");
-        })
-        .pipe(
-            z
-                .string()
-                .min(1, { message: "Campo requerido" })
-                .max(50, "Máximo 50 caracteres")
-        ),
-    apellidop: z
-        .string({ required_error: "Campo requerido" })
-        .transform((value) => {
-            if (/^(?!\s*$).+/.test(value)) {
-                return value;
-            }
-            return value.replace(/\s+/g, "");
-        })
-        .pipe(
-            z
-                .string()
-                .min(1, { message: "Campo requerido" })
-                .max(50, "Máximo 50 caracteres")
-        ),
-    apellidom: z.string().max(50, "Máximo 50 caracteres").optional(),
-    sexo: z.string({ required_error: "Campo requerido" }).max(1),
-    CURP: z
-        .string({ required_error: "Campo requerido" })
-        .regex(
-            /^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/,
-            "CURP inválido"
-        ),
-    estado_nacimiento: z.string({ required_error: "Campo requerido" }),
-    fecha_nacimiento: z
-        .date({ required_error: "Campo requerido" })
-        .transform((value) => value.toISOString().split("T")[0]),
-    periodo_ingreso: z
-        .string({ required_error: "Campo requerido" })
-        .transform((value) => {
-            if (/^(?!\s*$).+/.test(value)) {
-                return value;
-            }
-            return value.replace(/\s+/g, "");
-        })
-        .pipe(z.string().max(50, "Máximo 50 caracteres")),
-    periodo_egreso: z
-        .string({ required_error: "Campo requerido" })
-        .transform((value) => {
-            if (/^(?!\s*$).+/.test(value)) {
-                return value;
-            }
-            return value.replace(/\s+/g, "");
-        })
-        .pipe(z.string().max(50, "Máximo 50 caracteres")),
-    num_folio: z
-        .string({ required_error: "Campo requerido" })
-        .transform((value) => {
-            if (/^(?!\s*$).+/.test(value)) {
-                return value;
-            }
-            return value.replace(/\s+/g, "");
-        })
-        .pipe(z.string().min(1, { message: "Campo requerido" })),
-    carrera_fk: z.string({ required_error: "Campo requerido" }),
-    fecha_registro_cert: z
-        .date({ required_error: "Campo requerido" })
-        .transform((value) => value.toISOString().split("T")[0]),
-    observaciones_cert: z
-        .string()
-        .max(150, "Límite de caracteres excedido")
-        .optional(),
+    ...STUDENT_SCHEMA,
+    ...CERTIFICATE_SCHEMA
 });
 
 type Career = {

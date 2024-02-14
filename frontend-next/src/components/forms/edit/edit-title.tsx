@@ -22,29 +22,15 @@ import { Textarea } from "../../ui/textarea";
 import { Session } from "next-auth";
 import { toast } from "sonner";
 import { Input } from "../../ui/input";
+import { TITLE_SCHEMA } from "@/lib/form-schemas";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { notification } from "@/components/responsive/notification";
 
+
+const { num_titulo, ...fields } = TITLE_SCHEMA
 const formSchema = z.object({
-  observaciones_tit: z
-    .string()
-    .max(150, "Límite de caracteres excedido")
-    .optional(),
-  clave_plan: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => {
-      if (/^(?!\s*$).+/.test(value)) {
-        return value;
-      }
-      return value.replace(/\s+/g, "");
-    })
-    .pipe(z.string().min(13, { message: "ejem.: IISC-2006-201" })),
-  fecha_acto: z
-    .date({ required_error: "Campo requerido" })
-    .transform((value) => value.toISOString().split("T")[0]),
-  fecha_registro_tit: z
-    .date({ required_error: "Campo requerido" })
-    .transform((value) => value.toISOString().split("T")[0]),
-  num_cedula: z.string().max(10, "Máximo 10 caracteres").optional(),
-});
+  ...fields
+})
 
 interface EditTitleProps {
   studentData: Student;
@@ -60,11 +46,12 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
     fecha_registro_tit: new Date(
       studentData.fecha_registro_tit || "1970-01-01"
     ),
-  };
+  }
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialValues,
-  });
+  })
+  const isDesktop = useMediaQuery("(min-width: 768px)")
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const putTitle = await fetch(
@@ -82,18 +69,15 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
           observaciones: values.observaciones_tit,
         }),
       }
-    );
+    )
     if (!putTitle.ok) {
-      toast(`Error al actualizar los datos del título (${putTitle.status})`, {
-        description:
-          "Verifica que los datos sean correctos y vuelve a intentarlo",
-      });
-      return;
+      notification(`Error al actualizar los datos del título (${putTitle.status})`,
+        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop)
+      return
     }
-    toast(`Actualización correcta`, {
-      description: "Se han actualizado los datos del título.",
-    });
-  };
+    notification("Actualización correcta",
+      "success", "Se han actualizado los datos del Título", isDesktop)
+  }
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -234,7 +218,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
         </div>
       </form>
     </Form>
-  );
-};
+  )
+}
 
-export default EditTitle;
+export default EditTitle

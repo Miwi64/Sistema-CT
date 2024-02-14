@@ -14,13 +14,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,54 +23,13 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { Session } from "next-auth";
 import { Student } from "@/lib/columns";
+import { TITLE_SCHEMA } from "@/lib/form-schemas";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { notification } from "../responsive/notification";
 
-const formSchema = z.object({
-  num_titulo: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => {
-      if (/^(?!\s*$).+/.test(value)) {
-        return value;
-      }
-      return value.replace(/\s+/g, "");
-    })
-    .pipe(z.string().min(8, { message: "Minimo 8 caracteres" })),
-  num_cedula: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => {
-      if (/^(?!\s*$).+/.test(value)) {
-        return value;
-      }
-      return value.replace(/\s+/g, "");
-    })
-    .pipe(
-      z
-        .string()
-        .min(8, { message: "Minimo 8 caracteres" })
-        .max(10, "Máximo 10 caracteres")
-    ),
-  observaciones_tit: z
-    .string()
-    .max(150, "Límite de caracteres excedido")
-    .optional(),
-  clave_plan: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => {
-      if (/^(?!\s*$).+/.test(value)) {
-        return value;
-      }
-      return value.replace(/\s+/g, "");
-    })
-    .pipe(z.string().min(13, { message: "ejem.: IISC-2006-201" })),
-  fecha_acto: z
-    .date({ required_error: "Campo requerido" })
-    .transform((value) => value.toISOString().split("T")[0]),
-  fecha_registro_tit: z
-    .date({ required_error: "Campo requerido" })
-    .transform((value) => value.toISOString().split("T")[0]),
-});
+const formSchema = z.object(TITLE_SCHEMA);
 
 interface LinkTitleFormProps {
   studentData: Student;
@@ -89,6 +41,7 @@ const LinkTitleForm = ({ studentData, session }: LinkTitleFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const postTitle = await fetch(
@@ -110,10 +63,8 @@ const LinkTitleForm = ({ studentData, session }: LinkTitleFormProps) => {
       }
     );
     if (!postTitle.ok) {
-      toast(`Error al subir los datos del título (${postTitle.status})`, {
-        description:
-          "Verifique que los datos sean correctos y vuelva a intentarlo.",
-      });
+      notification(`Error al subir los datos del título (${postTitle.status})`,
+        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop);
       return;
     }
     const { id_titulo } = await postTitle.json();
@@ -137,18 +88,12 @@ const LinkTitleForm = ({ studentData, session }: LinkTitleFormProps) => {
       }
     );
     if (!putStudent.ok) {
-      toast(
-        `Error al vincular los datos del título con el estudiante (${putStudent.status})`,
-        {
-          description:
-            "Verifique que los datos sean correctos y vuelva a intentarlo.",
-        }
-      );
+      notification(`Error al intentar vincular los datos con el estudiante (${putStudent.status})`,
+        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop);
       return;
     }
-    toast(`Actualización exitosa`, {
-      description: "Redirigiendo a la tabla de estudiantes.",
-    });
+    notification("Actualización correcta",
+      "success", "Redirigiendo a la tabla de estudiantes", isDesktop);
     router.push("/table");
   };
 

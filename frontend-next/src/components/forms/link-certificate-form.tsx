@@ -30,28 +30,13 @@ import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { Session } from "next-auth";
 import { Student } from "@/lib/columns";
+import { CERTIFICATE_SCHEMA } from "@/lib/form-schemas";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { notification } from "../responsive/notification";
 
-const formSchema = z.object({
-  num_folio: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => {
-      if (/^(?!\s*$).+/.test(value)) {
-        return value;
-      }
-      return value.replace(/\s+/g, "");
-    })
-    .pipe(z.string().min(1, { message: "Campo requerido" })),
-  fecha_registro_cert: z
-    .date({ required_error: "Campo requerido" })
-    .transform((value) => value.toISOString().split("T")[0]),
-  observaciones_cert: z
-    .string()
-    .max(150, "Límite de caracteres excedido")
-    .optional(),
-});
+const formSchema = z.object(CERTIFICATE_SCHEMA);
 
 interface LinkCertificateFormProps {
   studentData: Student;
@@ -66,6 +51,7 @@ const LinkCertificateForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const postCertificate = await fetch(
@@ -84,13 +70,8 @@ const LinkCertificateForm = ({
       }
     );
     if (!postCertificate.ok) {
-      toast(
-        `Error al subir los datos del certificado (${postCertificate.status})`,
-        {
-          description:
-            "Verifique que los datos sean correctos y vuelva a intentarlo.",
-        }
-      );
+      notification(`Error al subir los datos del certificado (${postCertificate.status})`,
+        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop);
       return;
     }
     const { id_certificado } = await postCertificate.json();
@@ -114,18 +95,12 @@ const LinkCertificateForm = ({
       }
     );
     if (!putStudent.ok) {
-      toast(
-        `Error al vincular los datos del certificado con el estudiante (${putStudent.status})`,
-        {
-          description:
-            "Verifique que los datos sean correctos y vuelva a intentarlo.",
-        }
-      );
+      notification(`Error al intentar vincular los datos con el estudiante (${putStudent.status})`,
+        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop);
       return;
     }
-    toast(`Actualización exitosa`, {
-      description: "Redirigiendo a la tabla de estudiantes.",
-    });
+    notification("Actualización correcta",
+      "success", "Redirigiendo a la tabla de estudiantes", isDesktop);
     router.push("/table");
   };
 

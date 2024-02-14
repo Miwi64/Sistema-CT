@@ -29,75 +29,13 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../../ui/calendar";
 import { Session } from "next-auth";
 import { toast } from "sonner";
+import { STUDENT_SCHEMA } from "@/lib/form-schemas";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { notification } from "@/components/responsive/notification";
 
+const { num_control, ...fields} = STUDENT_SCHEMA
 const formSchema = z.object({
-  nombre: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => {
-      if (/^(?!\s*$).+/.test(value)) {
-        return value;
-      }
-      return value.replace(/\s+/g, "");
-    })
-    .pipe(
-      z
-        .string()
-        .min(1, { message: "Campo requerido" })
-        .max(50, "Máximo 50 caracteres")
-    ),
-  apellidop: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => {
-      if (/^(?!\s*$).+/.test(value)) {
-        return value;
-      }
-      return value.replace(/\s+/g, "");
-    })
-    .pipe(
-      z
-        .string()
-        .min(1, { message: "Campo requerido" })
-        .max(50, "Máximo 50 caracteres")
-    ),
-  apellidom: z.string().max(50, "Máximo 50 caracteres").optional(),
-  sexo: z.string({ required_error: "Campo requerido" }).max(1),
-  carrera_fk: z.string({ required_error: "Campo requerido" }),
-  CURP: z
-    .string({ required_error: "Campo requerido" })
-    .min(1, { message: "Campo requerido" })
-    .max(50, "Máximo 50 caracteres"),
-  estado_nacimiento: z.string({ required_error: "Campo requerido" }),
-  fecha_nacimiento: z
-    .date({ required_error: "Campo requerido" })
-    .transform((value) => value.toISOString().split("T")[0]),
-  periodo_ingreso: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => {
-      if (/^(?!\s*$).+/.test(value)) {
-        return value;
-      }
-      return value.replace(/\s+/g, "");
-    })
-    .pipe(
-      z
-        .string()
-        .min(1, { message: "Campo requerido" })
-        .max(50, "Máximo 50 caracteres")
-    ),
-  periodo_egreso: z
-    .string({ required_error: "Campo requerido" })
-    .transform((value) => {
-      if (/^(?!\s*$).+/.test(value)) {
-        return value;
-      }
-      return value.replace(/\s+/g, "");
-    })
-    .pipe(
-      z
-        .string()
-        .min(1, { message: "Campo requerido" })
-        .max(50, "Máximo 50 caracteres")
-    ),
+  ...fields
 });
 
 type Career = {
@@ -128,6 +66,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialValues,
   });
+  const isDesktop = useMediaQuery("(min-width: 768px)")
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const putStudent = await fetch(
@@ -155,18 +94,12 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
       }
     );
     if (!putStudent.ok) {
-      toast(
-        `Error al actualizar los datos del estudiante (${putStudent.status})`,
-        {
-          description:
-            "Verifica que los datos sean correctos y vuelve a intentarlo",
-        }
-      );
-      return;
+      notification(`Error al actualizar los datos del estudiante (${putStudent.status})`,
+            "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop)
+      return
     }
-    toast(`Actualización correcta`, {
-      description: "Se han actualizado los datos del certificado.",
-    });
+    notification("Actualización correcta",
+            "success", "Se han actualizado los datos del estudiante", isDesktop)
   };
   return (
     <Form {...form}>

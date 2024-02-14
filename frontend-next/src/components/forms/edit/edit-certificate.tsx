@@ -13,17 +13,15 @@ import { CalendarIcon } from 'lucide-react'
 import { Calendar } from '../../ui/calendar'
 import { Textarea } from '../../ui/textarea'
 import { Session } from 'next-auth'
-import { toast } from 'sonner'
+import { CERTIFICATE_SCHEMA } from '@/lib/form-schemas'
+import { useMediaQuery } from '@/hooks/use-media-query'
+import { notification } from '@/components/responsive/notification'
 
+const {fecha_registro_cert, observaciones_cert} = CERTIFICATE_SCHEMA
 const formSchema = z.object({
-    fecha_registro_cert: z
-        .date({ required_error: "Campo requerido" })
-        .transform((value) => value.toISOString().split("T")[0]),
-    observaciones_cert: z
-        .string()
-        .max(150, "Límite de caracteres excedido")
-        .optional(),
-});
+    fecha_registro_cert,
+    observaciones_cert
+})
 
 interface EditCertificateProps {
     studentData: Student,
@@ -39,6 +37,7 @@ const EditCertificate = ({ studentData, session }: EditCertificateProps) => {
         resolver: zodResolver(formSchema),
         defaultValues: initialValues
     });
+    const isDesktop = useMediaQuery("(min-width: 768px)")
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const putCertificate = await fetch(`http://127.0.0.1:8000/data/api/v1/certificados/${studentData.certificado_fk}/`, {
@@ -53,14 +52,12 @@ const EditCertificate = ({ studentData, session }: EditCertificateProps) => {
             }),
         });
         if (!putCertificate.ok) {
-            toast(`Error al actualizar los datos del certificado (${putCertificate.status})`, {
-                description: "Verifica que los datos sean correctos y vuelve a intentarlo",
-            })
+            notification(`Error al actualizar los datos del certificado (${putCertificate.status})`,
+            "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop)
             return
         }
-        toast(`Actualización correcta`, {
-            description: "Se han actualizado los datos del certificado.",
-        })
+        notification("Actualización correcta",
+            "success", "Se han actualizado los datos del certificado", isDesktop)
     }
     return (
         <Form {...form}>
