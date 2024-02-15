@@ -222,6 +222,8 @@ export const DATE_CRITERIAS = [
     { text: "Registro de título", value: "registro_tit" }
 ]
 
+
+
 export const tableOptions = (id: string | number, title_id?: string, cert_id?: string) => {
     if (!title_id && !cert_id) {
         return [
@@ -245,11 +247,6 @@ export const tableOptions = (id: string | number, title_id?: string, cert_id?: s
                 label: "Vincular certificado",
                 link: `/table/link-certificate/${id}`
             },
-            {
-                icon: <Trash2 />,
-                label: "Eliminar",
-                link: "#",
-            },
         ]
     }
     else if (title_id && !cert_id) {
@@ -268,11 +265,6 @@ export const tableOptions = (id: string | number, title_id?: string, cert_id?: s
                 icon: <Link />,
                 label: "Vincular certificado",
                 link: `/table/link-certificate/${id}`
-            },
-            {
-                icon: <Trash2 />,
-                label: "Eliminar",
-                link: "#",
             },
         ]
     }
@@ -293,11 +285,6 @@ export const tableOptions = (id: string | number, title_id?: string, cert_id?: s
                 label: "Vincular título",
                 link: `/table/link-title/${id}`
             },
-            {
-                icon: <Trash2 />,
-                label: "Eliminar",
-                link: "#",
-            },
         ]
     }
     else {
@@ -311,11 +298,6 @@ export const tableOptions = (id: string | number, title_id?: string, cert_id?: s
                 icon: <Pencil />,
                 label: "Editar",
                 link: `/table/edit/${id}`
-            },
-            {
-                icon: <Trash2 />,
-                label: "Eliminar",
-                link: "#",
             },
         ]
     }

@@ -23,6 +23,7 @@ import {
 import { useState } from "react"
 import ResponsiveContextMenu from "../responsive/context-menu"
 import { tableOptions } from "@/lib/constants"
+import { DeleteButton } from "../delete-button"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -85,7 +86,9 @@ export function DataTable<TData, TValue>({
                 <ResponsiveContextMenu
                   title={row.getValue("num_control")}
                   options={tableOptions(row.getValue("num_control"), row.getValue("num_titulo"), row.getValue("num_folio"))}
-                  key={row.id}>
+                  key={row.id}
+                  additionalOptions={<DeleteButton id={row.getValue("num_control")} mode="context-menu-item"/>}
+                  >
                   <TableRow
                     data-state={row.getIsSelected() && "selected"}
                   >

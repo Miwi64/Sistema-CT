@@ -2,8 +2,9 @@
 import React, { MouseEventHandler, useState } from "react"
 import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuLabel, ContextMenuSeparator, ContextMenuTrigger } from "../ui/context-menu"
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "../ui/drawer"
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "../ui/drawer"
 import { Button } from "../ui/button"
+import { X } from "lucide-react"
 
 interface ResponsiveContextMenuProps {
     children: React.ReactNode,
@@ -14,11 +15,12 @@ interface ResponsiveContextMenuProps {
         icon: React.ReactNode,
         link?: string,
         onClick?: MouseEventHandler<any>
-    }[]
+    }[],
+    additionalOptions?: React.ReactNode
 }
 
-const ResponsiveContextMenu = ({ children, title, options }: ResponsiveContextMenuProps) => {
-    const isDesktop = useMediaQuery("(min-width: 768px)");
+const ResponsiveContextMenu = ({ children, title, options, additionalOptions }: ResponsiveContextMenuProps) => {
+    const isDesktop = useMediaQuery("(min-width: 768px)")
     const [open, setOpen] = useState<boolean>(false)
     if (isDesktop) {
         return (
@@ -44,53 +46,58 @@ const ResponsiveContextMenu = ({ children, title, options }: ResponsiveContextMe
                                 </ContextMenuItem>
                         )
                     )}
+                    {additionalOptions}
                 </ContextMenuContent>
             </ContextMenu>
         )
     }
-    else {
-        return (
-            <Drawer open={open} onOpenChange={setOpen}>
-                <ContextMenu onOpenChange={setOpen}>
-                    <ContextMenuTrigger asChild>
-                        {children}
-                    </ContextMenuTrigger>
-                </ContextMenu>
-                <DrawerContent>
-                    <DrawerHeader className="text-left">
-                        <DrawerTitle>{title}</DrawerTitle>
-                        <DrawerDescription>Opciones</DrawerDescription>
-                    </DrawerHeader>
-                    <div className="mx-3 mb-8 flex flex-col gap-3">
-                        {options.map(
-                            ({ label, icon, link, onClick }) => (
-                                !onClick ? <Button
+    return (
+        <Drawer open={open} onOpenChange={setOpen}>
+            <ContextMenu onOpenChange={setOpen}>
+                <ContextMenuTrigger asChild>
+                    {children}
+                </ContextMenuTrigger>
+            </ContextMenu>
+            <DrawerContent>
+                <DrawerHeader className="text-left">
+                    <DrawerTitle>{title}</DrawerTitle>
+                    <DrawerDescription>Opciones</DrawerDescription>
+                </DrawerHeader>
+                <div className="px-4 grid gap-3">
+                    {options.map(
+                        ({ label, icon, link, onClick }) => (
+                            !onClick ? <Button
+                                key={label}
+                                variant="secondary"
+                                className="justify-start py-6 gap-4"
+                                asChild
+                            >
+                                <a href={link}>
+                                    {icon}
+                                    <span className="text-lg">{label}</span>
+                                </a>
+                            </Button> :
+                                <Button
                                     key={label}
-                                    variant="secondary"
                                     className="justify-start py-6 gap-6"
-                                    asChild
+                                    onClick={onClick}
                                 >
-                                    <a href={link}>
-                                        {icon}
-                                        <span className="text-lg">{label}</span>
-                                    </a>
-                                </Button> :
-                                    <Button
-                                        key={label}
-                                        className="justify-start py-6 gap-6"
-                                        onClick={onClick}
-                                    >
-                                        {icon}
-                                        <span className="text-lg">{label}</span>
-                                    </Button>
+                                    {icon}
+                                    <span className="text-lg">{label}</span>
+                                </Button>
 
-                            )
-                        )}
-                    </div>
-                </DrawerContent>
-            </Drawer>
-        )
-    }
+                        )
+                    )}
+                    {additionalOptions}
+                </div>
+                <DrawerFooter className="pt-4 w-full flex flex-row justify-center">
+                    <DrawerClose asChild>
+                        <Button size="icon" className="rounded-full" variant="secondary"><X /></Button>
+                    </DrawerClose>
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
+    )
 }
 
 export default ResponsiveContextMenu

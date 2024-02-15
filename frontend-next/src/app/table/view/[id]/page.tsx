@@ -16,7 +16,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { Session, getServerSession } from "next-auth";
-import AlertDialogClient from "@/components/AlertDialogClient";
+import { DeleteButton } from "@/components/delete-button";
 
 async function getData(session: Session, id: string) {
   const fetchApi = await fetch(
@@ -44,7 +44,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <>
       <h1 className="text-muted-foreground font-semibold mt-8 text-md">
-        Número de control: {params.id}
+        Número de control: {student.num_control}
       </h1>
       <h2 className="my-2  text-3xl font-bold mr-16">{`${student.nombre} ${student.apellidop} ${student.apellidom}`}</h2>
       <section className="my-5 flex gap-3">
@@ -54,7 +54,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             <span className="hidden md:inline">Editar</span>
           </a>
         </Button>
-        <AlertDialogClient id={params.id} />
+        <DeleteButton id={params.id} />
       </section>
       <section className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
         <Collapsible defaultOpen>
