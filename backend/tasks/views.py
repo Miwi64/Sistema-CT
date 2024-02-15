@@ -62,7 +62,7 @@ class LoginAPI(generics.GenericAPIView):
         user = serializer.validated_data
         token_obj = AuthToken.objects.filter(user=user).first()
         if token_obj:
-            raise ValidationError("El usuario ya tiene una sesion con token abierta.")
+            raise ValidationError("El usuario ya tiene una sesion abierta.")
         else:
             data = UserSerializer(user, context=self.get_serializer_context()).data
             token = AuthToken.objects.create(user)[1]
