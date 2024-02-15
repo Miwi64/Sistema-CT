@@ -64,7 +64,7 @@ export default function StudentsTable({
   const [urlFilter, setUrlFilter] = useState<string>("");
   const [filters, setFilters] = useState<FilterData>({
     doc: "C",
-    sex: "M",
+    sex: "B",
     career: -1,
     search: "",
     order: { criteria: "num_control", type: "" },

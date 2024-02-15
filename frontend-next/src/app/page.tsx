@@ -56,17 +56,27 @@ const Login = () => {
     if (responseNextAuth?.error) {
       console.log(responseNextAuth?.error);
       setSigning(false);
-      notification(
-        `Error al intentar iniciar sesión (${responseNextAuth.status})`,
-        "error", "Verifica que tu nombre de usuario y contraseña sean correctos.",
-        isDesktop);
-      return;
+      switch (responseNextAuth?.status) {
+        case 401:
+          notification(
+            `Error al intentar iniciar sesión (${responseNextAuth.status})`,
+            "error", "Verifica que tu nombre de usuario y contraseña sean correctos",
+            isDesktop);
+          return;
+        case 500:
+          notification(
+            `Error al intentar iniciar sesión (${responseNextAuth.status})`,
+            "error", `Ha ocurrido un error en el servidor del sistema. Verifica que no
+            exista una sesión abierta y vuelve a intentarlo`,
+            isDesktop);
+          return;
+      }
     }
     router.push(callbackUrl, { scroll: false });
     setSigning(false);
     notification("Inicio de sesión",
-    "success", "Accediendo a la sesión",
-    isDesktop);
+      "success", "Accediendo a la sesión",
+      isDesktop);
   };
 
   const imgUrl = "/backgrounds/558866.jpg";
