@@ -174,9 +174,9 @@ export function NavMenu() {
                 </ListItem>
                 <ListItem
                   onClick={async () => {
-                    console.log(session?.token);
+                    //console.log(session?.token);
                     const signout = await fetch(
-                      "http://127.0.0.1:8000/logoutall/",
+                      "http://127.0.0.1:8000/logout/",
                       {
                         method: "POST",
                         headers: {

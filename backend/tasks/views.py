@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from rest_framework.decorators import action
 from rest_framework import viewsets, generics, exceptions
 from rest_framework import status
@@ -59,17 +60,19 @@ class LoginAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        data = UserSerializer(user, context=self.get_serializer_context()).data
-        token = AuthToken.objects.create(user)[1]
-        token_obj = AuthToken.objects.get(user=user)
-        expiry = token_obj.expiry
-        expiry_datetime = datetime.fromtimestamp(expiry.timestamp())
-        return Response({
-            "user": data,
-            "token": token,
-            "expires": expiry_datetime.isoformat(),
-        }, status=status.HTTP_200_OK)
-
+        token_obj = AuthToken.objects.filter(user=user).first()
+        if token_obj:
+            raise ValidationError("El usuario ya tiene una sesion con token abierta.")
+        else:
+            data = UserSerializer(user, context=self.get_serializer_context()).data
+            token = AuthToken.objects.create(user)[1]
+            expiry = AuthToken.objects.get(user=user).expiry
+            expiry_datetime = datetime.fromtimestamp(expiry.timestamp())
+            return Response({
+                "user": data,
+                "token": token,
+                "expires": expiry_datetime.isoformat(),
+            }, status=status.HTTP_200_OK)
 
 class UserAPI(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
