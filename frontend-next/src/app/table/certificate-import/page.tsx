@@ -1,8 +1,11 @@
+import ResponsiveDialog from "@/components/responsive/dialog";
 import React from "react";
 
 const CertificateImport = () => {
   return (
-      <div>CertificateImport</div>
+      <ResponsiveDialog>
+        <div>CertificateImport</div>
+      </ResponsiveDialog>
   );
 };
 
