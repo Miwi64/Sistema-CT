@@ -81,30 +81,43 @@ class UserAPI(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+class AlumnoViewSet(viewsets.ViewSet):
+    def list(self, request, year):
+        graduates = Alumnos.objects.filter(periodo_egreso__year=year)
+        titles = Alumnos.objects.filter(titulo_fk__fecha_registro__year=year)
 
+        graduates_data = []
+        for graduate in graduates:
+            graduates_data.append({
+                'num_control': graduate.num_control,
+                'name': graduate.nombre,
+                'last_name1': graduate.apellidop,
+                'last_name2': graduate.apellidom,
+                'curp': graduate.CURP,
+                'birth_date': graduate.fecha_nacimiento,
+                'gender': graduate.sexo,
+                'career': graduate.carrera_fk.nombre_carrera,
+                'certificate': not graduate.certificado_fk is None
+            })
 
-""" #Pruebas de PDF
-class PruebaPDFView(View): 
-    def get(self, request, *args, **kwargs):
-        try: 
-            template = get_template('test.html')
-            context = {'title': 'Prueba de PDF'}
-            html = template.render(context)
-            response = HttpResponse(content_type='application/pdf')
-            #response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-            pisa_status = pisa.CreatePDF(
-                html, dest=response)
-            if pisa_status.err:
-                return HttpResponse('We had some errors <pre>' + html + '</pre>')
-            return response
-        except: 
-            pass
-        return HttpResponse('Error')
- """
+        titles_data = []
+        for title in titles:
+            titles_data.append({
+                'num_control': title.num_control,
+                'name': title.nombre,
+                'last_name1': title.apellidop,
+                'last_name2': title.apellidom,
+                'curp': title.CURP,
+                'birth_date': title.fecha_nacimiento,
+                'gender': title.sexo,
+                'career': title.carrera_fk.nombre_carrera,
+                'study_plan': title.titulo_fk.clave_plan
+            })
 
-
-
-
+        return Response({
+            'graduates': graduates_data,
+            'titles': titles_data
+        })
 
 class LoginView(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
