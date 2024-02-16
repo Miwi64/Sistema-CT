@@ -35,9 +35,9 @@ import {
 import { toast } from "sonner";
 
 interface OptionsButtonProps {
-  id: string
-  title: string
-  certificate: string
+  id: string;
+  title: string;
+  certificate: string;
 }
 
 const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
@@ -71,21 +71,23 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
               </a>
             </DropdownMenuItem>
 
-            {!title &&
+            {!title && (
               <DropdownMenuItem asChild>
                 <a href={`/table/link-title/${id}`} target="_blank">
                   <Link className="mr-2" />
                   <span>Vincular título</span>
                 </a>
-              </DropdownMenuItem>}
+              </DropdownMenuItem>
+            )}
 
-            {!certificate &&
+            {!certificate && (
               <DropdownMenuItem asChild>
                 <a href={`/table/link-certificate/${id}`} target="_blank">
                   <Link className="mr-2" />
                   <span>Vincular certificado</span>
                 </a>
-              </DropdownMenuItem>}
+              </DropdownMenuItem>
+            )}
 
             <DropdownMenuItem asChild>
               <a
@@ -147,26 +149,26 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
                       }
                     );
                     /*Eliminacion de Certificado y Titulo*/
-                    // await fetch(
-                    //   `http://127.0.0.1:8000/data/api/v1/certificados/${datac}/`,
-                    //   {
-                    //     method: "DELETE",
-                    //     headers: {
-                    //       "Content-Type": "application/json",
-                    //       Authorization: "Token " + session?.token,
-                    //     },
-                    //   }
-                    // );
-                    // await fetch(
-                    //   `http://127.0.0.1:8000/data/api/v1/titulados/${datat}/`,
-                    //   {
-                    //     method: "DELETE",
-                    //     headers: {
-                    //       "Content-Type": "application/json",
-                    //       Authorization: "Token " + session?.token,
-                    //     },
-                    //   }
-                    // );
+                    await fetch(
+                      `http://127.0.0.1:8000/data/api/v1/certificados/${datac}/`,
+                      {
+                        method: "DELETE",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: "Token " + session?.token,
+                        },
+                      }
+                    );
+                    await fetch(
+                      `http://127.0.0.1:8000/data/api/v1/titulados/${datat}/`,
+                      {
+                        method: "DELETE",
+                        headers: {
+                          "Content-Type": "application/json",
+                          Authorization: "Token " + session?.token,
+                        },
+                      }
+                    );
 
                     setShowAlert(false);
                     toast(`Eliminacion Exitosa`, {
@@ -182,7 +184,6 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
           </AlertDialogTrigger>
         </AlertDialog>
       </div>
-
 
       <div className="md:hidden">
         <Drawer open={open} onOpenChange={setOpen}>
@@ -221,7 +222,7 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
                   <span className="text-lg">Editar</span>
                 </a>
               </Button>
-              {!title &&
+              {!title && (
                 <Button
                   variant="secondary"
                   className="justify-start py-6"
@@ -231,8 +232,9 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
                     <Link className="mr-4 h-7 w-7" />
                     <span className="text-lg">Vincular título</span>
                   </a>
-                </Button>}
-              {!certificate &&
+                </Button>
+              )}
+              {!certificate && (
                 <Button
                   variant="secondary"
                   className="justify-start py-6"
@@ -242,7 +244,8 @@ const OptionsButton = ({ id, title, certificate }: OptionsButtonProps) => {
                     <Link className="mr-4 h-7 w-7" />
                     <span className="text-lg">Vincular certificado</span>
                   </a>
-                </Button>}
+                </Button>
+              )}
               <Button
                 variant="destructive"
                 className="justify-start py-6"

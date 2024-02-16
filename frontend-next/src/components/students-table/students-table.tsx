@@ -86,6 +86,7 @@ export default function StudentsTable({
           },
         }
       );
+
       const { results, ...pagination } = await fetchApi.json();
       setPaginationData(pagination);
       setStudentData(results);

@@ -60,19 +60,25 @@ class LoginAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data
-        token_obj = AuthToken.objects.filter(user=user).first()
-        if token_obj:
-            raise ValidationError("El usuario ya tiene una sesion abierta.")
-        else:
-            data = UserSerializer(user, context=self.get_serializer_context()).data
-            token = AuthToken.objects.create(user)[1]
-            expiry = AuthToken.objects.get(user=user).expiry
-            expiry_datetime = datetime.fromtimestamp(expiry.timestamp())
-            return Response({
+        data = UserSerializer(user, context=self.get_serializer_context()).data
+        token = AuthToken.objects.create(user)[1]
+        return Response({
                 "user": data,
                 "token": token,
-                "expires": expiry_datetime.isoformat(),
             }, status=status.HTTP_200_OK)
+        # token_obj = AuthToken.objects.filter(user=user).first()
+        # if token_obj:
+        #     raise ValidationError("El usuario ya tiene una sesion abierta.")
+        # else:
+        #     data = UserSerializer(user, context=self.get_serializer_context()).data
+        #     token = AuthToken.objects.create(user)[1]
+        #     expiry = AuthToken.objects.get(user=user).expiry
+        #     expiry_datetime = datetime.fromtimestamp(expiry.timestamp())
+        #     return Response({
+        #         "user": data,
+        #         "token": token,
+        #         "expires": expiry_datetime.isoformat(),
+        #     }, status=status.HTTP_200_OK)
 
 class UserAPI(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated, ]
