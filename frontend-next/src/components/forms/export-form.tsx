@@ -4,10 +4,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { REPORTS } from "@/lib/constants";
-import { generateGobReport } from "@/lib/export-functions";
+import { generateEst911Report, generateGobReport } from "@/lib/export-functions";
 import { Session } from "next-auth";
 import React, { ChangeEvent, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { notification } from "../responsive/notification";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import YearSelector from "../year-selector";
 
 
 interface ExportFormProps {
@@ -22,18 +25,19 @@ type Career = {
 
 type ExportSettings = {
     formatType: string,
-    career: number | null,
+    career?: number,
+    year?: number,
     useDefaultTemplate: boolean,
     templateFile: File | null
 }
 
 const ExportForm = ({ careers, session }: ExportFormProps) => {
+    const isDesktop = useMediaQuery("(min-width: 768px)")
     const [config, setConfig] = useState<ExportSettings>(
         {
             formatType: "gob",
-            career: careers[0].id_carrera,
             useDefaultTemplate: true,
-            templateFile: null
+            templateFile: null,
         }
     )
 
@@ -43,13 +47,45 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
         }
     }
 
-
     const handleExport = async () => {
-        if (!config.career) {
-            console.log("¡Carrera no seleccionada!")
+        //Check required fields
+        const requiredField = config.formatType === "gob" ? { value: config.career, text: "carrera" } :
+            config.formatType === "est911" ? { value: config.year, text: "año" } :
+                undefined
+        if (!requiredField?.value) {
+            notification("Favor de seleccionar " + requiredField?.text, "error", undefined, isDesktop)
+            return
         }
+        //Select the correct data api url
+        const templatePath = config.formatType === "gob" ?
+            `http://localhost:3000/templates/gob_template.xlsx` :
+            config.formatType === "est911" ?
+                `http://localhost:3000/templates/est911_template.xlsx` :
+                undefined
+        //Select the correct template 
+        const dataPath = config.formatType === "gob" ?
+            `http://127.0.0.1:8000/data/api/v1/get-gob-report-data/${config.career}` :
+            config.formatType === "est911" ?
+                `http://127.0.0.1:8000/data/api/v1/get-format911/${config.year}/` :
+                undefined
+        //Return if the format type is unknown
+        if (!templatePath || !dataPath) return
+        //Select default templete or a custom one
+        let template
+        if (config.templateFile && !config.useDefaultTemplate) {
+            template = await config.templateFile.arrayBuffer()
+        }
+        else if (config.useDefaultTemplate) {
+            const fetchTemplate = await fetch(templatePath)
+            template = await fetchTemplate.arrayBuffer()
+        }
+        if (!template) {
+            notification("Error al recuperar la plantilla", "error", "Vuelve a intentarlo más tarde", isDesktop)
+            return
+        }
+        //Get data
         const fetchData = await fetch(
-            `http://127.0.0.1:8000/data/api/v1/get-gob-report-data/${config.career}`,
+            dataPath,
             {
                 method: "GET",
                 headers: {
@@ -58,16 +94,17 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
             }
         )
         const data = await fetchData.json()
-
-
-        if (config.templateFile && !config.useDefaultTemplate && config.formatType === "gob") {
-            const template = await config.templateFile.arrayBuffer()
-            await generateGobReport(template, data)
-        }
-        else if(config.useDefaultTemplate && config.formatType === "gob"){
-            const fetchTemplate = await fetch(`http://localhost:3000/templates/gob_template.xlsx`)
-            const template = await fetchTemplate.arrayBuffer()
-            await generateGobReport(template, data)
+        //Generate report
+        switch (config.formatType) {
+            case "gob":
+                await generateGobReport(template, data)
+                break;
+            case "est911":
+                console.log(config)
+                await generateEst911Report(template, data)
+                break;
+            default:
+                break;
         }
     }
 
@@ -101,11 +138,11 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
                 }>
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="default" id="default" />
-                        <Label htmlFor="option-one">Usar plantilla por defecto</Label>
+                        <Label htmlFor="default">Usar plantilla por defecto</Label>
                     </div>
                     <div className="flex items-center space-x-2">
                         <RadioGroupItem value="custom" id="custom" />
-                        <Label htmlFor="option-two">Plantilla personalizada</Label>
+                        <Label htmlFor="custom">Plantilla personalizada</Label>
                     </div>
                 </RadioGroup>
             </section>
@@ -131,16 +168,29 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
                         <SelectTrigger className="my-2">
                             <SelectValue placeholder={"Seleccionar carrera"} />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="max-h-[250px]">
                             {careers.map((
                                 { id_carrera, nombre_carrera }) =>
-                                (<SelectItem key={id_carrera} value={`${id_carrera}`}>{nombre_carrera}</SelectItem>))}
+                            (<SelectItem key={id_carrera} value={`${id_carrera}`}>
+                                {nombre_carrera}
+                            </SelectItem>))}
                         </SelectContent>
                     </Select>
                 </section>
             }
+            {config.formatType === "est911" &&
+                <section className="">
+                    <Label htmlFor="year">Año</Label>
+                    <YearSelector from={2000} value={`${config.year}`} onValueChange={
+                        (value) => setConfig((prev) => ({ ...prev, year: Number(value) }))
+                    } />
+                </section>
+            }
             <section className="w-full flex justify-center mb-5">
-                <Button disabled={!config.useDefaultTemplate && !config.templateFile} onClick={handleExport}>Exportar</Button>
+                <Button disabled={!config.useDefaultTemplate && !config.templateFile}
+                    onClick={handleExport}>
+                    Exportar
+                </Button>
             </section>
         </section>
     );
