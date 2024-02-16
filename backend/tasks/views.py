@@ -101,9 +101,10 @@ class AlumnoViewSet(viewsets.ViewSet):
                 'last_name2': graduate.apellidom,
                 'curp': graduate.CURP,
                 'birth_date': graduate.fecha_nacimiento,
+                'age' : ( datetime.now().year - graduate.fecha_nacimiento.year ),
                 'gender': graduate.sexo,
                 'career': graduate.carrera_fk.nombre_carrera,
-                'certificate': not graduate.certificado_fk is None
+                'certificate': "Si" if not graduate.certificado_fk is None else "No"
             })
 
         titles_data = []
@@ -115,6 +116,7 @@ class AlumnoViewSet(viewsets.ViewSet):
                 'last_name2': title.apellidom,
                 'curp': title.CURP,
                 'birth_date': title.fecha_nacimiento,
+                'age' : ( datetime.now().year - title.fecha_nacimiento.year ),
                 'gender': title.sexo,
                 'career': title.carrera_fk.nombre_carrera,
                 'study_plan': title.titulo_fk.clave_plan

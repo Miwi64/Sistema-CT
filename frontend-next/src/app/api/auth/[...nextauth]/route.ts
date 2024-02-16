@@ -36,7 +36,6 @@ export const authOptions  = {
         async session({session, token}:any){
             session.user = token.user as any;
             session.token = token.token as any;
-            session.maxAge = 60; //1 hora
             // if (token.expires) {
             //   // Convierte la cadena de fecha de expiración en un objeto Date
             //   const expires = new Date(token.expires);
@@ -45,6 +44,9 @@ export const authOptions  = {
             // }
             return session;
         },
+      },
+      session: {
+        maxAge: 10 * 60
       },
       secret: process.env.NEXTAUTH_SECRET,
 };
