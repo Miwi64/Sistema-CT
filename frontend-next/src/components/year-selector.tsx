@@ -6,18 +6,24 @@ interface YearSelectorProps {
     from?: number;
     to?: number;
     value: string;
+    reverse?: boolean;
     onValueChange: (value: string) => void;
 }
 
 const YearSelector = (
-    { from = 1960, to = new Date().getFullYear(), value, onValueChange }: YearSelectorProps) => {
+    { from = 1960, to = new Date().getFullYear(), value, onValueChange, reverse }: YearSelectorProps) => {
     const [years, setYears] = useState<number[]>([]);
     useEffect(() => {
         const yearsArray: number[] = [];
         for (let year = from; year <= to; year++) {
             yearsArray.push(year);
         }
-        setYears(yearsArray);
+        if(reverse) {
+            setYears(yearsArray.toReversed())
+        }
+        else{
+            setYears(yearsArray);
+        }
     }, []);
     return (
         <Select

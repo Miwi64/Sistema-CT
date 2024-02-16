@@ -181,7 +181,7 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
             {config.formatType === "est911" &&
                 <section className="">
                     <Label htmlFor="year">Año</Label>
-                    <YearSelector from={2000} value={`${config.year}`} onValueChange={
+                    <YearSelector reverse from={2000} value={`${config.year}`} onValueChange={
                         (value) => setConfig((prev) => ({ ...prev, year: Number(value) }))
                     } />
                 </section>
