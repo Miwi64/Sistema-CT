@@ -188,7 +188,8 @@ class GraduationView(APIView):
         for year, alumnos_this_year in sorted_data:
             students = [{
                 'name': alumno.nombre,
-                'last_name': f"{alumno.apellidop} {alumno.apellidom}",
+                'last_name1': alumno.apellidop,
+                'last_name2': alumno.apellidom,
                 'title_date': alumno.titulo_fk.fecha_registro.strftime('%Y-%m-%d')
             } for alumno in alumnos_this_year]
             result.append({
