@@ -90,7 +90,6 @@ export default function StudentsTable({
       setPaginationData(pagination);
       setStudentData(results);
     };
-    console.log(session.expires);
     console.log(columnVisibility);
     const orderFilter = `&order_by=${filters.order.type}${filters.order.criteria}`;
     const docFilter =

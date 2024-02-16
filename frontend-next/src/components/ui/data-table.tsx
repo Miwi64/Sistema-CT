@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -10,7 +10,9 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+  ColumnResizeDirection,
+  ColumnResizeMode,
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -19,33 +21,41 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { useState } from "react"
-import ResponsiveContextMenu from "../responsive/context-menu"
-import { tableOptions } from "@/lib/constants"
-import { DeleteButton } from "../delete-button"
+} from "@/components/ui/table";
+import { useReducer, useState } from "react";
+import ResponsiveContextMenu from "../responsive/context-menu";
+import { tableOptions } from "@/lib/constants";
+import { DeleteButton } from "../delete-button";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  columnVisibility: VisibilityState
-  setColumnVisibility: React.Dispatch<React.SetStateAction<VisibilityState>>
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  columnVisibility: VisibilityState;
+  setColumnVisibility: React.Dispatch<React.SetStateAction<VisibilityState>>;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   columnVisibility,
-  setColumnVisibility
+  setColumnVisibility,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
+  const [columnResizeMode, setColumnResizeMode] =
+    useState<ColumnResizeMode>("onChange");
+
+  const [columnResizeDirection, setColumnResizeDirection] =
+    useState<ColumnResizeDirection>("ltr");
+
+  const rerender = useReducer(() => ({}), {})[1];
 
   const reactTable = useReactTable({
     data,
     columns,
+    columnResizeMode,
+    columnResizeDirection,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
@@ -57,7 +67,7 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
     },
-  })
+  });
   return (
     <div className="rounded-md border">
       {reactTable.getRowModel().rows?.length ? (
@@ -72,11 +82,23 @@ export function DataTable<TData, TValue>({
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                        <div
+                          {...{
+                            onDoubleClick: () => header.column.resetSize(),
+                            onMouseDown: header.getResizeHandler(),
+                            onTouchStart: header.getResizeHandler(),
+                            className: `resizer ${
+                              reactTable.options.columnResizeDirection
+                            } ${
+                              header.column.getIsResizing() ? "isResizing" : ""
+                            }`,
+                          }}
+                        />
                       </TableHead>
-                    )
+                    );
                   })}
                 </TableRow>
               ))}
@@ -85,17 +107,26 @@ export function DataTable<TData, TValue>({
               {reactTable.getRowModel().rows.map((row) => (
                 <ResponsiveContextMenu
                   title={row.getValue("num_control")}
-                  options={tableOptions(row.getValue("num_control"), row.getValue("num_titulo"), row.getValue("num_folio"))}
+                  options={tableOptions(
+                    row.getValue("num_control"),
+                    row.getValue("num_titulo"),
+                    row.getValue("num_folio")
+                  )}
                   key={row.id}
-                  additionalOptions={<DeleteButton id={row.getValue("num_control")} mode="context-menu-item"/>}
-                  >
-                  <TableRow
-                    data-state={row.getIsSelected() && "selected"}
-                  >
+                  additionalOptions={
+                    <DeleteButton
+                      id={row.getValue("num_control")}
+                      mode="context-menu-item"
+                    />
+                  }
+                >
+                  <TableRow data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => (
-
                       <TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -103,7 +134,8 @@ export function DataTable<TData, TValue>({
               ))}
             </TableBody>
           </Table>
-        </div>) :
+        </div>
+      ) : (
         <Table>
           <TableBody>
             <TableRow>
@@ -113,7 +145,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           </TableBody>
         </Table>
-      }
+      )}
     </div>
-  )
+  );
 }
