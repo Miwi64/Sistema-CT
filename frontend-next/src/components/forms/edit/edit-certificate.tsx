@@ -95,6 +95,16 @@ const EditCertificate = ({ studentData, session }: EditCertificateProps) => {
                                         <Calendar
                                             mode="single"
                                             selected={new Date(field.value)}
+                                            captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                                            classNames={{
+                                                caption: "justify-between",
+                                                caption_label: "hidden",
+                                                dropdown: `flex h-10 items-center justify-between 
+                                                rounded-md border border-input bg-background 
+                                                px-3 py-1 text-sm ring-offset-background 
+                                                [&>span]:line-clamp-1`,
+                                                caption_dropdowns: "text-[0] flex justify-center"
+                                            }}
                                             onSelect={field.onChange}
                                             disabled={(date) =>
                                                 date > new Date() || date < new Date("1900-01-01")

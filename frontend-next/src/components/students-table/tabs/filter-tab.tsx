@@ -213,6 +213,7 @@ const FilterTab = ({
           </DropdownMenuContent>
         </DropdownMenu>
 
+<<<<<<< HEAD
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
@@ -234,6 +235,166 @@ const FilterTab = ({
                   setColumnVisibility(TITLE_VISIBLE_COLUMNS);
                 } else {
                   setColumnVisibility(BOTH_VISIBLE_COLUMNS);
+=======
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                            <BookText className="sm:mr-2 h-5 w-5" />
+                            <span className="hidden sm:block">Documento</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Mostrar estudiantes con</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuRadioGroup
+                            value={filters.doc}
+                            onValueChange={(value) => {
+                                setFilters({ ...filters, doc: value })
+                                setPaginationData((prev) => ({ ...prev, current_page: "1" }))
+                                if (value === "C") {
+                                    setColumnVisibility(CERTIFICATE_VISIBLE_COLUMNS)
+                                }
+                                else if (value === "T") {
+                                    setColumnVisibility(TITLE_VISIBLE_COLUMNS)
+                                }
+                                else {
+                                    setColumnVisibility(BOTH_VISIBLE_COLUMNS)
+                                }
+                            }
+                            }
+                        >
+                            <DropdownMenuRadioItem value="C">
+                                Certificado
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="T">Título</DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="CT">
+                                Certificado y título
+                            </DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                            <Users className="sm:mr-2 h-5 w-5" />
+                            <span className="hidden sm:block">Sexo</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56">
+                        <DropdownMenuLabel>Sexo</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuRadioGroup
+                            value={filters.sex}
+                            onValueChange={(value) =>
+                                setFilters({ ...filters, sex: value })
+                            }
+                        >
+                            <DropdownMenuRadioItem value="M">
+                                Masculino
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="F">
+                                Femenino
+                            </DropdownMenuRadioItem>
+                            <DropdownMenuRadioItem value="B">Ambos</DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+
+                <Toggle
+                    pressed={filters.date.enable}
+                    onPressedChange={(pressed) => setFilters({ ...filters, date: { ...filters.date, enable: pressed } })}
+                    aria-label="Activar/desactivar rango de fechas"
+                >
+                    <CalendarIcon className="sm:mr-2 h-5 w-5" />
+                    <span className="hidden sm:block">Fecha</span>
+                </Toggle>
+                {filters.date.enable &&
+                    (
+                        <>
+                            <Select
+                                value={filters.date.criteria}
+                                onValueChange={(value) => {
+                                    setFilters({
+                                        ...filters,
+                                        date: { ...filters.date, criteria: value },
+                                    });
+                                }}
+                            >
+                                <SelectTrigger className="h-9 w-[200px]">
+                                    <SelectValue placeholder={filters.date.criteria} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {DATE_CRITERIAS.map(({ text, value }) => (
+                                        <SelectItem key={value} value={value}>
+                                            {text}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            {[
+                                {
+                                    label: "Desde",
+                                    date: filters.date.min,
+                                    update: (selected: Date) =>
+                                        ({ ...filters, date: { ...filters.date, min: selected } })
+
+                                },
+                                {
+                                    label: "Hasta",
+                                    date: filters.date.max,
+                                    update: (selected: Date) =>
+                                        ({ ...filters, date: { ...filters.date, max: selected } })
+                                },
+                            ].map(({ label, date, update }, index) => (
+                                <div key={index} className="flex items-center gap-3">
+                                    {label}
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                id="date"
+                                                variant={"outline"}
+                                                className={cn(
+                                                    "w-[200px] justify-start text-left font-normal",
+                                                )}
+                                            >
+                                                {date.toDateString()}
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-auto p-0" align="start">
+                                            <Calendar
+                                                mode="single"
+                                                captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                                                classNames={{
+                                                    caption: "justify-between",
+                                                    caption_label: "hidden",
+                                                    dropdown: `flex h-10 items-center justify-between 
+                                                rounded-md border border-input bg-background 
+                                                px-3 py-1 text-sm ring-offset-background 
+                                                [&>span]:line-clamp-1`,
+                                                    caption_dropdowns: "text-[0] flex justify-center"
+                                                }}
+                                                defaultMonth={date}
+                                                selected={date}
+                                                onSelect={(selected) => {
+                                                    if (selected) {
+                                                        setFilters(update(selected))
+                                                    }
+                                                }}
+                                                disabled={(date) =>
+                                                    date > new Date() || date < new Date("1900-01-01")
+                                                }
+                                                initialFocus
+                                            />
+                                        </PopoverContent>
+                                    </Popover>
+                                </div>
+                            ))}
+                        </>
+                    )
+>>>>>>> fe45becc (Change date picker styles)
                 }
               }}
             >

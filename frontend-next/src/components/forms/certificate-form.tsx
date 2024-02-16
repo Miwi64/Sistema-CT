@@ -180,7 +180,7 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
                                             <SelectValue placeholder="Seleccionar carrera" />
                                         </SelectTrigger>
                                     </FormControl>
-                                    <SelectContent>
+                                    <SelectContent className="max-h-[250px]">
                                         {careers.map(({ id_carrera, nombre_carrera }) => (
                                             <SelectItem
                                                 key={id_carrera}
@@ -223,6 +223,16 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
                                     <PopoverContent className="w-auto p-0" align="start">
                                         <Calendar
                                             mode="single"
+                                            captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                                            classNames={{
+                                                caption: "justify-between",
+                                                caption_label: "hidden",
+                                                dropdown: `flex h-10 items-center justify-between 
+                                                rounded-md border border-input bg-background 
+                                                px-3 py-1 text-sm ring-offset-background 
+                                                [&>span]:line-clamp-1`,
+                                                caption_dropdowns: "text-[0] flex justify-center"
+                                            }}
                                             selected={new Date(field.value)}
                                             onSelect={field.onChange}
                                             disabled={(date) =>

@@ -33,7 +33,7 @@ import { STUDENT_SCHEMA } from "@/lib/form-schemas";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "@/components/responsive/notification";
 
-const { num_control, ...fields} = STUDENT_SCHEMA
+const { num_control, ...fields } = STUDENT_SCHEMA
 const formSchema = z.object({
   ...fields
 });
@@ -95,11 +95,11 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
     );
     if (!putStudent.ok) {
       notification(`Error al actualizar los datos del estudiante (${putStudent.status})`,
-            "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop)
+        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop)
       return
     }
     notification("Actualización correcta",
-            "success", "Se han actualizado los datos del estudiante", isDesktop)
+      "success", "Se han actualizado los datos del estudiante", isDesktop)
   };
   return (
     <Form {...form}>
@@ -240,6 +240,16 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
+                      captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                      classNames={{
+                        caption: "justify-between",
+                        caption_label: "hidden",
+                        dropdown: `flex h-10 items-center justify-between 
+                                                rounded-md border border-input bg-background 
+                                                px-3 py-1 text-sm ring-offset-background 
+                                                [&>span]:line-clamp-1`,
+                        caption_dropdowns: "text-[0] flex justify-center"
+                      }}
                       selected={new Date(field.value)}
                       onSelect={field.onChange}
                       disabled={(date) =>
@@ -268,7 +278,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
                       <SelectValue placeholder="Seleccionar" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent className="max-h-[250px]">
                     {careers.map(({ id_carrera, nombre_carrera }) => (
                       <SelectItem key={id_carrera} value={`${id_carrera}`}>
                         {nombre_carrera}
