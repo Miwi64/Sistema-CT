@@ -29,9 +29,9 @@ export const CERTIFICATE_VISIBLE_COLUMNS = {
     "apellidop": true,
     "apellidom": true,
     "sexo": false,
-    "CURP": false,
-    "estado_nacimiento": false,
     "fecha_nacimiento": true,
+    "estado_nacimiento": false,
+    "CURP": false,
     "nombre_carrera": true,
     "periodo_ingreso": true,
     "periodo_egreso": true,
@@ -39,10 +39,10 @@ export const CERTIFICATE_VISIBLE_COLUMNS = {
     "fecha_registro_cert": true,
     "observaciones_cert": true,
     "num_titulo": false,
-    "fecha_acto": false,
     "clave_plan": false,
-    "num_cedula": false,
     "fecha_registro_tit": false,
+    "fecha_acto": false,
+    "num_cedula": false,
     "observaciones_tit": false
 }
 export const TITLE_VISIBLE_COLUMNS = {
@@ -51,9 +51,9 @@ export const TITLE_VISIBLE_COLUMNS = {
     "apellidop": true,
     "apellidom": true,
     "sexo": false,
-    "CURP": false,
-    "estado_nacimiento": false,
     "fecha_nacimiento": true,
+    "estado_nacimiento": false,
+    "CURP": false,
     "nombre_carrera": true,
     "periodo_ingreso": true,
     "periodo_egreso": true,
@@ -61,10 +61,10 @@ export const TITLE_VISIBLE_COLUMNS = {
     "fecha_registro_cert": false,
     "observaciones_cert": false,
     "num_titulo": true,
-    "fecha_acto": true,
     "clave_plan": true,
-    "num_cedula": true,
     "fecha_registro_tit": true,
+    "fecha_acto": true,
+    "num_cedula": true,
     "observaciones_tit": true
 }
 
@@ -74,9 +74,9 @@ export const BOTH_VISIBLE_COLUMNS = {
     "apellidop": true,
     "apellidom": true,
     "sexo": false,
-    "CURP": false,
-    "estado_nacimiento": false,
     "fecha_nacimiento": true,
+    "estado_nacimiento": false,
+    "CURP": false,
     "nombre_carrera": true,
     "periodo_ingreso": true,
     "periodo_egreso": true,
@@ -84,10 +84,10 @@ export const BOTH_VISIBLE_COLUMNS = {
     "fecha_registro_cert": true,
     "observaciones_cert": true,
     "num_titulo": true,
-    "fecha_acto": true,
     "clave_plan": true,
-    "num_cedula": true,
     "fecha_registro_tit": true,
+    "fecha_acto": true,
+    "num_cedula": true,
     "observaciones_tit": true
 }
 

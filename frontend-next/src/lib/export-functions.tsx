@@ -139,7 +139,7 @@ const filterProps = (obj: { [x: string]: any }, props: string[]) => {
   const newObj: { [x: string]: any } = {};
   props.forEach((prop, index) => {
     if (obj.hasOwnProperty(prop)) {
-      newObj[`column${index}`] = obj[prop];
+      newObj[`column${index+1}`] = obj[prop];
     }
   });
   return newObj;
