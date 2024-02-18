@@ -7,6 +7,7 @@ import pdfFonts from "pdfmake/build/vfs_fonts";
 import { Student } from "./columns";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { VisibilityState } from "@tanstack/react-table";
+import { notification } from "@/components/responsive/notification";
 
 type GobReportData = [
   {
@@ -61,8 +62,12 @@ export const generateEst911Report = async (
   const excelTemplate = await JsExcelTemplate.fromArrayBuffer(template);
   excelTemplate.set("graduates", graduates);
   excelTemplate.set("titles", titles);
-  const blob = await excelTemplate.toBlob();
-  saveAs(blob, "est911.xlsx");
+  try {
+    const blob = await excelTemplate.toBlob();
+    saveAs(blob, "est911.xlsx");
+  } catch (error) {
+    notification("Error al generar el archivo", "error", `Vuelve a intentarlo más tarde.`);
+  }
 };
 
 export const generateGobReport = async (
@@ -74,7 +79,7 @@ export const generateGobReport = async (
   await workbook.xlsx.load(template).then(() => {
     const sheetToDuplicate = workbook.getWorksheet("year");
     if (!sheetToDuplicate) {
-      console.log("Error de formato");
+      notification("Error de formato", "error", "El formato de la plantilla no es válido.");
       return;
     }
     years.forEach((year) => {
@@ -95,6 +100,10 @@ export const generateGobReport = async (
       });
     });
     workbook.removeWorksheet("year");
+  }, () => {
+    notification("Error al cargar la plantilla", "error", `Si estás utilizando una plantilla 
+    personalizada, revisa que el archivo no esté corrupto y vuelve a intentarlo.`);
+    return;
   });
   workbook.xlsx.writeBuffer().then(async (buffer) => {
     const excelTemplate = await JsExcelTemplate.fromArrayBuffer(buffer);
@@ -105,9 +114,23 @@ export const generateGobReport = async (
       excelTemplate.set(`gen${year}`, `${gen}`);
       excelTemplate.set(`students${year}`, students);
     }
-    const blob = await excelTemplate.toBlob();
-    saveAs(blob, "gob.xlsx");
-  });
+    try {
+      const blob = await excelTemplate.toBlob();
+      saveAs(blob, "gob.xlsx");
+    } catch (error) {
+      notification("Error al generar el archivo", "error", `Ha ocurrido un error al grabar el archivo. 
+      Si estás utilizando una plantilla personalizada, revisa que el archivo no esté corrupto y 
+      vuelve a intentarlo.`);
+      return;
+    }
+  },
+    () => {
+      () => {
+        notification("Error al intentar generar la descarga del archivo",
+          "error", "Vuelve a intentarlo más tarde");
+        return;
+      }
+    });
 };
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
