@@ -10,8 +10,6 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
-  ColumnResizeDirection,
-  ColumnResizeMode,
 } from "@tanstack/react-table";
 
 import {
@@ -22,10 +20,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import ResponsiveContextMenu from "../responsive/context-menu";
 import { tableOptions } from "@/lib/constants";
 import { DeleteButton } from "../delete-button";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -43,19 +42,10 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
-  const [columnResizeMode, setColumnResizeMode] =
-    useState<ColumnResizeMode>("onChange");
-
-  const [columnResizeDirection, setColumnResizeDirection] =
-    useState<ColumnResizeDirection>("ltr");
-
-  const rerender = useReducer(() => ({}), {})[1];
-
   const reactTable = useReactTable({
     data,
     columns,
-    columnResizeMode,
-    columnResizeDirection,
+    columnResizeMode: "onEnd",
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
@@ -78,25 +68,22 @@ export function DataTable<TData, TValue>({
                 <TableRow key={headerGroup.id}>
                   {headerGroup.headers.map((header) => {
                     return (
-                      <TableHead key={header.id}>
+                      <TableHead
+                        key={header.id}
+                        className={cn("resize-column", {
+                          "cursor-col-resize": header.column.columnDef.size,
+                        })}
+                        {...{
+                          onMouseDown: header.getResizeHandler(),
+                          onTouchStart: header.getResizeHandler(),
+                        }}
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                        <div
-                          {...{
-                            onDoubleClick: () => header.column.resetSize(),
-                            onMouseDown: header.getResizeHandler(),
-                            onTouchStart: header.getResizeHandler(),
-                            className: `resizer ${
-                              reactTable.options.columnResizeDirection
-                            } ${
-                              header.column.getIsResizing() ? "isResizing" : ""
-                            }`,
-                          }}
-                        />
                       </TableHead>
                     );
                   })}
