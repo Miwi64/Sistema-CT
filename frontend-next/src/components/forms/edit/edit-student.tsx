@@ -32,6 +32,7 @@ import { toast } from "sonner";
 import { STUDENT_SCHEMA } from "@/lib/form-schemas";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "@/components/responsive/notification";
+import SemesterSelector from "@/components/semester-selector";
 
 const { num_control, ...fields } = STUDENT_SCHEMA
 const formSchema = z.object({
@@ -297,10 +298,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
               <FormItem className="">
                 <FormLabel>Periodo de ingreso</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Periodo de ingreso ejem. 2013-12-19"
-                    {...field}
-                  />
+                  <SemesterSelector from={1990} value={field.value} onValueChange={field.onChange} reverse />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -313,10 +311,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
               <FormItem className="">
                 <FormLabel>Periodo de egreso</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Periodo de egreso ejem. 2013-12-19"
-                    {...field}
-                  />
+                  <SemesterSelector from={1990} value={field.value} onValueChange={field.onChange} reverse />
                 </FormControl>
                 <FormMessage />
               </FormItem>

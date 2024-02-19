@@ -56,23 +56,9 @@ export const STUDENT_SCHEMA = {
         .date({ required_error: "Campo requerido" })
         .transform((value) => value.toISOString().split("T")[0]),
     periodo_ingreso: z
-        .string({ required_error: "Campo requerido" })
-        .transform((value) => {
-            if (/^(?!\s*$).+/.test(value)) {
-                return value;
-            }
-            return value.replace(/\s+/g, "");
-        })
-        .pipe(z.string().max(50, "Máximo 50 caracteres")),
+        .string({ required_error: "Campo requerido" }),
     periodo_egreso: z
-        .string({ required_error: "Campo requerido" })
-        .transform((value) => {
-            if (/^(?!\s*$).+/.test(value)) {
-                return value;
-            }
-            return value.replace(/\s+/g, "");
-        })
-        .pipe(z.string().max(50, "Máximo 50 caracteres")),
+        .string({ required_error: "Campo requerido" }),
     carrera_fk: z.string({ required_error: "Campo requerido" }),
 
 }

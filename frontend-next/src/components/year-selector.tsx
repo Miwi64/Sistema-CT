@@ -19,7 +19,7 @@ const YearSelector = (
             yearsArray.push(year);
         }
         if(reverse) {
-            setYears(yearsArray.toReversed())
+            setYears(yearsArray.toReversed());
         }
         else{
             setYears(yearsArray);
