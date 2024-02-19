@@ -114,11 +114,12 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
     //Generate report
     switch (config.formatType) {
       case "gob":
-        await generateGobReport(template, data);
+        const careerName = careers.find(career => career.id_carrera === config.career)?.nombre_carrera;
+        await generateGobReport(template, data, careerName? careerName: "No reconocida");
         break;
       case "est911":
         console.log(config);
-        await generateEst911Report(template, data);
+        await generateEst911Report(template, data, careers);
         break;
       default:
         break;

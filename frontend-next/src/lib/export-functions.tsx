@@ -54,14 +54,22 @@ type Est911ReportData = {
   ];
 };
 
+type Career = {
+  id_carrera: number;
+  nombre_carrera: string;
+};
+
 export const generateEst911Report = async (
   template: ArrayBuffer,
-  data: Est911ReportData
+  data: Est911ReportData,
+  careers: Career[]
 ) => {
+  const results = careers.map(career => ({career: career.nombre_carrera}));
   const { graduates, titles } = data;
   const excelTemplate = await JsExcelTemplate.fromArrayBuffer(template);
   excelTemplate.set("graduates", graduates);
   excelTemplate.set("titles", titles);
+  excelTemplate.set("results", results);
   try {
     const blob = await excelTemplate.toBlob();
     saveAs(blob, "est911.xlsx");
@@ -72,7 +80,8 @@ export const generateEst911Report = async (
 
 export const generateGobReport = async (
   template: ArrayBuffer,
-  data: GobReportData
+  data: GobReportData,
+  career: string
 ) => {
   const years = data.map((value) => value.year);
   const workbook = new ExcelJS.Workbook();
@@ -114,6 +123,9 @@ export const generateGobReport = async (
       excelTemplate.set(`gen${year}`, `${gen}`);
       excelTemplate.set(`students${year}`, students);
     }
+    const results = data.map((value) => ({ count: value.count, year: value.year }));
+    excelTemplate.set(`results`, results);
+    excelTemplate.set(`career`, career);
     try {
       const blob = await excelTemplate.toBlob();
       saveAs(blob, "gob.xlsx");
@@ -139,7 +151,7 @@ const filterProps = (obj: { [x: string]: any }, props: string[]) => {
   const newObj: { [x: string]: any } = {};
   props.forEach((prop, index) => {
     if (obj.hasOwnProperty(prop)) {
-      newObj[`column${index+1}`] = obj[prop];
+      newObj[`column${index + 1}`] = obj[prop];
     }
   });
   return newObj;
