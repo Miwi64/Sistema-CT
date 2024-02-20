@@ -183,32 +183,59 @@ class CarrerasView(generics.ListAPIView):
 
 class GraduationView(APIView):
     def get(self, request, carrera_fk):
+        # Obtener alumnos con título y que pertenecen a la carrera especificada
         alumnos = Alumnos.objects.filter(carrera_fk=carrera_fk, titulo_fk__isnull=False)
         alumnos_por_year = defaultdict(list)
         gen_counter = 1
 
+        # Agrupar alumnos por el año de ingreso
         for alumno in alumnos:
             alumnos_por_year[alumno.periodo_ingreso.year].append(alumno)
 
+        # Ordenar los datos por el año de ingreso
         sorted_data = sorted(alumnos_por_year.items(), key=lambda x: x[0])
 
-        result = []
+        # Contar la cantidad de alumnos con título y la cantidad de alumnos que se graduaron en cada año
+        summary = []
+        sheets = []
         for year, alumnos_this_year in sorted_data:
-            students = [{
-                'name': alumno.nombre,
-                'last_name1': alumno.apellidop,
-                'last_name2': alumno.apellidom,
-                'title_date': alumno.titulo_fk.fecha_registro.strftime('%Y-%m-%d')
-            } for alumno in alumnos_this_year]
-            result.append({
-                'gen': gen_counter,  # Generación, puedes calcularlo según tus reglas
-                'count': len(alumnos_this_year),
+            titles = len([alumno for alumno in alumnos_this_year if alumno.titulo_fk])
+            graduates = len([alumno for alumno in alumnos_this_year if alumno.periodo_egreso]) 
+            total = titles + graduates
+            # Agregar el año, total, titles y graduates al summary
+            summary.append({
+                'year': year,
+                'total': total,
+                'titles': titles,
+                'graduates': graduates
+            })
+
+            # Agregar solo los alumnos con título a la lista de estudiantes
+            students = [
+                {
+                    'name': alumno.nombre,
+                    'last_name1': alumno.apellidop,
+                    'last_name2': alumno.apellidom,
+                    'title_date': alumno.titulo_fk.fecha_registro.strftime('%Y-%m-%d')
+                } for alumno in alumnos_this_year if alumno.titulo_fk
+            ]
+
+            # Agregar la información del año, la cantidad de alumnos y la lista de estudiantes a la lista de hojas
+            sheets.append({
+                'gen': gen_counter,
+                'count': len(students),
                 'year': year,
                 'students': students
             })
             gen_counter += 1
+        # Incrementar el contador gen_counter por cada año que se agregue
 
-        return Response(result)
+
+        # Devolver la respuesta en el formato deseado
+        return Response({
+            'summary': summary,
+            'sheets': sheets
+        })
 
 class SearchViewAlumCert(APIView):
     def post(self, request, format=None):
