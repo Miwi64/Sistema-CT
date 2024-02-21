@@ -183,8 +183,8 @@ class CarrerasView(generics.ListAPIView):
 
 class GraduationView(APIView):
     def get(self, request, carrera_fk):
-        # Obtener alumnos con título y que pertenecen a la carrera especificada
-        alumnos = Alumnos.objects.filter(carrera_fk=carrera_fk, titulo_fk__isnull=False)
+        # Obtener alumnos que pertenecen a la carrera especificada
+        alumnos = Alumnos.objects.filter(carrera_fk=carrera_fk)
         alumnos_por_year = defaultdict(list)
         gen_counter = 1
 
@@ -200,8 +200,8 @@ class GraduationView(APIView):
         sheets = []
         for year, alumnos_this_year in sorted_data:
             titles = len([alumno for alumno in alumnos_this_year if alumno.titulo_fk])
-            graduates = len([alumno for alumno in alumnos_this_year if alumno.periodo_egreso]) 
-            total = titles + graduates
+            graduates = len([alumno for alumno in alumnos_this_year if alumno.periodo_egreso and alumno.titulo_fk is None]) 
+            total = graduates + titles
             # Agregar el año, total, titles y graduates al summary
             summary.append({
                 'year': year,
@@ -216,8 +216,8 @@ class GraduationView(APIView):
                     'name': alumno.nombre,
                     'last_name1': alumno.apellidop,
                     'last_name2': alumno.apellidom,
-                    'title_date': alumno.titulo_fk.fecha_registro.strftime('%Y-%m-%d')
-                } for alumno in alumnos_this_year if alumno.titulo_fk
+                    'title_date': alumno.titulo_fk.fecha_registro.strftime('%Y-%m-%d') if not alumno.titulo_fk is None else "S/T"
+                } for alumno in alumnos_this_year
             ]
 
             # Agregar la información del año, la cantidad de alumnos y la lista de estudiantes a la lista de hojas

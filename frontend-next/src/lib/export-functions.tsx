@@ -8,16 +8,17 @@ import { Student } from "./columns";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { VisibilityState } from "@tanstack/react-table";
 import { notification } from "@/components/responsive/notification";
+import { title } from "process";
 
 type GobReportData = {
   summary: [
     {
-      year: number,
-      total: number,
-      graduates: number,
-      titles: number
+      year: number;
+      total: number;
+      graduates: number;
+      titles: number;
     }
-  ],
+  ];
   sheets: [
     {
       gen: number;
@@ -30,10 +31,10 @@ type GobReportData = {
           last_name2: String;
           title_date: string;
         }
-      ]
+      ];
     }
-  ]
-}
+  ];
+};
 
 type Est911ReportData = {
   graduates: [
@@ -74,7 +75,7 @@ export const generateEst911Report = async (
   data: Est911ReportData,
   careers: Career[]
 ) => {
-  const results = careers.map(career => ({ career: career.nombre_carrera }));
+  const results = careers.map((career) => ({ career: career.nombre_carrera }));
   const { graduates, titles } = data;
   const excelTemplate = await JsExcelTemplate.fromArrayBuffer(template);
   excelTemplate.set("graduates", graduates);
@@ -84,7 +85,11 @@ export const generateEst911Report = async (
     const blob = await excelTemplate.toBlob();
     saveAs(blob, "est911.xlsx");
   } catch (error) {
-    notification("Error al generar el archivo", "error", `Vuelve a intentarlo más tarde.`);
+    notification(
+      "Error al generar el archivo",
+      "error",
+      `Vuelve a intentarlo más tarde.`
+    );
   }
 };
 
@@ -93,66 +98,96 @@ export const generateGobReport = async (
   data: GobReportData,
   career: string
 ) => {
-  const {summary, sheets} = data;
+  const { summary, sheets } = data;
+  const totalGraduates = summary.reduce(
+    (previous, { graduates }) => previous + graduates,
+    0
+  );
+  const totalTitles = summary.reduce(
+    (previous, { titles }) => previous + titles,
+    0
+  );
   const years = sheets.map((value) => value.year);
   const workbook = new ExcelJS.Workbook();
-  await workbook.xlsx.load(template).then(() => {
-    const sheetToDuplicate = workbook.getWorksheet("year");
-    if (!sheetToDuplicate) {
-      notification("Error de formato", "error", "El formato de la plantilla no es válido.");
-      return;
-    }
-    years.forEach((year) => {
-      const duplicatedSheet = workbook.addWorksheet(`${year}`);
-      duplicatedSheet.model = Object.assign(
-        { ...sheetToDuplicate.model, name: `${year}` },
-        { mergeCells: sheetToDuplicate.model.merges }
-      );
-      sheetToDuplicate.eachRow(function (row, rowNumber) {
-        row.eachCell(function (cell, colNumber) {
-          let newText = cell.value;
-          newText = newText.replace("{gen", `{gen${year}`);
-          newText = newText.replace("{count", `{count${year}`);
-          newText = newText.replace("{year", `{year${year}`);
-          newText = newText.replace("{students", `{students${year}`);
-          duplicatedSheet.getCell(rowNumber, colNumber).value = newText;
-        });
-      });
-    });
-    workbook.removeWorksheet("year");
-  }, () => {
-    notification("Error al cargar la plantilla", "error", `Si estás utilizando una plantilla 
-    personalizada, revisa que el archivo no esté corrupto y vuelve a intentarlo.`);
-    return;
-  });
-  workbook.xlsx.writeBuffer().then(async (buffer) => {
-    const excelTemplate = await JsExcelTemplate.fromArrayBuffer(buffer);
-    for (const sheet of sheets) {
-      const { year, count, gen, students } = sheet;
-      excelTemplate.set(`year${year}`, `${year}`);
-      excelTemplate.set(`count${year}`, `${count}`);
-      excelTemplate.set(`gen${year}`, `${gen}`);
-      excelTemplate.set(`students${year}`, students);
-    }
-    excelTemplate.set(`summary`, summary);
-    excelTemplate.set(`career`, career);
-    try {
-      const blob = await excelTemplate.toBlob();
-      saveAs(blob, "gob.xlsx");
-    } catch (error) {
-      notification("Error al generar el archivo", "error", `Ha ocurrido un error al grabar el archivo. 
-      Si estás utilizando una plantilla personalizada, revisa que el archivo no esté corrupto y 
-      vuelve a intentarlo.`);
-      return;
-    }
-  },
+  await workbook.xlsx.load(template).then(
     () => {
-      () => {
-        notification("Error al intentar generar la descarga del archivo",
-          "error", "Vuelve a intentarlo más tarde");
+      const sheetToDuplicate = workbook.getWorksheet("year");
+      if (!sheetToDuplicate) {
+        notification(
+          "Error de formato",
+          "error",
+          "El formato de la plantilla no es válido."
+        );
         return;
       }
-    });
+      years.forEach((year) => {
+        const duplicatedSheet = workbook.addWorksheet(`${year}`);
+        duplicatedSheet.model = Object.assign(
+          { ...sheetToDuplicate.model, name: `${year}` },
+          { mergeCells: sheetToDuplicate.model.merges }
+        );
+        sheetToDuplicate.eachRow(function (row, rowNumber) {
+          row.eachCell(function (cell, colNumber) {
+            let newText = cell.value;
+            newText = newText.replace("{gen", `{gen${year}`);
+            newText = newText.replace("{count", `{count${year}`);
+            newText = newText.replace("{year", `{year${year}`);
+            newText = newText.replace("{students", `{students${year}`);
+            duplicatedSheet.getCell(rowNumber, colNumber).value = newText;
+          });
+        });
+      });
+      workbook.removeWorksheet("year");
+    },
+    () => {
+      notification(
+        "Error al cargar la plantilla",
+        "error",
+        `Si estás utilizando una plantilla 
+    personalizada, revisa que el archivo no esté corrupto y vuelve a intentarlo.`
+      );
+      return;
+    }
+  );
+  workbook.xlsx.writeBuffer().then(
+    async (buffer) => {
+      const excelTemplate = await JsExcelTemplate.fromArrayBuffer(buffer);
+      for (const sheet of sheets) {
+        const { year, count, gen, students } = sheet;
+        excelTemplate.set(`year${year}`, `${year}`);
+        excelTemplate.set(`count${year}`, `${count}`);
+        excelTemplate.set(`gen${year}`, `${gen}`);
+        excelTemplate.set(`students${year}`, students);
+      }
+      excelTemplate.set(`summary`, summary);
+      excelTemplate.set(`career`, career);
+      excelTemplate.set(`totalGraduates`, totalGraduates);
+      excelTemplate.set(`totalTitles`, totalTitles);
+      try {
+        const blob = await excelTemplate.toBlob();
+        saveAs(blob, "gob.xlsx");
+      } catch (error) {
+        notification(
+          "Error al generar el archivo",
+          "error",
+          `Ha ocurrido un error al grabar el archivo. 
+      Si estás utilizando una plantilla personalizada, revisa que el archivo no esté corrupto y 
+      vuelve a intentarlo.`
+        );
+        return;
+      }
+    },
+    () => {
+      () => {
+        notification(
+          "Error al intentar generar la descarga del archivo",
+          "error",
+          "Vuelve a intentarlo más tarde"
+        );
+        return;
+      };
+    }
+  );
 };
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
