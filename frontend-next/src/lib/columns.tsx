@@ -34,115 +34,99 @@ export type Student = {
 export const columns: ColumnDef<Student>[] = [
   {
     accessorKey: "num_control",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Número de control" />
-    ),
+    header: "No. control"
   },
   {
     accessorKey: "nombre",
-    header: ({ column }) => <ColumnHeader column={column} title="Nombre" />,
+    header: "Nombre"
   },
   {
     accessorKey: "apellidop",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Apellido Paterno" />
-    ),
+    header:
+      "A.Paterno"
   },
   {
     accessorKey: "apellidom",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Apellido Materno" />
-    ),
+    header: "A.Materno"
   },
   {
     accessorKey: "sexo",
-    header: ({ column }) => <ColumnHeader column={column} title="Sexo" />,
+    header: "Sexo",
   },
   {
     accessorKey: "fecha_nacimiento",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Fecha de nacimiento" />
-    ),
+    header:
+      "Fecha de nacimiento"
+    ,
   },
   {
     accessorKey: "estado_nacimiento",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Estado de nacimiento" />
-    ),
+    header:
+      "Estado de nacimiento"
+    ,
   },
   {
     accessorKey: "CURP",
-    header: ({ column }) => <ColumnHeader column={column} title="CURP" />,
+    header: ({ column }) => "CURP"
   },
   {
     accessorKey: "nombre_carrera",
-    header: ({ column }) => <ColumnHeader column={column} title="Carrera" />,
+    header: ({ column }) => "Carrera",
   },
   {
     accessorKey: "periodo_ingreso",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Periodo de ingreso" />
-    ),
+    header:
+      "Ingreso"
   },
   {
     accessorKey: "periodo_egreso",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Periodo de egreso" />
-    ),
+    header:
+      "Egreso"
   },
   {
     accessorKey: "num_folio",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Número de folio" />
-    ),
+    header:
+      "Folio"
   },
   {
     accessorKey: "fecha_registro_cert",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Fecha de registro (Cert.)" />
-    ),
+    header:
+      "(Certificado) Registro"
   },
   {
     accessorKey: "observaciones_cert",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Observaciones (Cert.)" />
-    ),
+    header:
+      "(Certificado) Observaciones"
   },
   {
     accessorKey: "num_titulo",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Número de título" />
-    ),
+    header:
+      "Título"
   },
   {
     accessorKey: "clave_plan",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Plan de estudios" />
-    ),
+    header:
+      "Plan de estudios"
   },
   {
     accessorKey: "fecha_acto",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Fecha del acto" />
-    ),
+    header:
+      "Fecha del acto"
   },
   {
     accessorKey: "fecha_registro_tit",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Fecha de registro (Título)" />
-    ),
+    header:
+      "(Título) Registro"
   },
   {
     accessorKey: "num_cedula",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Número de cédula" />
-    ),
+    header:
+      "Cédula"
   },
   {
     accessorKey: "observaciones_tit",
-    header: ({ column }) => (
-      <ColumnHeader column={column} title="Observaciones (Título)" />
-    ),
+    header:
+      "(Título) Observaciones"
   },
   {
     id: "actions",
@@ -153,6 +137,8 @@ export const columns: ColumnDef<Student>[] = [
         certificate={row.getValue("num_folio")}
       />
     ),
+    size: 20,
+    enableResizing: false,
     enableSorting: false,
     enableHiding: false,
   },

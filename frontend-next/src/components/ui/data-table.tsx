@@ -45,13 +45,18 @@ export function DataTable<TData, TValue>({
   const reactTable = useReactTable({
     data,
     columns,
-    columnResizeMode: "onEnd",
+    columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    defaultColumn: {
+      size: 120,
+      minSize: 50,
+      maxSize: 350,
+    },
     state: {
       sorting,
       columnFilters,
@@ -62,7 +67,9 @@ export function DataTable<TData, TValue>({
     <div className="rounded-md border">
       {reactTable.getRowModel().rows?.length ? (
         <div>
-          <Table>
+          <Table style={{
+            width: reactTable.getCenterTotalSize(),
+          }}>
             <TableHeader>
               {reactTable.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -70,20 +77,17 @@ export function DataTable<TData, TValue>({
                     return (
                       <TableHead
                         key={header.id}
-                        className={cn("resize-column", {
-                          "cursor-col-resize": header.column.columnDef.size,
-                        })}
-                        {...{
-                          onMouseDown: header.getResizeHandler(),
-                          onTouchStart: header.getResizeHandler(),
-                        }}
+                        style={{ width: header.getSize() }}
+                        onDoubleClick={() => header.column.resetSize()}
+                        onMouseDown={header.getResizeHandler()}
+                        onTouchStart={header.getResizeHandler()}
                       >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </TableHead>
                     );
                   })}
@@ -109,7 +113,9 @@ export function DataTable<TData, TValue>({
                 >
                   <TableRow data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
+                      <TableCell key={cell.id} style={{
+                        width: cell.column.getSize(),
+                      }}>
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -132,7 +138,8 @@ export function DataTable<TData, TValue>({
             </TableRow>
           </TableBody>
         </Table>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
