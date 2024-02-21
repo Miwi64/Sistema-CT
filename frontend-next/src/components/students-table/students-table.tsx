@@ -66,6 +66,7 @@ export default function StudentsTable({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     CERTIFICATE_VISIBLE_COLUMNS
   );
+  
   const [urlFilter, setUrlFilter] = useState<string>("");
   const [filters, setFilters] = useState<FilterData>({
     doc: "C",
@@ -131,9 +132,8 @@ export default function StudentsTable({
     const periodFilter = filters.period.enable ?
       `&periodo_${filters.period.criteria.toLowerCase()}=${filters.period.date}`
       : "";
-    const url = `${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`;
-    setUrlFilter(url);
-    loadData(url);
+    setUrlFilter(`${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`);
+    loadData(urlFilter);
   }, [paginationData.current_page, filters]);
   return (
     <>
@@ -181,6 +181,7 @@ export default function StudentsTable({
         setColumnVisibility={setColumnVisibility}
         columns={columns}
         data={studentData}
+        setData={setStudentData}
       />
       <section className="flex justify-center my-5">
         <PaginationHandler data={paginationData} setData={setPaginationData} />

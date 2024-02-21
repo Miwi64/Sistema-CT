@@ -11,9 +11,10 @@ import { useState } from "react";
 interface DeleteButtonProps {
   id: string;
   mode?: "button" | "context-menu-item";
+  additionalAction?: () => void
 }
 
-export const DeleteButton = ({ id, mode = "button" }: DeleteButtonProps) => {
+export const DeleteButton = ({ id, mode = "button", additionalAction }: DeleteButtonProps) => {
   const { data: session } = useSession();
 
   const router = useRouter();
@@ -76,10 +77,9 @@ export const DeleteButton = ({ id, mode = "button" }: DeleteButtonProps) => {
       notification(
         `El registro ha sido eliminado correctamente`,
         "success",
-        "Recargando la página",
+        undefined,
         isDesktop
       );
-      location.reload();
     } else {
       notification(
         `El registro ha sido eliminado correctamente`,
@@ -122,6 +122,7 @@ export const DeleteButton = ({ id, mode = "button" }: DeleteButtonProps) => {
         <Button
           onClick={async () => {
             await handleDelete(id);
+            {additionalAction && additionalAction()}
           }}
           variant="destructive"
         >

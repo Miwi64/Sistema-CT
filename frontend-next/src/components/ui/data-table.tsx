@@ -24,13 +24,13 @@ import { useState } from "react";
 import ResponsiveContextMenu from "../responsive/context-menu";
 import { tableOptions } from "@/lib/constants";
 import { DeleteButton } from "../delete-button";
-import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   columnVisibility: VisibilityState;
   setColumnVisibility: React.Dispatch<React.SetStateAction<VisibilityState>>;
+  setData: React.Dispatch<React.SetStateAction<TData[]>>;
 }
 
 export function DataTable<TData, TValue>({
@@ -38,6 +38,7 @@ export function DataTable<TData, TValue>({
   data,
   columnVisibility,
   setColumnVisibility,
+  setData
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -108,6 +109,11 @@ export function DataTable<TData, TValue>({
                     <DeleteButton
                       id={row.getValue("num_control")}
                       mode="context-menu-item"
+                      additionalAction={()=> {
+                        const dataCopy = [...data];
+                        dataCopy.splice(row.index, 1);
+                        setData(dataCopy)
+                      }}
                     />
                   }
                 >
