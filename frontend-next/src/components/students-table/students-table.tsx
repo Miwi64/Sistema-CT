@@ -82,11 +82,10 @@ export default function StudentsTable({
     period: {
       enable: false,
       criteria: "ingreso",
-      date: `${new Date().getFullYear()}${(new Date().getMonth())<8? "-02-01": "-08-1"}`
+      date: `${new Date().getFullYear()}${(new Date().getMonth()) < 8 ? "-02-01" : "-08-1"}`
     },
   });
   useEffect(() => {
-    console.log(filters)
     const loadData = async (url: string) => {
       const fetchApi = await fetch(
         `http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${url}`,
@@ -108,28 +107,31 @@ export default function StudentsTable({
       filters.doc === "C"
         ? "&certificado_fk_null=false"
         : filters.doc === "T"
-        ? "&titulo_fk_null=false"
-        : "";
+          ? "&titulo_fk_null=false"
+          : "";
     const sexFilter =
       filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : "";
     const careerFilter =
       filters.career !== -1 ? `&carrera_fk=${filters.career}` : "";
     const min = new Date(
       filters.date.min.getTime() -
-        filters.date.min.getTimezoneOffset() * 60 * 1000
+      filters.date.min.getTimezoneOffset() * 60 * 1000
     )
       .toISOString()
       .split("T")[0];
     const max = new Date(
       filters.date.max.getTime() -
-        filters.date.max.getTimezoneOffset() * 60 * 1000
+      filters.date.max.getTimezoneOffset() * 60 * 1000
     )
       .toISOString()
       .split("T")[0];
     const dateFilter = filters.date.enable
       ? `&${filters.date.criteria}_min=${min}&${filters.date.criteria}_max=${max}`
       : "";
-    const url = `${docFilter}${sexFilter}${careerFilter}${dateFilter}${orderFilter}&num_control=${filters.search}`;
+    const periodFilter = filters.period.enable ?
+      `&periodo_${filters.period.criteria}=${filters.period.date}`
+      : "";
+    const url = `${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`;
     setUrlFilter(url);
     loadData(url);
   }, [paginationData.current_page, filters]);
