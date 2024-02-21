@@ -273,6 +273,103 @@ class SearchViewAlumTit(APIView):
         else:
             return Response({'error': 'Both search terms are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class AlumnoCertificadoView(APIView):
+    def post(self, request, format=None):
+        data = request.data
+        search_term_1 = data.get('num_folio')
+        search_term_2 = data.get('num_control')
+        results_1 = Certificados.objects.filter(num_folio=search_term_1)
+        results_2 = Alumnos.objects.filter(num_control=search_term_2)
+        if results_1.exists() and results_2.exists():
+            return Response({'error':'Ambos registros ya existen'}, status=status.HTTP_400_BAD_REQUEST)
+        elif results_1.exists():
+            return Response({'error':'Un registro con ese Numero de Folio ya existe'}, status=status.HTTP_400_BAD_REQUEST)
+        elif results_2.exists():
+            return Response({'error':'Un registro con ese Numero de Control ya existe'}, status=status.HTTP_400_BAD_REQUEST)
+        else: 
+            # Crear el registro del Modelo Certificado
+            certificado = Certificados(
+                num_folio=data.get('num_folio'),
+                fecha_registro=data.get('fecha_registro'),
+                observaciones=data.get('observaciones')
+            )
+            certificado.save()
+            # Obtener el id del Modelo Certificado que acabas de crear
+            id_certificado = certificado.id_certificado
+            certificado_fk = Certificados.objects.get(id_certificado=id_certificado)
+            carrera = Carreras.objects.get(id_carrera=data.get("carrera_fk"))
+            # Crear el registro del Modelo Alumnos utilizando el id del Modelo Certificado como fk
+            alumno = Alumnos(
+                nombre=data.get('nombre'),
+                apellidop=data.get('apellidop'),
+                apellidom=data.get('apellidom'),
+                carrera_fk=carrera,
+                num_control=data.get('num_control'),
+                sexo=data.get('sexo'),
+                CURP=data.get('CURP'),
+                periodo_ingreso=data.get('periodo_ingreso'),
+                periodo_egreso=data.get('periodo_egreso'),
+                estado_nacimiento=data.get('estado_nacimiento'),
+                fecha_nacimiento=data.get('fecha_nacimiento'),
+                titulo_fk=None,
+                certificado_fk=certificado_fk
+            )
+            alumno.save()
+            return Response({'message':'Registros creados correctamente'}, status=status.HTTP_201_CREATED)
+
+class AlumnoTituloView(APIView):
+    def post(self, request, format=None):
+        data = request.data
+        search_term_1 = data.get('num_titulo')
+        search_term_2 = data.get('num_control')
+        results_1 = Titulados.objects.filter(num_titulo=search_term_1)
+        results_2 = Alumnos.objects.filter(num_control=search_term_2)
+        if results_1.exists() and results_2.exists():
+            return Response({'error':'Ambos registros ya existen'}, status=status.HTTP_400_BAD_REQUEST)
+        elif results_1.exists():
+            return Response({'error':'Un registro con ese Numero de Titulo ya existe'}, status=status.HTTP_400_BAD_REQUEST)
+        elif results_2.exists():
+            return Response({'error':'Un registro con ese Numero de Control ya existe'}, status=status.HTTP_400_BAD_REQUEST)
+        else: 
+            # Crear el registro del Modelo Titulados
+            titulo = Titulados(
+                num_titulo=data.get('num_titulo'),
+                clave_plan=data.get('clave_plan'),
+                fecha_acto=data.get('fecha_acto'),
+                fecha_registro=data.get('fecha_registro'),
+                num_cedula=data.get('num_cedula'),
+                observaciones=data.get('observaciones')
+            )
+            titulo.save()
+            # Obtener el id del Modelo Titulados que acabas de crear
+            id_titulo = titulo.id_titulo
+            titulo_fk = Titulados.objects.get(id_titulo=id_titulo)
+            carrera = Carreras.objects.get(id_carrera=data.get("carrera_fk"))
+            # Crear el registro del Modelo Alumnos utilizando el id del Modelo Certificado como fk
+            alumno = Alumnos(
+                nombre=data.get('nombre'),
+                apellidop=data.get('apellidop'),
+                apellidom=data.get('apellidom'),
+                carrera_fk=carrera,
+                num_control=data.get('num_control'),
+                sexo=data.get('sexo'),
+                CURP=data.get('CURP'),
+                periodo_ingreso=data.get('periodo_ingreso'),
+                periodo_egreso=data.get('periodo_egreso'),
+                estado_nacimiento=data.get('estado_nacimiento'),
+                fecha_nacimiento=data.get('fecha_nacimiento'),
+                titulo_fk=titulo_fk,
+                certificado_fk=None
+            )
+            alumno.save()
+            return Response({'message':'Registros creados correctamente'}, status=status.HTTP_201_CREATED)
+
+
+
+
+
+
 class CustomPagination(PageNumberPagination):
     page_size = 50
     page_size_query_param = 'limit'
