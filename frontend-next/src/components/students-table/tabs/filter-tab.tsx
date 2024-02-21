@@ -33,6 +33,7 @@ import {
   TITLE_VISIBLE_COLUMNS,
 } from "@/lib/constants";
 import {
+  BellElectric,
   BookText,
   BookType,
   CalendarIcon,
@@ -55,6 +56,7 @@ import { cn } from "@/lib/utils";
 import { VisibilityState } from "@tanstack/react-table";
 import { Calendar } from "@/components/ui/calendar";
 import { DropdownMenuSub } from "@radix-ui/react-dropdown-menu";
+import SemesterSelector from "@/components/semester-selector";
 
 interface FilterTabProps {
   careers: Career[];
@@ -372,6 +374,47 @@ const FilterTab = ({
             </>
           )
         }
+
+        <Toggle
+          pressed={filters.period.enable}
+          onPressedChange={(pressed) => setFilters({ ...filters, period: { ...filters.period, enable: pressed } })}
+          aria-label="Activar/desactivar filtro por fecha de ingreso/egreso"
+        >
+          <BellElectric className="sm:mr-2 h-5 w-5" />
+          <span className="hidden sm:block">Periódo</span>
+        </Toggle>
+        {filters.period.enable &&
+          (
+            <>
+              <Select
+                value={filters.period.criteria}
+                onValueChange={(value) => {
+                  setFilters({
+                    ...filters,
+                    period: { ...filters.period, criteria: value },
+                  });
+                }}
+              >
+                <SelectTrigger className="h-9 w-fit">
+                  <SelectValue placeholder={filters.date.criteria} />
+                </SelectTrigger>
+                <SelectContent>
+                  {["ingreso", "egreso"].map((value) => (
+                    <SelectItem key={value} value={value}>
+                      {value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="w-fit">
+              <SemesterSelector value={filters.period.date} onValueChange={
+                value => setFilters({ ...filters, period: { ...filters.period, date: value } })
+              } from={2000} />
+              </div>
+            </>
+          )
+        }
+
       </div >
     </TabsContent >
   );

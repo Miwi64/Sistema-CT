@@ -40,6 +40,11 @@ export type FilterData = {
     min: Date;
     max: Date;
   };
+  period: {
+    enable: boolean,
+    criteria: string;
+    date: string
+  };
 };
 
 export default function StudentsTable({
@@ -74,8 +79,14 @@ export default function StudentsTable({
       min: new Date("1999-01-01"),
       max: new Date(),
     },
+    period: {
+      enable: false,
+      criteria: "ingreso",
+      date: `${new Date().getFullYear()}${(new Date().getMonth())<8? "-02-01": "-08-1"}`
+    },
   });
   useEffect(() => {
+    console.log(filters)
     const loadData = async (url: string) => {
       const fetchApi = await fetch(
         `http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${url}`,
