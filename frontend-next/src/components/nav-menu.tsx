@@ -15,6 +15,7 @@ import {
   Edit2,
   FileDown,
   FileUp,
+  GraduationCap,
   LogOut,
   Menu,
   ScrollText,
@@ -71,6 +72,13 @@ const navLinks = [
     icon: <FileDown size={40} />,
     path: "/table/export",
   },
+  {
+    desktopTitle: "Carrera",
+    description: "Agregar carrera",
+    title: "Carreras",
+    icon: <GraduationCap size={40} />,
+    path: "/table/careers",
+  },
 ];
 
 export function NavMenu() {
@@ -93,7 +101,7 @@ export function NavMenu() {
             <NavigationMenuTrigger>Agregar</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-1 p-2 md:w-[300px]">
-                {[navLinks[1], navLinks[2]].map(
+                {[navLinks[1], navLinks[2], navLinks[6]].map(
                   ({ desktopTitle, path, description }) => (
                     <ListItem
                       key={desktopTitle}
