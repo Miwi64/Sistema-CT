@@ -380,7 +380,7 @@ const FilterTab = ({
           aria-label="Activar/desactivar filtro por fecha de ingreso/egreso"
         >
           <BellElectric className="sm:mr-2 h-5 w-5" />
-          <span className="hidden sm:block">Periódo</span>
+          <span className="hidden sm:block">Periodo</span>
         </Toggle>
         {filters.period.enable &&
           (
@@ -390,15 +390,15 @@ const FilterTab = ({
                 onValueChange={(value) => {
                   setFilters({
                     ...filters,
-                    period: { ...filters.period, criteria: value },
+                    period: { ...filters.period, criteria: value},
                   });
                 }}
               >
                 <SelectTrigger className="h-9 w-fit">
-                  <SelectValue placeholder={filters.date.criteria} />
+                  <SelectValue placeholder={filters.period.criteria} />
                 </SelectTrigger>
                 <SelectContent>
-                  {["ingreso", "egreso"].map((value) => (
+                  {["Ingreso", "Egreso"].map((value) => (
                     <SelectItem key={value} value={value}>
                       {value}
                     </SelectItem>

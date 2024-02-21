@@ -81,7 +81,7 @@ export default function StudentsTable({
     },
     period: {
       enable: false,
-      criteria: "ingreso",
+      criteria: "Ingreso",
       date: `${new Date().getFullYear()}${(new Date().getMonth()) < 8 ? "-02-01" : "-08-1"}`
     },
   });
@@ -129,7 +129,7 @@ export default function StudentsTable({
       ? `&${filters.date.criteria}_min=${min}&${filters.date.criteria}_max=${max}`
       : "";
     const periodFilter = filters.period.enable ?
-      `&periodo_${filters.period.criteria}=${filters.period.date}`
+      `&periodo_${filters.period.criteria.toLowerCase()}=${filters.period.date}`
       : "";
     const url = `${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`;
     setUrlFilter(url);

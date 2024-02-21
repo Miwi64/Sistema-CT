@@ -1,5 +1,4 @@
 "use client";
-import { ColumnHeader } from "@/components/column-header";
 import OptionsButton from "@/components/options-button";
 import { ColumnDef } from "@tanstack/react-table";
 
