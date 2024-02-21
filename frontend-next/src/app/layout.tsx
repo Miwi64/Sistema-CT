@@ -19,24 +19,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="es-mx" suppressHydrationWarning>
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
-        <SessionAuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SessionAuthProvider>
             {children}
-            <Toaster closeButton richColors/>
-          </ThemeProvider>
-        </SessionAuthProvider>
+            <Toaster closeButton richColors />
+          </SessionAuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

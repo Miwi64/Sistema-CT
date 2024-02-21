@@ -39,6 +39,7 @@ import {
   CalendarIcon,
   GraduationCap,
   ScrollText,
+  SortAsc,
   SortDesc,
   UserRound,
   Users,
@@ -85,77 +86,114 @@ const FilterTab = ({
     return newColumnVisibility;
   };
 
+
+  const careerFilter = () => (
+    <div className="flex items-center gap-2">
+      <p className="text-sm font-medium">Carreras</p>
+      <Select
+        value={`${filters.career}`}
+        onValueChange={(value) => {
+          setFilters({
+            ...filters,
+            career: Number(value),
+          });
+          setPaginationData((value) => ({ ...value, current_page: "1" }));
+        }}
+      >
+        <SelectTrigger className="h-9">
+          <SelectValue placeholder={filters.career} />
+        </SelectTrigger>
+        <SelectContent side="top">
+          <SelectItem value="-1">Todas</SelectItem>
+          {careers.map(({ id_carrera, nombre_carrera }) => (
+            <SelectItem key={id_carrera} value={`${id_carrera}`}>
+              {nombre_carrera}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  )
+
+  const orderFilter = () => (
+    <div className="flex items-center gap-2">
+      <p className="text-sm font-medium">Ordenar</p>
+      <Select
+        value={filters.order.criteria}
+        onValueChange={(value) => {
+          setFilters({
+            ...filters,
+            order: { criteria: value, type: filters.order.type },
+          });
+          setPaginationData((value) => ({ ...value, current_page: "1" }));
+        }}
+      >
+        <SelectTrigger className="h-9">
+          <SelectValue placeholder={filters.order.criteria} />
+        </SelectTrigger>
+        <SelectContent side="top">
+          {ORDER_CRITERIAS.map(({ text, value }) => (
+            <SelectItem key={value} value={value}>
+              {text}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <Toggle
+        variant="outline"
+        size="sm"
+        pressed={filters.order.type === "-"}
+        onPressedChange={(pressed) => {
+          const type = pressed ? "-" : "";
+          setFilters({
+            ...filters,
+            order: { criteria: filters.order.criteria, type: type },
+          });
+        }}
+      >
+        <SortDesc size={18} />
+      </Toggle>
+    </div>
+  );
+
   return (
     <TabsContent className="mt-0" value="Filtrar">
       <div
-        className="rounded-t-none rounded-b-lg flex flex-wrap items-center gap-4 
+        className="overflow-x-auto rounded-t-none rounded-b-lg flex items-center gap-4 
                 px-4 py-3 border bg-card text-card-foreground shadow-md"
       >
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-medium">Ordenar</p>
-          <Select
-            value={filters.order.criteria}
-            onValueChange={(value) => {
-              setFilters({
-                ...filters,
-                order: { criteria: value, type: filters.order.type },
-              });
-              setPaginationData((value) => ({ ...value, current_page: "1" }));
-            }}
-          >
-            <SelectTrigger className="h-9">
-              <SelectValue placeholder={filters.order.criteria} />
-            </SelectTrigger>
-            <SelectContent side="top">
-              {ORDER_CRITERIAS.map(({ text, value }) => (
-                <SelectItem key={value} value={value}>
-                  {text}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Toggle
-            variant="outline"
-            size="sm"
-            pressed={filters.order.type === "-"}
-            onPressedChange={(pressed) => {
-              const type = pressed ? "-" : "";
-              setFilters({
-                ...filters,
-                order: { criteria: filters.order.criteria, type: type },
-              });
-            }}
-          >
-            <SortDesc size={18} />
-          </Toggle>
+        <div className="hidden md:block">{orderFilter()}</div>
+        <div className="md:hidden">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+              >
+                <SortAsc className="sm:mr-2 h-5 w-5" />
+                <span className="hidden sm:block">Ordenar</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-5" align="start">
+              {orderFilter()}
+            </PopoverContent>
+          </Popover>
         </div>
-
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-medium">Carreras</p>
-          <Select
-            value={`${filters.career}`}
-            onValueChange={(value) => {
-              setFilters({
-                ...filters,
-                career: Number(value),
-              });
-              setPaginationData((value) => ({ ...value, current_page: "1" }));
-            }}
-          >
-            <SelectTrigger className="h-9">
-              <SelectValue placeholder={filters.career} />
-            </SelectTrigger>
-            <SelectContent side="top">
-              <SelectItem value="-1">Todas</SelectItem>
-              {careers.map(({ id_carrera, nombre_carrera }) => (
-                <SelectItem key={id_carrera} value={`${id_carrera}`}>
-                  {nombre_carrera}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="hidden md:block">{careerFilter()}</div>
+        <div className="md:hidden">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant={"outline"}
+              >
+                <GraduationCap className="sm:mr-2 h-5 w-5" />
+                <span className="hidden sm:block">Carreras</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-5" align="start">
+              {careerFilter()}
+            </PopoverContent>
+          </Popover>
         </div>
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
@@ -280,6 +318,45 @@ const FilterTab = ({
           </DropdownMenuContent>
         </DropdownMenu>
 
+        <Toggle
+          pressed={filters.period.enable}
+          onPressedChange={(pressed) => setFilters({ ...filters, period: { ...filters.period, enable: pressed } })}
+          aria-label="Activar/desactivar filtro por fecha de ingreso/egreso"
+        >
+          <BellElectric className="sm:mr-2 h-5 w-5" />
+          <span className="hidden sm:block">Periodo</span>
+        </Toggle>
+        {filters.period.enable &&
+          (
+            <>
+              <Select
+                value={filters.period.criteria}
+                onValueChange={(value) => {
+                  setFilters({
+                    ...filters,
+                    period: { ...filters.period, criteria: value },
+                  });
+                }}
+              >
+                <SelectTrigger className="h-9 w-fit">
+                  <SelectValue placeholder={filters.period.criteria} />
+                </SelectTrigger>
+                <SelectContent>
+                  {["Ingreso", "Egreso"].map((value) => (
+                    <SelectItem key={value} value={value}>
+                      {value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <div className="w-fit">
+                <SemesterSelector value={filters.period.date} onValueChange={
+                  value => setFilters({ ...filters, period: { ...filters.period, date: value } })
+                } from={2000} />
+              </div>
+            </>
+          )
+        }
 
         <Toggle
           pressed={filters.date.enable}
@@ -373,47 +450,6 @@ const FilterTab = ({
             </>
           )
         }
-
-        <Toggle
-          pressed={filters.period.enable}
-          onPressedChange={(pressed) => setFilters({ ...filters, period: { ...filters.period, enable: pressed } })}
-          aria-label="Activar/desactivar filtro por fecha de ingreso/egreso"
-        >
-          <BellElectric className="sm:mr-2 h-5 w-5" />
-          <span className="hidden sm:block">Periodo</span>
-        </Toggle>
-        {filters.period.enable &&
-          (
-            <>
-              <Select
-                value={filters.period.criteria}
-                onValueChange={(value) => {
-                  setFilters({
-                    ...filters,
-                    period: { ...filters.period, criteria: value},
-                  });
-                }}
-              >
-                <SelectTrigger className="h-9 w-fit">
-                  <SelectValue placeholder={filters.period.criteria} />
-                </SelectTrigger>
-                <SelectContent>
-                  {["Ingreso", "Egreso"].map((value) => (
-                    <SelectItem key={value} value={value}>
-                      {value}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <div className="w-fit">
-              <SemesterSelector value={filters.period.date} onValueChange={
-                value => setFilters({ ...filters, period: { ...filters.period, date: value } })
-              } from={2000} />
-              </div>
-            </>
-          )
-        }
-
       </div >
     </TabsContent >
   );
