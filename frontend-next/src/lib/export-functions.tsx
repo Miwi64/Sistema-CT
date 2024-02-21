@@ -9,21 +9,31 @@ import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { VisibilityState } from "@tanstack/react-table";
 import { notification } from "@/components/responsive/notification";
 
-type GobReportData = [
-  {
-    gen: number;
-    count: number;
-    year: number;
-    students: [
-      {
-        name: string;
-        last_name1: string;
-        last_name2: String;
-        title_date: string;
-      }
-    ];
-  }
-];
+type GobReportData = {
+  summary: [
+    {
+      year: number,
+      total: number,
+      graduates: number,
+      titles: number
+    }
+  ],
+  sheets: [
+    {
+      gen: number;
+      count: number;
+      year: number;
+      students: [
+        {
+          name: string;
+          last_name1: string;
+          last_name2: String;
+          title_date: string;
+        }
+      ]
+    }
+  ]
+}
 
 type Est911ReportData = {
   graduates: [
@@ -64,7 +74,7 @@ export const generateEst911Report = async (
   data: Est911ReportData,
   careers: Career[]
 ) => {
-  const results = careers.map(career => ({career: career.nombre_carrera}));
+  const results = careers.map(career => ({ career: career.nombre_carrera }));
   const { graduates, titles } = data;
   const excelTemplate = await JsExcelTemplate.fromArrayBuffer(template);
   excelTemplate.set("graduates", graduates);
@@ -83,7 +93,8 @@ export const generateGobReport = async (
   data: GobReportData,
   career: string
 ) => {
-  const years = data.map((value) => value.year);
+  const {summary, sheets} = data;
+  const years = sheets.map((value) => value.year);
   const workbook = new ExcelJS.Workbook();
   await workbook.xlsx.load(template).then(() => {
     const sheetToDuplicate = workbook.getWorksheet("year");
@@ -116,15 +127,14 @@ export const generateGobReport = async (
   });
   workbook.xlsx.writeBuffer().then(async (buffer) => {
     const excelTemplate = await JsExcelTemplate.fromArrayBuffer(buffer);
-    for (const sheet of data) {
+    for (const sheet of sheets) {
       const { year, count, gen, students } = sheet;
       excelTemplate.set(`year${year}`, `${year}`);
       excelTemplate.set(`count${year}`, `${count}`);
       excelTemplate.set(`gen${year}`, `${gen}`);
       excelTemplate.set(`students${year}`, students);
     }
-    const results = data.map((value) => ({ count: value.count, year: value.year }));
-    excelTemplate.set(`results`, results);
+    excelTemplate.set(`summary`, summary);
     excelTemplate.set(`career`, career);
     try {
       const blob = await excelTemplate.toBlob();
