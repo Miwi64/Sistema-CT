@@ -1,4 +1,3 @@
-import { useMediaQuery } from "@/hooks/use-media-query";
 import { toast } from "sonner"
 
 export const notification = (message: string,

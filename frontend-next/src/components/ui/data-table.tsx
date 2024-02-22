@@ -24,6 +24,7 @@ import { useState } from "react";
 import ResponsiveContextMenu from "../responsive/context-menu";
 import { tableOptions } from "@/lib/constants";
 import { DeleteButton } from "../delete-button";
+import TableContextMenu from "../students-table/table-context-menu";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -97,25 +98,15 @@ export function DataTable<TData, TValue>({
             </TableHeader>
             <TableBody>
               {reactTable.getRowModel().rows.map((row) => (
-                <ResponsiveContextMenu
+                <TableContextMenu
                   title={row.getValue("num_control")}
-                  options={tableOptions(
-                    row.getValue("num_control"),
-                    row.getValue("num_titulo"),
-                    row.getValue("num_folio")
-                  )}
+                  id={row.getValue("num_control")}
                   key={row.id}
-                  additionalOptions={
-                    <DeleteButton
-                      id={row.getValue("num_control")}
-                      mode="context-menu-item"
-                      additionalAction={()=> {
-                        const dataCopy = [...data];
-                        dataCopy.splice(row.index, 1);
-                        setData(dataCopy)
-                      }}
-                    />
-                  }
+                  afterDelete={() => {
+                    const dataCopy = [...data];
+                    dataCopy.splice(row.index, 1);
+                    setData(dataCopy)
+                  }}
                 >
                   <TableRow data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => (
@@ -129,7 +120,7 @@ export function DataTable<TData, TValue>({
                       </TableCell>
                     ))}
                   </TableRow>
-                </ResponsiveContextMenu>
+                </TableContextMenu>
               ))}
             </TableBody>
           </Table>

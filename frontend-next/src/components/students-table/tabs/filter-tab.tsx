@@ -57,7 +57,7 @@ import { cn } from "@/lib/utils";
 import { VisibilityState } from "@tanstack/react-table";
 import { Calendar } from "@/components/ui/calendar";
 import { DropdownMenuSub } from "@radix-ui/react-dropdown-menu";
-import SemesterSelector from "@/components/semester-selector";
+import SemesterSelector from "@/components/custom-selectors/semester-selector";
 
 interface FilterTabProps {
   careers: Career[];

@@ -19,7 +19,7 @@ import React, { ChangeEvent, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { notification } from "../responsive/notification";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import YearSelector from "../year-selector";
+import YearSelector from "../custom-selectors/year-selector";
 
 interface ExportFormProps {
   careers: Career[];

@@ -28,11 +28,10 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../../ui/calendar";
 import { Session } from "next-auth";
-import { toast } from "sonner";
 import { STUDENT_SCHEMA } from "@/lib/form-schemas";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "@/components/responsive/notification";
-import SemesterSelector from "@/components/semester-selector";
+import SemesterSelector from "@/components/custom-selectors/semester-selector";
 
 const { num_control, ...fields } = STUDENT_SCHEMA
 const formSchema = z.object({

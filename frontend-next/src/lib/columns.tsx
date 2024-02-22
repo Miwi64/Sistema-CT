@@ -1,5 +1,4 @@
 "use client";
-import OptionsButton from "@/components/options-button";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type Student = {
@@ -126,19 +125,5 @@ export const columns: ColumnDef<Student>[] = [
     accessorKey: "observaciones_tit",
     header:
       "(Título) Observaciones"
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => (
-      <OptionsButton
-        id={row.getValue("num_control")}
-        title={row.getValue("num_titulo")}
-        certificate={row.getValue("num_folio")}
-      />
-    ),
-    size: 20,
-    enableResizing: false,
-    enableSorting: false,
-    enableHiding: false,
-  },
+  }
 ];

@@ -1,5 +1,5 @@
 "use client";
-import StudentFields from "@/components/student-fields";
+import StudentFields from "@/components/form-fields/student-fields";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {

@@ -5,8 +5,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
+} from "../ui/form";
+import { Input } from "../ui/input";
 import { UseFormReturn } from "react-hook-form";
 import {
   Select,
@@ -14,15 +14,15 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "../ui/select";
 import { STATES } from "@/lib/constants";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { Button } from "./ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "../ui/button";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { Calendar } from "./ui/calendar";
+import { Calendar } from "../ui/calendar";
 import { cn } from "@/lib/utils";
-import SemesterSelector from "./semester-selector";
+import SemesterSelector from "../custom-selectors/semester-selector";
 
 interface StudentFieldsProps {
   form: UseFormReturn<any>;
