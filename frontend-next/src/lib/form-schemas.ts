@@ -64,8 +64,16 @@ export const STUDENT_SCHEMA = {
 }
 
 export const TITLE_SCHEMA = {
-    num_titulo: z.coerce.number({ invalid_type_error: "Introducir solo digitos", required_error: "Campo requerido" }).lte(9999999, "Límite de caracteres excedido"),
-    num_cedula: z.coerce.number({ invalid_type_error: "Introducir solo digitos", required_error: "Campo requerido" }).lte(9999999, "Límite de caracteres excedido"),
+    num_titulo: z
+        .string({ required_error: "Campo requerido" })
+        .transform((value) => {
+            if (/^(?!\s*$).+/.test(value)) {
+                return value;
+            }
+            return value.replace(/\s+/g, "");
+        })
+        .pipe(z.string().min(8, { message: "Minimo 8 caracteres" })),
+    num_cedula: z.string().max(10, "Máximo 10 caracteres").optional(),
     observaciones_tit: z
         .string()
         .max(150, "Límite de caracteres excedido")
@@ -88,7 +96,15 @@ export const TITLE_SCHEMA = {
 }
 
 export const CERTIFICATE_SCHEMA = {
-    num_folio: z.coerce.number({ invalid_type_error: "Introducir solo digitos", required_error: "Campo requerido" }).lte(9999999, "Límite de caracteres excedido"),
+    num_folio: z
+        .string({ required_error: "Campo requerido" })
+        .transform((value) => {
+            if (/^(?!\s*$).+/.test(value)) {
+                return value;
+            }
+            return value.replace(/\s+/g, "");
+        })
+        .pipe(z.string().min(1, { message: "Campo requerido" })),
     fecha_registro_cert: z
         .date({ required_error: "Campo requerido" })
         .transform((value) => value.toISOString().split("T")[0]),

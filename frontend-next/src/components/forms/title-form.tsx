@@ -66,6 +66,16 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      num_control: "",
+      nombre: "",
+      apellidom: "",
+      apellidop: "",
+      CURP: "",
+      num_cedula: "",
+      num_titulo: "",
+      clave_plan: ""
+    }
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -218,7 +228,7 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de título</FormLabel>
                 <FormControl>
-                  <Input placeholder="Número de título" {...field} />
+                  <Input type="number" placeholder="Número de título" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -231,7 +241,7 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de cédula</FormLabel>
                 <FormControl>
-                  <Input placeholder="Número de cédula" {...field} />
+                  <Input type="number" placeholder="Número de cédula" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

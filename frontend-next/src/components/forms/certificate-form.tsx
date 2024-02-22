@@ -67,6 +67,14 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      num_control: "",
+      nombre: "",
+      apellidom: "",
+      apellidop: "",
+      CURP: "",
+      num_folio: ""
+    }
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -187,7 +195,7 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de folio</FormLabel>
                 <FormControl>
-                  <Input placeholder="Número de folio" {...field} />
+                  <Input type="number" placeholder="Número de folio" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

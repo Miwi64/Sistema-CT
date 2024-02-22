@@ -40,6 +40,11 @@ const LinkTitleForm = ({ studentData, session }: LinkTitleFormProps) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      num_titulo: "",
+      num_cedula: "",
+      clave_plan: ""
+    }
   });
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -108,7 +113,7 @@ const LinkTitleForm = ({ studentData, session }: LinkTitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de título</FormLabel>
                 <FormControl>
-                  <Input placeholder="Número de título" {...field} />
+                  <Input type="number" placeholder="Número de título" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -121,7 +126,7 @@ const LinkTitleForm = ({ studentData, session }: LinkTitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de cédula</FormLabel>
                 <FormControl>
-                  <Input placeholder="Número de cédula" {...field} />
+                  <Input type="number" placeholder="Número de cédula" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

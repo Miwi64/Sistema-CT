@@ -50,6 +50,9 @@ const LinkCertificateForm = ({
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      num_folio: ""
+    }
   });
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
