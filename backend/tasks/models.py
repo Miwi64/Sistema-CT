@@ -14,7 +14,7 @@ class Titulados(models.Model):
     clave_plan = models.CharField(max_length=20, blank=True)
     fecha_acto = models.DateField()
     fecha_registro = models.DateField()
-    num_cedula = models.IntegerField(blank=True)
+    num_cedula = models.CharField(max_length=10, blank=True)
     observaciones = models.TextField(max_length=45, blank=True)
     def __str__(self):
         return self.num_titulo

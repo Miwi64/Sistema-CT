@@ -74,11 +74,12 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
       CURP: "",
       num_cedula: "",
       num_titulo: "",
-      clave_plan: ""
-    }
+      clave_plan: "",
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
     const checkNotDuplicated = await fetch(
       `http://localhost:8000/data/api/v1/alumno-titulo/`,
       {
@@ -228,7 +229,11 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de título</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Número de título" {...field} />
+                  <Input
+                    type="number"
+                    placeholder="Número de título"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -241,7 +246,11 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de cédula</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Número de cédula" {...field} />
+                  <Input
+                    type="number"
+                    placeholder="Número de cédula"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

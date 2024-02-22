@@ -73,11 +73,12 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
       apellidom: "",
       apellidop: "",
       CURP: "",
-      num_folio: ""
-    }
+      num_folio: "",
+    },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(values);
     const checkNotDuplicated = await fetch(
       `http://localhost:8000/data/api/v1/alumno-certificado/`,
       {
@@ -195,7 +196,11 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de folio</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Número de folio" {...field} />
+                  <Input
+                    type="number"
+                    placeholder="Número de folio"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
