@@ -39,26 +39,27 @@ export default async function Page({ params }: { params: { id: string } }) {
   } = await getData(session, params.id);
   return (
     <>
-      <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
+      <h1 className="my-3 text-2xl font-semibold leading-none tracking-tight">
         Editar
       </h1>
-      <section className="flex gap-2 text-muted-foreground">
-        <Link2 /> Anexar
-      </section>
-      <section className="flex gap-3 mt-3 mb-10">
-        <Button variant="secondary" asChild>
-          <a href={`/table/link/${params.id}`}>
-            <BookType className="mr-2" />
-            <span className="inline">Título</span>
-          </a>
-        </Button>
-        <Button variant="secondary" asChild>
-          <a href={`/table/link/${params.id}`}>
-            <ScrollText className="mr-2" />
-            <span className="inline">Certificado</span>
-          </a>
-        </Button>
-      </section>
+      {!student.titulo_fk || !student.certificado_fk &&
+        <><section className="flex gap-2 text-muted-foreground">
+          <Link2 /> Anexar
+        </section>
+          <section className="flex gap-3 mt-3 mb-10">
+            {!student.titulo_fk && <Button variant="secondary" asChild>
+              <a href={`/table/link/${params.id}`}>
+                <BookType className="mr-2" />
+                <span className="inline">Título</span>
+              </a>
+            </Button>}
+            {!student.certificado_fk && <Button variant="secondary" asChild>
+              <a href={`/table/link/${params.id}`}>
+                <ScrollText className="mr-2" />
+                <span className="inline">Certificado</span>
+              </a>
+            </Button>}
+          </section></>}
       <EditStudent session={session} studentData={student} careers={careers} />
       {student.titulo_fk &&
         <>
