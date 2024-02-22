@@ -104,7 +104,7 @@ export const CERTIFICATE_SCHEMA = {
             }
             return value.replace(/\s+/g, "");
         })
-        .pipe(z.string().min(1, { message: "Campo requerido" })),
+        .pipe(z.string().min(1, { message: "Campo requerido" }).max(10, "Máximo 10 caracteres")),
     fecha_registro_cert: z
         .date({ required_error: "Campo requerido" })
         .transform((value) => value.toISOString().split("T")[0]),

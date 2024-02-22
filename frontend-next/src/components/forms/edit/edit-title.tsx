@@ -92,7 +92,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
               <FormItem className="">
                 <FormLabel>Número de cedula</FormLabel>
                 <FormControl>
-                  <Input placeholder="Número de cédula" {...field} />
+                  <Input type="number" placeholder="Número de cédula" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
