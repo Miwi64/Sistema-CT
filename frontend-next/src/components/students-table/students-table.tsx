@@ -102,7 +102,6 @@ export default function StudentsTable({
       setPaginationData(pagination);
       setStudentData(results);
     };
-    console.log(columnVisibility);
     const orderFilter = `&order_by=${filters.order.type}${filters.order.criteria}`;
     const docFilter =
       filters.doc === "C"
@@ -133,7 +132,7 @@ export default function StudentsTable({
       `&periodo_${filters.period.criteria.toLowerCase()}=${filters.period.date}`
       : "";
     setUrlFilter(`${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`);
-    loadData(urlFilter);
+    loadData(`${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`);
   }, [paginationData.current_page, filters]);
   return (
     <>
