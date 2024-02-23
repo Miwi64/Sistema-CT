@@ -1,12 +1,14 @@
-import { ModeSelect } from "@/components/mode-toggle";
+"use client"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Github, InfoIcon, Paintbrush2, User2 } from "lucide-react";
+import { useTheme } from "next-themes";
 
 const Settings = () => {
+  const { setTheme, theme } = useTheme()
   return (
     <>
       <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">Configuración</h1>
@@ -25,9 +27,16 @@ const Settings = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div>
-                  <ModeSelect />
-                </div>
+                <Select value={theme} onValueChange={setTheme}>
+                  <SelectTrigger>
+                    <SelectValue placeholder={theme} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="light">Claro</SelectItem>
+                    <SelectItem value="dark">Oscuro</SelectItem>
+                    <SelectItem value="system">Sistema</SelectItem>
+                  </SelectContent>
+                </Select>
                 <div className="mt-5">
                   <Label htmlFor="username">Feature 2</Label>
                   <Select>
@@ -58,7 +67,7 @@ const Settings = () => {
               <CardContent className="space-y-2">
                 <h2 className="leading-none tracking-tight">Desarrolladores</h2>
                 <Button variant="ghost" className="text-muted-foreground w-full md:max-w-[250px] justify-start" asChild>
-                  <a href="#"><User2 size={20} className="mr-3"/>Miguel Argote Reyes</a>
+                  <a href="#"><User2 size={20} className="mr-3" />Miguel Argote Reyes</a>
                 </Button>
                 <Button variant="ghost" className="text-muted-foreground w-full md:max-w-[250px] justify-start" asChild>
                   <a href="#"><User2 size={20} className="mr-3" />André Axel Cadena Zepeda</a>

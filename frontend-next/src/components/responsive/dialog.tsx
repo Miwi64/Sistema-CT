@@ -26,7 +26,7 @@ const ResponsiveDialog = ({ children, controlledOpen,
                 <DialogTrigger asChild>
                     {trigger}
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[425px] bg-card text-card-foreground">
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                         <DialogDescription>
@@ -43,7 +43,7 @@ const ResponsiveDialog = ({ children, controlledOpen,
             <DrawerTrigger asChild>
                 {trigger}
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent className="bg-card text-card-foreground">
                 <DrawerHeader className="text-left">
                     <DrawerTitle>{title}</DrawerTitle>
                     <DrawerDescription>

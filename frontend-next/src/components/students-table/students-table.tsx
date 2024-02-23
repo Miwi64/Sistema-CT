@@ -136,20 +136,20 @@ export default function StudentsTable({
   }, [paginationData.current_page, filters]);
   return (
     <>
-      <Tabs defaultValue="Inicio" className="min-w-[200px] mb-3">
+      <Tabs defaultValue="Inicio" className="min-w-[200px] my-3">
         <TabsList
           className="w-full rounded-b-none flex flex-row justify-start 
-            items-center overflow-x-auto overflow-y-visible"
+            items-center overflow-x-auto overflow-y-visible h-15"
         >
-          <TabsTrigger value="Inicio">
+          <TabsTrigger value="Inicio" className="data-[state=active]:text-primary dark:data-[state=active]:text-foreground">
             <Home size={14} className="mr-2" />
             Inicio
           </TabsTrigger>
-          <TabsTrigger value="Filtrar">
+          <TabsTrigger value="Filtrar" className="data-[state=active]:text-primary dark:data-[state=active]:text-foreground">
             <Filter size={14} className="mr-2" />
             Filtrar
           </TabsTrigger>
-          <TabsTrigger value="Pagina">
+          <TabsTrigger value="Pagina" className="data-[state=active]:text-primary dark:data-[state=active]:text-foreground">
             <File size={14} className="mr-2" />
             Página
           </TabsTrigger>

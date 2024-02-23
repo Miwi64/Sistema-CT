@@ -21,9 +21,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
-import ResponsiveContextMenu from "../responsive/context-menu";
-import { tableOptions } from "@/lib/constants";
-import { DeleteButton } from "../delete-button";
 import TableContextMenu from "../students-table/table-context-menu";
 
 interface DataTableProps<TData, TValue> {
@@ -80,6 +77,7 @@ export function DataTable<TData, TValue>({
                       <TableHead
                         key={header.id}
                         style={{ width: header.getSize() }}
+                        className="font-semibold text-primary dark:text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
                         onDoubleClick={() => header.column.resetSize()}
                         onMouseDown={header.getResizeHandler()}
                         onTouchStart={header.getResizeHandler()}
@@ -108,7 +106,7 @@ export function DataTable<TData, TValue>({
                     setData(dataCopy)
                   }}
                 >
-                  <TableRow data-state={row.getIsSelected() && "selected"}>
+                  <TableRow className="hover:bg-accent" data-state={row.getIsSelected() && "selected"}>
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} style={{
                         width: cell.column.getSize(),

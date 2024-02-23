@@ -179,14 +179,14 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <h2 className="my-5 text-lg leading-none tracking-tight">
+        <h2 className="my-5 text-muted-foreground text-lg leading-none tracking-tight">
           Datos del estudiante
         </h2>
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           <StudentFields form={form} />
         </section>
         <Separator className="my-8" />
-        <h2 className="mb-5 text-lg leading-none tracking-tight">
+        <h2 className="mb-5 text-muted-foreground text-lg leading-none tracking-tight">
           Datos del certificado
         </h2>
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

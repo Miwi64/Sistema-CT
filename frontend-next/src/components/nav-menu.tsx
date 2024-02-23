@@ -85,7 +85,7 @@ export function NavMenu() {
   const { data: session } = useSession();
 
   return (
-    <div className="bg-background hidden md:flex justify-between pl-1 w-full py-2">
+    <div className="bg-primary text-primary-foreground hidden md:flex justify-between px-2 w-full py-2">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
@@ -146,11 +146,6 @@ export function NavMenu() {
 
           <NavigationMenuItem>
             <NavigationMenuTrigger>
-              <Avatar className="h-[1.5rem] w-[1.5rem] mr-3">
-                <AvatarFallback>
-                  <User size={14} />
-                </AvatarFallback>
-              </Avatar>
               Cuenta
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -181,6 +176,7 @@ export function NavMenu() {
                   Nombre, contraseña.
                 </ListItem>
                 <ListItem
+                  className="cursor-pointer"
                   onClick={async () => {
                     //console.log(session?.token);
                     const signout = await fetch(

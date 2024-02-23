@@ -113,7 +113,7 @@ const TableContextMenu = ({ id, children, title, afterDelete }: TableContextMenu
                     <Trash2 className="mr-2" />
                     <span>Eliminar</span>
                 </Button>
-                <Button onClick={() => setDialogOpen(false)} variant="outline">
+                <Button onClick={() => setDialogOpen(false)} variant="secondary">
                     Cancelar
                 </Button>
             </section>
@@ -126,7 +126,7 @@ const TableContextMenu = ({ id, children, title, afterDelete }: TableContextMenu
                 <ContextMenuTrigger asChild>
                     {children}
                 </ContextMenuTrigger>
-                <ContextMenuContent >
+                <ContextMenuContent className="bg-card text-card-foreground">
                     <ContextMenuLabel>{title}</ContextMenuLabel>
                     <ContextMenuSeparator />
                     {contextMenuItems(id).map(
@@ -160,7 +160,7 @@ const TableContextMenu = ({ id, children, title, afterDelete }: TableContextMenu
                     {children}
                 </ContextMenuTrigger>
             </ContextMenu>
-            <DrawerContent>
+            <DrawerContent className="bg-card text-card-foreground">
                 <DrawerHeader className="text-left">
                     <DrawerTitle>{title}</DrawerTitle>
                     <DrawerDescription>Opciones</DrawerDescription>
