@@ -36,6 +36,7 @@ import { useRouter } from "next/navigation";
 import { notification } from "@/components/responsive/notification";
 import { Session } from "next-auth";
 import { STUDENT_SCHEMA, TITLE_SCHEMA } from "@/lib/form-schemas";
+import NumericInput from "../custom-selectors/numeric-input";
 
 const formSchema = z.object({
   ...STUDENT_SCHEMA,
@@ -229,11 +230,7 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de título</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Número de título"
-                    {...field}
-                  />
+                  <NumericInput placeholder="Número de título" field={field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -246,11 +243,7 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de cédula</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Número de cédula"
-                    {...field}
-                  />
+                  <NumericInput placeholder="Número de cédula" field={field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

@@ -25,6 +25,7 @@ import { Input } from "../../ui/input";
 import { TITLE_SCHEMA } from "@/lib/form-schemas";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "@/components/responsive/notification";
+import NumericInput from "@/components/custom-selectors/numeric-input";
 
 
 const { num_titulo, ...fields } = TITLE_SCHEMA
@@ -92,7 +93,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
               <FormItem className="">
                 <FormLabel>Número de cedula</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Número de cédula" {...field} />
+                  <NumericInput placeholder="Número de cédula" field={field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

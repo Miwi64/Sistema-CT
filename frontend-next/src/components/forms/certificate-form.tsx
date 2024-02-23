@@ -36,6 +36,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "@/components/responsive/notification";
 import { Session } from "next-auth";
 import { CERTIFICATE_SCHEMA, STUDENT_SCHEMA } from "@/lib/form-schemas";
+import NumericInput from "../custom-selectors/numeric-input";
 
 const formSchema = z.object({
   ...STUDENT_SCHEMA,
@@ -196,11 +197,7 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de folio</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="Número de folio"
-                    {...field}
-                  />
+                  <NumericInput placeholder="Número de folio" field={field}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>

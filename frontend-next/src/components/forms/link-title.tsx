@@ -30,6 +30,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "../responsive/notification";
 import { useState } from "react";
 import ResponsiveDialog from "../responsive/dialog";
+import NumericInput from "../custom-selectors/numeric-input";
 
 const formSchema = z.object(TITLE_SCHEMA);
 
@@ -135,7 +136,7 @@ const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
             <FormItem className="">
               <FormLabel>Número de título</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Número de título" {...field} />
+                <NumericInput placeholder="Número de título" field={field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -148,7 +149,7 @@ const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
             <FormItem className="">
               <FormLabel>Número de cédula</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Número de cédula" {...field} />
+                <NumericInput placeholder="Número de cédula" field={field} />
               </FormControl>
               <FormMessage />
             </FormItem>

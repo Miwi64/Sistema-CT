@@ -29,6 +29,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "../responsive/notification";
 import ResponsiveDialog from "../responsive/dialog";
 import { useState } from "react";
+import NumericInput from "../custom-selectors/numeric-input";
 
 const formSchema = z.object(CERTIFICATE_SCHEMA);
 
@@ -132,7 +133,7 @@ const LinkCertificateForm = ({
             <FormItem className="">
               <FormLabel>Número de folio</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Número de folio" {...field} />
+                <NumericInput placeholder="Número de folio" field={field} />
               </FormControl>
               <FormMessage />
             </FormItem>
