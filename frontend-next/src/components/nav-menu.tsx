@@ -145,9 +145,7 @@ export function NavMenu() {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger>
-              Cuenta
-            </NavigationMenuTrigger>
+            <NavigationMenuTrigger>Cuenta</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-1 py-4 px-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                 <li className="row-span-3">
@@ -232,7 +230,7 @@ export function NavMobile() {
               focus:shadow-md text-center"
             >
               <div className="w-full flex justify-center">
-                <a href="/profile">
+                <a href="/table/profile">
                   <Avatar className="w-[60px] h-[60px]">
                     <AvatarFallback>
                       <User size={30} />
@@ -248,7 +246,7 @@ export function NavMobile() {
               </div>
               <div className="w-full flex justify-center gap-2">
                 <Button variant="outline" asChild>
-                  <a href="/profile">
+                  <a href="/table/profile">
                     <Edit2 size={20} />
                   </a>
                 </Button>
@@ -256,7 +254,7 @@ export function NavMobile() {
                   <LogOut size={20} />
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href="/settings">
+                  <a href="/table/settings">
                     <Settings size={20} />
                   </a>
                 </Button>
