@@ -131,7 +131,7 @@ const TableContextMenu = ({ id, children, title, afterDelete }: TableContextMenu
                     <ContextMenuSeparator />
                     {contextMenuItems(id).map(
                         ({ label, icon, link }) => (
-                            <ContextMenuItem asChild>
+                            <ContextMenuItem key={label} asChild>
                                 <a href={link}>
                                     {icon}
                                     <span className="ml-2">{label}</span>
