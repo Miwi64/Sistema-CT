@@ -409,8 +409,8 @@ class AlumnoFilter(filters.FilterSet):
     apellidop = filters.CharFilter(lookup_expr='icontains')
     apellidom =filters.CharFilter(lookup_expr='icontains')
     num_control = filters.CharFilter(lookup_expr='icontains')
-    sexo = filters.CharFilter(field_name='sexo',lookup_expr='in')
-    sexo_not = filters.CharFilter(field_name='sexo', lookup_expr='in' ,exclude=True)
+    genero = filters.CharFilter(field_name='sexo',lookup_expr='in')
+    genero_not = filters.CharFilter(field_name='sexo', lookup_expr='in' ,exclude=True)
     CURP = filters.CharFilter(lookup_expr='icontains')
     periodo_ingreso = django_filters.DateFilter(field_name='periodo_ingreso', lookup_expr='exact')
     periodo_egreso = django_filters.DateFilter(field_name='periodo_egreso' ,lookup_expr='exact')
@@ -446,7 +446,7 @@ class AlumnoFilter(filters.FilterSet):
 
     class Meta:
         model = Alumnos
-        fields = ['nombre','apellidop','apellidom','num_control','sexo', 'sexo_not','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk','certificado_fk_null','titulo_fk_null', 'registro_tit_min', 'registro_tit_max', 'registro_cert_min', 'registro_cert_max', 'nacimiento_min', 'nacimiento_max']
+        fields = ['nombre','apellidop','apellidom','num_control','genero', 'genero_not','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk','certificado_fk_null','titulo_fk_null', 'registro_tit_min', 'registro_tit_max', 'registro_cert_min', 'registro_cert_max', 'nacimiento_min', 'nacimiento_max']
 
     
 class AlumView(generics.ListAPIView):
