@@ -299,7 +299,7 @@ const FilterTab = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>Sexo</DropdownMenuLabel>
+            <DropdownMenuLabel>Género</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
               value={filters.gender}

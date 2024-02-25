@@ -220,4 +220,15 @@ export const DATE_CRITERIAS = [
     { text: "Registro de título", value: "registro_tit" }
 ]
 
+export const DEVELOPERS = [
+    {
+        name: "Miguel Argote Reyes",
+        link: "https://github.com/Miwi64"
+    },
+    {
+        name: "André Axel Cadena Zepeda",
+        link: "https://github.com/AndreCaze"
+    }
+]
+
 
