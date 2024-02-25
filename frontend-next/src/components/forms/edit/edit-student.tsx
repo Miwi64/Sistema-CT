@@ -152,7 +152,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="sexo"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Sexo</FormLabel>
+                <FormLabel>Género</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}

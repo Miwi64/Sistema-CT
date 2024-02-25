@@ -295,16 +295,16 @@ const FilterTab = ({
           <DropdownMenuTrigger asChild>
             <Button variant="outline">
               <Users className="sm:mr-2 h-5 w-5" />
-              <span className="hidden sm:block">Sexo</span>
+              <span className="hidden sm:block">Género</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
             <DropdownMenuLabel>Sexo</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
-              value={filters.sex}
+              value={filters.gender}
               onValueChange={(value) =>
-                setFilters({ ...filters, sex: value })
+                setFilters({ ...filters, gender: value })
               }
             >
               <DropdownMenuRadioItem value="M">

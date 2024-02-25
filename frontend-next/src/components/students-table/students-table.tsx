@@ -27,7 +27,7 @@ export type Career = {
 
 export type FilterData = {
   doc: string;
-  sex: string;
+  gender: string;
   search: string;
   career: number;
   order: {
@@ -70,7 +70,7 @@ export default function StudentsTable({
   const [urlFilter, setUrlFilter] = useState<string>("");
   const [filters, setFilters] = useState<FilterData>({
     doc: "C",
-    sex: "B",
+    gender: "B",
     career: -1,
     search: "",
     order: { criteria: "num_control", type: "" },
@@ -110,7 +110,7 @@ export default function StudentsTable({
           ? "&titulo_fk_null=false"
           : "";
     const sexFilter =
-      filters.sex === "M" ? "&sexo=M" : filters.sex === "F" ? "&sexo=F" : "";
+      filters.gender === "M" ? "&genero=M" : filters.gender === "F" ? "&genero=F" : "";
     const careerFilter =
       filters.career !== -1 ? `&carrera_fk=${filters.career}` : "";
     const min = new Date(
