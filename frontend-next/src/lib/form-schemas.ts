@@ -53,8 +53,7 @@ export const STUDENT_SCHEMA = {
         ),
     estado_nacimiento: z.string({ required_error: "Campo requerido" }),
     fecha_nacimiento: z
-        .date({ required_error: "Campo requerido" })
-        .transform((value) => value.toISOString().split("T")[0]),
+        .date({ required_error: "Campo requerido" }),
     periodo_ingreso: z
         .string({ required_error: "Campo requerido" }),
     periodo_egreso: z
@@ -88,11 +87,9 @@ export const TITLE_SCHEMA = {
         })
         .pipe(z.string().min(13, { message: "ejem.: IISC-2006-201" })),
     fecha_acto: z
-        .date({ required_error: "Campo requerido" })
-        .transform((value) => value.toISOString().split("T")[0]),
+        .date({ required_error: "Campo requerido" }),
     fecha_registro_tit: z
         .date({ required_error: "Campo requerido" })
-        .transform((value) => value.toISOString().split("T")[0]),
 }
 
 export const CERTIFICATE_SCHEMA = {
@@ -106,8 +103,7 @@ export const CERTIFICATE_SCHEMA = {
         })
         .pipe(z.string().min(1, { message: "Campo requerido" }).max(10, "Máximo 10 caracteres")),
     fecha_registro_cert: z
-        .date({ required_error: "Campo requerido" })
-        .transform((value) => value.toISOString().split("T")[0]),
+        .date({ required_error: "Campo requerido" }),
     observaciones_cert: z
         .string()
         .max(150, "Límite de caracteres excedido")

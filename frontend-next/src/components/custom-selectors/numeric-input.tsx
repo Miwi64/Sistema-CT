@@ -1,11 +1,11 @@
-"use client"
-import React from 'react';
-import { ControllerRenderProps } from 'react-hook-form';
-import { Input } from '../ui/input';
+"use client";
+import React from "react";
+import { ControllerRenderProps } from "react-hook-form";
+import { Input } from "../ui/input";
 
 interface NumericInputProps {
-    field: ControllerRenderProps<any>
-    placeholder?: string
+  field: ControllerRenderProps<any, any>;
+  placeholder?: string;
 }
 
 const NumericInput = ({ field, placeholder }: NumericInputProps) => {
@@ -17,7 +17,7 @@ const NumericInput = ({ field, placeholder }: NumericInputProps) => {
       onChange={(e) => {
         const value = e.target.value;
         const regex = /^[0-9]*$/;
-        if (value === '' || regex.test(value)) {
+        if (value === "" || regex.test(value)) {
           field.onChange(e);
         }
       }}

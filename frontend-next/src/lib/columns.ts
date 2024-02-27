@@ -2,6 +2,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 export type Student = {
+  [key: string]: string | number | undefined;
+} & {
   id_alumno: string;
   num_control: string;
   nombre: string;

@@ -40,19 +40,22 @@ interface LinkTitleButtonProps {
 }
 
 interface LinkTitleFormProps {
-  form: UseFormReturn<any>,
-  onSubmit: (values: z.infer<typeof formSchema>) => Promise<void>
+  form: UseFormReturn<any>;
+  onSubmit: (values: z.infer<typeof formSchema>) => Promise<void>;
 }
 
-export default function LinkTitleButton({ studentData, session }: LinkTitleButtonProps) {
+export default function LinkTitleButton({
+  studentData,
+  session,
+}: LinkTitleButtonProps) {
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       num_titulo: "",
       num_cedula: "",
-      clave_plan: ""
-    }
+      clave_plan: "",
+    },
   });
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -67,16 +70,20 @@ export default function LinkTitleButton({ studentData, session }: LinkTitleButto
         body: JSON.stringify({
           num_titulo: values.num_titulo,
           clave_plan: values.clave_plan,
-          fecha_acto: values.fecha_acto,
-          fecha_registro: values.fecha_registro_tit,
+          fecha_acto: values.fecha_acto.toISOString().split("T")[0],
+          fecha_registro: values.fecha_registro_tit.toISOString().split("T")[0],
           num_cedula: values.num_cedula,
           observaciones: values.observaciones_tit,
         }),
       }
     );
     if (!postTitle.ok) {
-      notification(`Error al subir los datos del título (${postTitle.status})`,
-        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop);
+      notification(
+        `Error al subir los datos del título (${postTitle.status})`,
+        "error",
+        "Verifica que los datos sean correctos y vuelve a intentarlo",
+        isDesktop
+      );
       return;
     }
     const { id_titulo } = await postTitle.json();
@@ -92,7 +99,7 @@ export default function LinkTitleButton({ studentData, session }: LinkTitleButto
         body: JSON.stringify({
           periodo_ingreso: studentData.periodo_ingreso,
           periodo_egreso: studentData.periodo_egreso,
-          fecha_nacimiento: studentData.fecha_nacimiento,
+          fecha_nacimiento: studentData.fecha_nacimiento.split("T")[0],
           carrera_fk: studentData.carrera_fk,
           certificado_fk: studentData.certificado_fk,
           titulo_fk: id_titulo,
@@ -101,12 +108,15 @@ export default function LinkTitleButton({ studentData, session }: LinkTitleButto
     );
     setOpen(false);
     if (!putStudent.ok) {
-      notification(`Error al intentar vincular los datos con el estudiante (${putStudent.status})`,
-        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop);
+      notification(
+        `Error al intentar vincular los datos con el estudiante (${putStudent.status})`,
+        "error",
+        "Verifica que los datos sean correctos y vuelve a intentarlo",
+        isDesktop
+      );
       return;
     }
-    notification("Actualización correcta",
-      "success", undefined, isDesktop);
+    notification("Actualización correcta", "success", undefined, isDesktop);
     location.reload();
   };
 
@@ -122,7 +132,8 @@ export default function LinkTitleButton({ studentData, session }: LinkTitleButto
       controlledOpen={{ open, setOpen }}
     >
       <LinkTitleForm form={form} onSubmit={onSubmit} />
-    </ResponsiveDialog>)
+    </ResponsiveDialog>
+  );
 }
 
 const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
@@ -196,7 +207,9 @@ const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                    captionLayout="dropdown"
+                    fromYear={1970}
+                    toYear={new Date().getFullYear()}
                     classNames={{
                       caption: "justify-between",
                       caption_label: "hidden",
@@ -204,7 +217,7 @@ const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
                                                 rounded-md border border-input bg-background 
                                                 px-3 py-1 text-sm ring-offset-background 
                                                 [&>span]:line-clamp-1`,
-                      caption_dropdowns: "text-[0] flex justify-center"
+                      caption_dropdowns: "text-[0] flex justify-center",
                     }}
                     selected={new Date(field.value)}
                     onSelect={field.onChange}
@@ -247,7 +260,9 @@ const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                    captionLayout="dropdown"
+                    fromYear={1970}
+                    toYear={new Date().getFullYear()}
                     classNames={{
                       caption: "justify-between",
                       caption_label: "hidden",
@@ -255,7 +270,7 @@ const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
                                                 rounded-md border border-input bg-background 
                                                 px-3 py-1 text-sm ring-offset-background 
                                                 [&>span]:line-clamp-1`,
-                      caption_dropdowns: "text-[0] flex justify-center"
+                      caption_dropdowns: "text-[0] flex justify-center",
                     }}
                     selected={new Date(field.value)}
                     onSelect={field.onChange}

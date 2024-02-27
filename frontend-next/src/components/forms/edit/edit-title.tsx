@@ -27,11 +27,10 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "@/components/responsive/notification";
 import NumericInput from "@/components/custom-selectors/numeric-input";
 
-
-const { num_titulo, ...fields } = TITLE_SCHEMA
+const { num_titulo, ...fields } = TITLE_SCHEMA;
 const formSchema = z.object({
-  ...fields
-})
+  ...fields,
+});
 
 interface EditTitleProps {
   studentData: Student;
@@ -47,12 +46,12 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
     fecha_registro_tit: new Date(
       studentData.fecha_registro_tit || "1970-01-01"
     ),
-  }
+  };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialValues,
-  })
-  const isDesktop = useMediaQuery("(min-width: 768px)")
+  });
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const putTitle = await fetch(
@@ -65,20 +64,28 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
         },
         body: JSON.stringify({
           clave_plan: values.clave_plan,
-          fecha_acto: values.fecha_acto,
-          fecha_registro: values.fecha_registro_tit,
+          fecha_acto: values.fecha_acto.toISOString().split("T")[0],
+          fecha_registro: values.fecha_registro_tit.toISOString().split("T")[0],
           observaciones: values.observaciones_tit,
         }),
       }
-    )
+    );
     if (!putTitle.ok) {
-      notification(`Error al actualizar los datos del título (${putTitle.status})`,
-        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop)
-      return
+      notification(
+        `Error al actualizar los datos del título (${putTitle.status})`,
+        "error",
+        "Verifica que los datos sean correctos y vuelve a intentarlo",
+        isDesktop
+      );
+      return;
     }
-    notification("Actualización correcta",
-      "success", "Se han actualizado los datos del Título", isDesktop)
-  }
+    notification(
+      "Actualización correcta",
+      "success",
+      "Se han actualizado los datos del Título",
+      isDesktop
+    );
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -140,7 +147,9 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                      captionLayout="dropdown"
+                      fromYear={1970}
+                      toYear={new Date().getFullYear()}
                       classNames={{
                         caption: "justify-between",
                         caption_label: "hidden",
@@ -148,7 +157,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
                                                 rounded-md border border-input bg-background 
                                                 px-3 py-1 text-sm ring-offset-background 
                                                 [&>span]:line-clamp-1`,
-                        caption_dropdowns: "text-[0] flex justify-center"
+                        caption_dropdowns: "text-[0] flex justify-center",
                       }}
                       selected={new Date(field.value)}
                       onSelect={field.onChange}
@@ -191,7 +200,9 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                      captionLayout="dropdown"
+                      fromYear={1970}
+                      toYear={new Date().getFullYear()}
                       classNames={{
                         caption: "justify-between",
                         caption_label: "hidden",
@@ -199,7 +210,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
                                                 rounded-md border border-input bg-background 
                                                 px-3 py-1 text-sm ring-offset-background 
                                                 [&>span]:line-clamp-1`,
-                        caption_dropdowns: "text-[0] flex justify-center"
+                        caption_dropdowns: "text-[0] flex justify-center",
                       }}
                       selected={new Date(field.value)}
                       onSelect={field.onChange}
@@ -239,7 +250,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
         </div>
       </form>
     </Form>
-  )
-}
+  );
+};
 
-export default EditTitle
+export default EditTitle;

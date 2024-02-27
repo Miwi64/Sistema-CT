@@ -27,11 +27,16 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { notification } from "@/components/responsive/notification";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { Suspense } from "react";
 
 const formSchema = z.object({
-  username: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
+  username: z
+    .string({ required_error: "Campo requerido" })
+    .transform((value) => value.replace(/\s+/g, ""))
     .pipe(z.string().min(1, "Campo requerido")),
-  password: z.string({ required_error: "Campo requerido" }).transform(value => value.replace(/\s+/g, ''))
+  password: z
+    .string({ required_error: "Campo requerido" })
+    .transform((value) => value.replace(/\s+/g, ""))
     .pipe(z.string().min(1, "Campo requerido")),
 });
 
@@ -60,23 +65,30 @@ const Login = () => {
         case 401:
           notification(
             `Error al intentar iniciar sesión (${responseNextAuth.status})`,
-            "error", "Verifica que tu nombre de usuario y contraseña sean correctos",
-            isDesktop);
+            "error",
+            "Verifica que tu nombre de usuario y contraseña sean correctos",
+            isDesktop
+          );
           return;
         case 500:
           notification(
             `Error al intentar iniciar sesión (${responseNextAuth.status})`,
-            "error", `Ha ocurrido un error en el servidor del sistema. Verifica que no
+            "error",
+            `Ha ocurrido un error en el servidor del sistema. Verifica que no
             exista una sesión abierta y vuelve a intentarlo`,
-            isDesktop);
+            isDesktop
+          );
           return;
       }
     }
     router.push(callbackUrl, { scroll: false });
     setSigning(false);
-    notification("Inicio de sesión",
-      "success", "Accediendo a la sesión",
-      isDesktop);
+    notification(
+      "Inicio de sesión",
+      "success",
+      "Accediendo a la sesión",
+      isDesktop
+    );
   };
 
   const imgUrl = "/backgrounds/558866.jpg";
@@ -84,7 +96,7 @@ const Login = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
-      password: ""
+      password: "",
     },
   });
 
@@ -94,10 +106,14 @@ const Login = () => {
         className="hidden md:block w-full h-screen bg-no-repeat bg-cover absolute"
         style={{ backgroundImage: `url(${imgUrl})` }}
       />
-      <section className="w-full h-screen flex justify-center items-center overflow-y-auto absolute 
-      md:bg-[rgba(255,255,255,0.9)] md:dark:bg-[rgba(0,0,0,0.9)] backdrop-blur-3xl">
-        <Card className="rounded-none md:rounded-lg bg-transparent md:bg-card w-full h-full
-         md:w-[420px] md:h-auto">
+      <section
+        className="w-full h-screen flex justify-center items-center overflow-y-auto absolute 
+      md:bg-[rgba(255,255,255,0.9)] md:dark:bg-[rgba(0,0,0,0.9)] backdrop-blur-3xl"
+      >
+        <Card
+          className="rounded-none md:rounded-lg bg-transparent md:bg-card w-full h-full
+         md:w-[420px] md:h-auto"
+        >
           <div className="text-right">
             <ModeToggle />
           </div>
@@ -143,7 +159,14 @@ const Login = () => {
                   )}
                 />
                 <Button type="submit" className="w-full" disabled={signing}>
-                  {!signing ? <><LogIn className="mr-2 h-4 w-4" />Iniciar sesión</> : "Iniciando sesión..."}
+                  {!signing ? (
+                    <>
+                      <LogIn className="mr-2 h-4 w-4" />
+                      Iniciar sesión
+                    </>
+                  ) : (
+                    "Iniciando sesión..."
+                  )}
                 </Button>
               </form>
             </Form>
@@ -153,4 +176,11 @@ const Login = () => {
     </div>
   );
 };
-export default Login;
+
+const Page = () => (
+  <Suspense>
+    <Login />
+  </Suspense>
+);
+
+export default Page;

@@ -90,7 +90,9 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
         },
         body: JSON.stringify({
           num_folio: values.num_folio,
-          fecha_registro: values.fecha_registro_cert,
+          fecha_registro: values.fecha_registro_cert
+            .toISOString()
+            .split("T")[0],
           observaciones: values.observaciones_cert,
           nombre: values.nombre,
           apellidop: values.apellidop,
@@ -102,7 +104,7 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
           periodo_ingreso: values.periodo_ingreso,
           periodo_egreso: values.periodo_egreso,
           estado_nacimiento: values.estado_nacimiento,
-          fecha_nacimiento: values.fecha_nacimiento,
+          fecha_nacimiento: values.fecha_nacimiento.toISOString().split("T")[0],
           titulo_fk: null,
         }),
       }
@@ -113,59 +115,6 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
       handleError(result.error);
       return;
     }
-
-    // const postCert = await fetch(
-    //   `http://127.0.0.1:8000/data/api/v1/certificados/`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: "Token " + session?.token,
-    //     },
-    //     body: JSON.stringify({
-    //       num_folio: values.num_folio,
-    //       fecha_registro: values.fecha_registro_cert,
-    //       observaciones: values.observaciones_cert,
-    //     }),
-    //   }
-    // );
-    // if (!postCert.ok) {
-    //   handleError(`Ha ocurrido un error al registrar el certificado.
-    //   Revise que los datos sean correctos y vuelva a intentarlo`);
-    //   return;
-    // }
-    // const { id_certificado } = await postCert.json();
-
-    // const postStudent = await fetch(
-    //   `http://127.0.0.1:8000/data/api/v1/alumnos/`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: "Token " + session?.token,
-    //     },
-    //     body: JSON.stringify({
-    //       nombre: values.nombre,
-    //       apellidop: values.apellidop,
-    //       apellidom: values.apellidom,
-    //       carrera_fk: values.carrera_fk,
-    //       num_control: values.num_control,
-    //       sexo: values.sexo,
-    //       CURP: values.CURP,
-    //       periodo_ingreso: values.periodo_ingreso,
-    //       periodo_egreso: values.periodo_egreso,
-    //       estado_nacimiento: values.estado_nacimiento,
-    //       fecha_nacimiento: values.fecha_nacimiento,
-    //       titulo_fk: null,
-    //       certificado_fk: id_certificado,
-    //     }),
-    //   }
-    // );
-    // if (!postStudent.ok) {
-    //   handleError(`Ha ocurrido un error al registrar los datos del
-    //   estudiante en el certificado. Revise que los datos sean correctos y vuelva a intentarlo`);
-    //   return;
-    // }
 
     router.push("/table");
     notification(
@@ -197,7 +146,7 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de folio</FormLabel>
                 <FormControl>
-                  <NumericInput placeholder="Número de folio" field={field}/>
+                  <NumericInput placeholder="Número de folio" field={field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

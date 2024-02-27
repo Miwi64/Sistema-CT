@@ -39,17 +39,20 @@ interface LinkCertificateButtonProps {
 }
 
 interface LinkCertificateFormProps {
-  form: UseFormReturn<any>,
-  onSubmit: (values: z.infer<typeof formSchema>) => Promise<void>
+  form: UseFormReturn<any>;
+  onSubmit: (values: z.infer<typeof formSchema>) => Promise<void>;
 }
 
-export default function LinkCertificateButton({ studentData, session }: LinkCertificateButtonProps) {
+export default function LinkCertificateButton({
+  studentData,
+  session,
+}: LinkCertificateButtonProps) {
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      num_folio: ""
-    }
+      num_folio: "",
+    },
   });
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -63,14 +66,20 @@ export default function LinkCertificateButton({ studentData, session }: LinkCert
         },
         body: JSON.stringify({
           num_folio: values.num_folio,
-          fecha_registro: values.fecha_registro_cert,
+          fecha_registro: values.fecha_registro_cert
+            .toISOString()
+            .split("T")[0],
           observaciones: values.observaciones_cert,
         }),
       }
     );
     if (!postCertificate.ok) {
-      notification(`Error al subir los datos del certificado (${postCertificate.status})`,
-        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop);
+      notification(
+        `Error al subir los datos del certificado (${postCertificate.status})`,
+        "error",
+        "Verifica que los datos sean correctos y vuelve a intentarlo",
+        isDesktop
+      );
       return;
     }
     const { id_certificado } = await postCertificate.json();
@@ -86,7 +95,7 @@ export default function LinkCertificateButton({ studentData, session }: LinkCert
         body: JSON.stringify({
           periodo_ingreso: studentData.periodo_ingreso,
           periodo_egreso: studentData.periodo_egreso,
-          fecha_nacimiento: studentData.fecha_nacimiento,
+          fecha_nacimiento: studentData.fecha_nacimiento.split("T")[0],
           carrera_fk: studentData.carrera_fk,
           certificado_fk: id_certificado,
           titulo_fk: studentData.titulo_fk,
@@ -95,12 +104,15 @@ export default function LinkCertificateButton({ studentData, session }: LinkCert
     );
     setOpen(false);
     if (!putStudent.ok) {
-      notification(`Error al intentar vincular los datos con el estudiante (${putStudent.status})`,
-        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop);
+      notification(
+        `Error al intentar vincular los datos con el estudiante (${putStudent.status})`,
+        "error",
+        "Verifica que los datos sean correctos y vuelve a intentarlo",
+        isDesktop
+      );
       return;
     }
-    notification("Actualización correcta",
-      "success", undefined, isDesktop);
+    notification("Actualización correcta", "success", undefined, isDesktop);
     location.reload();
   };
 
@@ -113,16 +125,14 @@ export default function LinkCertificateButton({ studentData, session }: LinkCert
         </Button>
       }
       title="Vincular Certificado"
-      controlledOpen={{open, setOpen}}
+      controlledOpen={{ open, setOpen }}
     >
       <LinkCertificateForm form={form} onSubmit={onSubmit} />
-    </ResponsiveDialog>)
+    </ResponsiveDialog>
+  );
 }
 
-const LinkCertificateForm = ({
-  form,
-  onSubmit
-}: LinkCertificateFormProps) => (
+const LinkCertificateForm = ({ form, onSubmit }: LinkCertificateFormProps) => (
   <Form {...form}>
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <section className="flex max-h-[250px] overflow-y-auto px-1 pb-5 flex-col gap-4">
@@ -167,7 +177,9 @@ const LinkCertificateForm = ({
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
-                    captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                    captionLayout="dropdown"
+                    fromYear={1970}
+                    toYear={new Date().getFullYear()}
                     classNames={{
                       caption: "justify-between",
                       caption_label: "hidden",
@@ -175,7 +187,7 @@ const LinkCertificateForm = ({
                                                 rounded-md border border-input bg-background 
                                                 px-3 py-1 text-sm ring-offset-background 
                                                 [&>span]:line-clamp-1`,
-                      caption_dropdowns: "text-[0] flex justify-center"
+                      caption_dropdowns: "text-[0] flex justify-center",
                     }}
                     selected={new Date(field.value)}
                     onSelect={field.onChange}

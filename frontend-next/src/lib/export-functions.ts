@@ -69,6 +69,7 @@ type Career = {
   nombre_carrera: string;
 };
 
+
 export const generateEst911Report = async (
   template: ArrayBuffer,
   data: Est911ReportData,
@@ -128,7 +129,7 @@ export const generateGobReport = async (
         sheetToDuplicate.eachRow(function (row, rowNumber) {
           row.eachCell(function (cell, colNumber) {
             let newText = cell.value;
-            newText = newText.replace("{gen", `{gen${year}`);
+            newText = newText.replace("{gen", `{gen${year}`) as any;
             newText = newText.replace("{count", `{count${year}`);
             newText = newText.replace("{year", `{year${year}`);
             newText = newText.replace("{students", `{students${year}`);

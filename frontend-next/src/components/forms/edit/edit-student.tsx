@@ -33,9 +33,9 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { notification } from "@/components/responsive/notification";
 import SemesterSelector from "@/components/custom-selectors/semester-selector";
 
-const { num_control, ...fields } = STUDENT_SCHEMA
+const { num_control, ...fields } = STUDENT_SCHEMA;
 const formSchema = z.object({
-  ...fields
+  ...fields,
 });
 
 type Career = {
@@ -66,7 +66,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
     resolver: zodResolver(formSchema),
     defaultValues: initialValues,
   });
-  const isDesktop = useMediaQuery("(min-width: 768px)")
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const putStudent = await fetch(
@@ -86,7 +86,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
           periodo_ingreso: values.periodo_ingreso,
           periodo_egreso: values.periodo_egreso,
           estado_nacimiento: values.estado_nacimiento,
-          fecha_nacimiento: values.fecha_nacimiento,
+          fecha_nacimiento: values.fecha_nacimiento.toISOString().split("T")[0],
           carrera_fk: values.carrera_fk,
           certificado_fk: studentData.certificado_fk,
           titulo_fk: studentData.titulo_fk,
@@ -94,12 +94,20 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
       }
     );
     if (!putStudent.ok) {
-      notification(`Error al actualizar los datos del estudiante (${putStudent.status})`,
-        "error", "Verifica que los datos sean correctos y vuelve a intentarlo", isDesktop)
-      return
+      notification(
+        `Error al actualizar los datos del estudiante (${putStudent.status})`,
+        "error",
+        "Verifica que los datos sean correctos y vuelve a intentarlo",
+        isDesktop
+      );
+      return;
     }
-    notification("Actualización correcta",
-      "success", "Se han actualizado los datos del estudiante", isDesktop)
+    notification(
+      "Actualización correcta",
+      "success",
+      "Se han actualizado los datos del estudiante",
+      isDesktop
+    );
   };
   return (
     <Form {...form}>
@@ -240,7 +248,9 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                      captionLayout="dropdown" fromYear={1970} toYear={new Date().getFullYear()}
+                      captionLayout="dropdown"
+                      fromYear={1970}
+                      toYear={new Date().getFullYear()}
                       classNames={{
                         caption: "justify-between",
                         caption_label: "hidden",
@@ -248,7 +258,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
                                                 rounded-md border border-input bg-background 
                                                 px-3 py-1 text-sm ring-offset-background 
                                                 [&>span]:line-clamp-1`,
-                        caption_dropdowns: "text-[0] flex justify-center"
+                        caption_dropdowns: "text-[0] flex justify-center",
                       }}
                       selected={new Date(field.value)}
                       onSelect={field.onChange}
@@ -297,7 +307,12 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
               <FormItem className="">
                 <FormLabel>Periodo de ingreso</FormLabel>
                 <FormControl>
-                  <SemesterSelector from={1990} value={field.value} onValueChange={field.onChange} reverse />
+                  <SemesterSelector
+                    from={1990}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    reverse
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -310,7 +325,12 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
               <FormItem className="">
                 <FormLabel>Periodo de egreso</FormLabel>
                 <FormControl>
-                  <SemesterSelector from={1990} value={field.value} onValueChange={field.onChange} reverse />
+                  <SemesterSelector
+                    from={1990}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    reverse
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
