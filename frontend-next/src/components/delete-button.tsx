@@ -21,7 +21,7 @@ export const DeleteButton = ({ id }: DeleteButtonProps) => {
 
   const handleDelete = async (controlNumber: string) => {
     const search = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/alumnos/?num_control=${controlNumber}`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/?num_control=${controlNumber}`,
       {
         method: "GET",
         headers: {
@@ -32,10 +32,10 @@ export const DeleteButton = ({ id }: DeleteButtonProps) => {
     );
     const {
       results: [student],
-    } = await search.json()
+    } = await search.json();
 
     const response = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/alumnos/${student?.id_alumno}/`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/${student?.id_alumno}/`,
       {
         method: "DELETE",
         headers: {
@@ -43,8 +43,8 @@ export const DeleteButton = ({ id }: DeleteButtonProps) => {
           Authorization: "Token " + session?.token,
         },
       }
-    )
-    
+    );
+
     setOpen(false);
     if (!response.ok) {
       notification(
@@ -52,26 +52,32 @@ export const DeleteButton = ({ id }: DeleteButtonProps) => {
         "error",
         "Vuelva a intentarlo más tarde",
         isDesktop
-      )
-      return
+      );
+      return;
     }
 
-    /*const datac = student.certificado_fk
-    const datat = student.titulo_fk
-    await fetch(`http://127.0.0.1:8000/data/api/v1/certificados/${datac}/`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })
-    await fetch(`http://127.0.0.1:8000/data/api/v1/titulados/${datat}/`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Token " + token,
-      },
-    })*/
+    const datac = student.certificado_fk;
+    const datat = student.titulo_fk;
+    await fetch(
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/certificados/${datac}/`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + session?.token,
+        },
+      }
+    );
+    await fetch(
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}1/titulados/${datat}/`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Token " + session?.token,
+        },
+      }
+    );
     notification(
       `El registro ha sido eliminado correctamente`,
       "success",

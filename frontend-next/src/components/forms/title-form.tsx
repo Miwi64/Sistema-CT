@@ -82,7 +82,7 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log(values);
     const checkNotDuplicated = await fetch(
-      `http://localhost:8000/data/api/v1/alumno-titulo/`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumno-titulo/`,
       {
         method: "POST",
         headers: {

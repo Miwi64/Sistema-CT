@@ -1,15 +1,133 @@
 export const STATES = [
-    { text: 'Aguascalientes', value: 'Aguascalientes' },
-    { text: 'Baja California', value: 'Baja California' },
-    { text: 'Baja California Sur', value: 'Baja California Sur' },
-    { text: 'Campeche', value: 'Campeche' },
-    { text: 'Chiapas', value: 'Chiapas' },
-    { text: 'Chihuahua', value: 'Chihuahua' },
-    { text: 'Coahuila', value: 'Coahuila' },
-    { text: 'Colima', value: 'Colima' },
-    { text: 'Durango', value: 'Durango' },
-    { text: 'Guanajuato', value: 'Guanajuato' }
-]
+    {
+      "text": "Aguascalientes",
+      "value": "Aguascalientes"
+    },
+    {
+      "text": "Baja California",
+      "value": "Baja California"
+    },
+    {
+      "text": "Baja California Sur",
+      "value": "Baja California Sur"
+    },
+    {
+      "text": "Campeche",
+      "value": "Campeche"
+    },
+    {
+      "text": "Chiapas",
+      "value": "Chiapas"
+    },
+    {
+      "text": "Chihuahua",
+      "value": "Chihuahua"
+    },
+    {
+      "text": "Coahuila",
+      "value": "Coahuila"
+    },
+    {
+      "text": "Colima",
+      "value": "Colima"
+    },
+    {
+      "text": "Ciudad de México",
+      "value": "Ciudad de México"
+    },
+    {
+      "text": "Durango",
+      "value": "Durango"
+    },
+    {
+        "text": "Estado de México",
+        "value": "Estado de México"
+    },
+    {
+      "text": "Guanajuato",
+      "value": "Guanajuato"
+    },
+    {
+      "text": "Guerrero",
+      "value": "Guerrero"
+    },
+    {
+      "text": "Hidalgo",
+      "value": "Hidalgo"
+    },
+    {
+      "text": "Jalisco",
+      "value": "Jalisco"
+    },
+    {
+      "text": "Michoacán",
+      "value": "Michoacán"
+    },
+    {
+      "text": "Morelos",
+      "value": "Morelos"
+    },
+    {
+      "text": "Nayarit",
+      "value": "Nayarit"
+    },
+    {
+      "text": "Nuevo León",
+      "value": "Nuevo León"
+    },
+    {
+      "text": "Oaxaca",
+      "value": "Oaxaca"
+    },
+    {
+      "text": "Puebla",
+      "value": "Puebla"
+    },
+    {
+      "text": "Querétaro",
+      "value": "Querétaro"
+    },
+    {
+      "text": "Quintana Roo",
+      "value": "Quintana Roo"
+    },
+    {
+      "text": "San Luis Potosí",
+      "value": "San Luis Potosí"
+    },
+    {
+      "text": "Sinaloa",
+      "value": "Sinaloa"
+    },
+    {
+      "text": "Sonora",
+      "value": "Sonora"
+    },
+    {
+      "text": "Tabasco",
+      "value": "Tabasco"
+    },
+    {
+      "text": "Tamaulipas",
+      "value": "Tamaulipas"
+    },
+    {
+      "text": "Tlaxcala",
+      "value": "Tlaxcala"
+    },
+    {
+      "text": "Veracruz",
+      "value": "Veracruz"
+    },
+    {
+      "text": "Yucatán",
+      "value": "Yucatán"
+    },
+    {
+      "text": "Zacatecas",
+      "value": "Zacatecas"
+    }
+  ]
 
 export const REPORTS: { [key: string]: string } = {
     gob: "Gobierno del estado",

@@ -70,7 +70,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const putStudent = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/alumnos/${studentData.id_alumno}/`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/${studentData.id_alumno}/`,
       {
         method: "PUT",
         headers: {

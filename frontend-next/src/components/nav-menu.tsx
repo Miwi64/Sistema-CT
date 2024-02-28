@@ -178,7 +178,7 @@ export function NavMenu() {
                   onClick={async () => {
                     //console.log(session?.token);
                     const signout = await fetch(
-                      "http://127.0.0.1:8000/logout/",
+                      `${process.env.NEXT_PUBLIC_DJANGO_API_BASEURL}/logout/`,
                       {
                         method: "POST",
                         headers: {

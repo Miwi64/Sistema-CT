@@ -41,9 +41,9 @@ export type FilterData = {
     max: Date;
   };
   period: {
-    enable: boolean,
+    enable: boolean;
     criteria: string;
-    date: string
+    date: string;
   };
 };
 
@@ -66,7 +66,7 @@ export default function StudentsTable({
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
     CERTIFICATE_VISIBLE_COLUMNS
   );
-  
+
   const [urlFilter, setUrlFilter] = useState<string>("");
   const [filters, setFilters] = useState<FilterData>({
     doc: "C",
@@ -83,13 +83,15 @@ export default function StudentsTable({
     period: {
       enable: false,
       criteria: "Ingreso",
-      date: `${new Date().getFullYear()}${(new Date().getMonth()) < 8 ? "-02-01" : "-08-1"}`
+      date: `${new Date().getFullYear()}${
+        new Date().getMonth() < 8 ? "-02-01" : "-08-1"
+      }`,
     },
   });
   useEffect(() => {
     const loadData = async (url: string) => {
       const fetchApi = await fetch(
-        `http://127.0.0.1:8000/data/api/v1/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${url}`,
+        `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos?page=${paginationData.current_page}&limit=${paginationData.page_size}${url}`,
         {
           method: "GET",
           headers: {
@@ -107,32 +109,42 @@ export default function StudentsTable({
       filters.doc === "C"
         ? "&certificado_fk_null=false"
         : filters.doc === "T"
-          ? "&titulo_fk_null=false"
-          : "";
+        ? "&titulo_fk_null=false"
+        : "";
     const sexFilter =
-      filters.gender === "M" ? "&genero=M" : filters.gender === "F" ? "&genero=F" : "";
+      filters.gender === "M"
+        ? "&genero=M"
+        : filters.gender === "F"
+        ? "&genero=F"
+        : "";
     const careerFilter =
       filters.career !== -1 ? `&carrera_fk=${filters.career}` : "";
     const min = new Date(
       filters.date.min.getTime() -
-      filters.date.min.getTimezoneOffset() * 60 * 1000
+        filters.date.min.getTimezoneOffset() * 60 * 1000
     )
       .toISOString()
       .split("T")[0];
     const max = new Date(
       filters.date.max.getTime() -
-      filters.date.max.getTimezoneOffset() * 60 * 1000
+        filters.date.max.getTimezoneOffset() * 60 * 1000
     )
       .toISOString()
       .split("T")[0];
     const dateFilter = filters.date.enable
       ? `&${filters.date.criteria}_min=${min}&${filters.date.criteria}_max=${max}`
       : "";
-    const periodFilter = filters.period.enable ?
-      `&periodo_${filters.period.criteria.toLowerCase()}=${filters.period.date}`
+    const periodFilter = filters.period.enable
+      ? `&periodo_${filters.period.criteria.toLowerCase()}=${
+          filters.period.date
+        }`
       : "";
-    setUrlFilter(`${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`);
-    loadData(`${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`);
+    setUrlFilter(
+      `${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`
+    );
+    loadData(
+      `${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`
+    );
   }, [paginationData.current_page, filters]);
   return (
     <>
@@ -141,15 +153,24 @@ export default function StudentsTable({
           className="w-full rounded-b-none flex flex-row justify-start 
             items-center overflow-x-auto overflow-y-visible h-15"
         >
-          <TabsTrigger value="Inicio" className="data-[state=active]:text-primary dark:data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="Inicio"
+            className="data-[state=active]:text-primary dark:data-[state=active]:text-foreground"
+          >
             <Home size={14} className="mr-2" />
             Inicio
           </TabsTrigger>
-          <TabsTrigger value="Filtrar" className="data-[state=active]:text-primary dark:data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="Filtrar"
+            className="data-[state=active]:text-primary dark:data-[state=active]:text-foreground"
+          >
             <Filter size={14} className="mr-2" />
             Filtrar
           </TabsTrigger>
-          <TabsTrigger value="Pagina" className="data-[state=active]:text-primary dark:data-[state=active]:text-foreground">
+          <TabsTrigger
+            value="Pagina"
+            className="data-[state=active]:text-primary dark:data-[state=active]:text-foreground"
+          >
             <File size={14} className="mr-2" />
             Página
           </TabsTrigger>

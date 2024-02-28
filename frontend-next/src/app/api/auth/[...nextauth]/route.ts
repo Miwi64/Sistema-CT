@@ -11,7 +11,7 @@ export const authOptions  = {
           },
           authorize: async (credentials) => {
             const res = await fetch(
-                `${process.env.DJANGO_API_AUTH_URL}/login/`,
+                `${process.env.NEXT_PUBLIC_DJANGO_API_BASEURL}/login/`,
                 {
                 method:'POST',
                 headers:{ "Content-Type":"application/json" },
@@ -21,6 +21,7 @@ export const authOptions  = {
                 }),
             });
             const user = await res.json();
+            console.log(user);
             if(res.status===200) return user;
             return null;
           }

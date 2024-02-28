@@ -10,7 +10,7 @@ import { Session, getServerSession } from "next-auth";
 
 async function getData(session: Session, id: string) {
   const fetchStudent = await fetch(
-    `http://127.0.0.1:8000/data/api/v1/alumnos?num_control=${id}`,
+    `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos?num_control=${id}`,
     {
       method: "GET",
       headers: {
@@ -19,7 +19,7 @@ async function getData(session: Session, id: string) {
     }
   );
   const fetchCareers = await fetch(
-    `http://127.0.0.1:8000/data/api/v1/carreras/`,
+    `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/carreras/`,
     {
       method: "GET",
       headers: {
@@ -43,35 +43,34 @@ export default async function Page({ params }: { params: { id: string } }) {
       <h1 className="my-3 text-2xl font-semibold leading-none tracking-tight">
         Editar
       </h1>
-      {(!student.titulo_fk || !student.certificado_fk) &&
+      {(!student.titulo_fk || !student.certificado_fk) && (
         <section className="flex gap-2 text-muted-foreground">
           <Link2 /> Anexar
-        </section>}
-
+        </section>
+      )}
 
       <section className="flex gap-3 mt-3 mb-10">
-        {!student.titulo_fk &&
-          <LinkTitleButton studentData={student} session={session}/>
-        }
-        {!student.certificado_fk &&
-          <LinkCertificateButton studentData={student} session={session}/>
-        }
+        {!student.titulo_fk && (
+          <LinkTitleButton studentData={student} session={session} />
+        )}
+        {!student.certificado_fk && (
+          <LinkCertificateButton studentData={student} session={session} />
+        )}
       </section>
 
-
       <EditStudent session={session} studentData={student} careers={careers} />
-      {student.titulo_fk &&
+      {student.titulo_fk && (
         <>
           <Separator />
           <EditTitle session={session} studentData={student} />
         </>
-      }
-      {student.certificado_fk &&
+      )}
+      {student.certificado_fk && (
         <>
           <Separator />
           <EditCertificate session={session} studentData={student} />
         </>
-      }
+      )}
     </>
   );
 }

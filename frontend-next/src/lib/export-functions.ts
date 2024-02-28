@@ -219,7 +219,7 @@ export const handleExcelDownload = async (
   headers.forEach((head, index) => {
     objHeaders[`column${index + 1}`] = head;
   });
-  fetch("http://127.0.0.1:8000/alumnos/?" + `${urlFilter}`)
+  fetch(`${process.env.NEXT_PUBLIC_DJANGO_API_BASEURL}/alumnos/?` + `${urlFilter}`)
     .then((response) => response.json())
     .then(async (data: Student[]) => {
       const selected_data = data.map((element: { [x: string]: any }) =>
@@ -246,7 +246,7 @@ export const handlePdfDownload = async (
   );
   const headers = formatHeader(REF_COLUMN_NAMES, columns);
   const fetchData = await fetch(
-    "http://127.0.0.1:8000/alumnos/?" + `${urlFilter}`
+    `${process.env.NEXT_PUBLIC_DJANGO_API_BASEURL}/alumnos/?` + `${urlFilter}`
   );
   const data = await fetchData.json();
   const docDefinition: TDocumentDefinitions = {

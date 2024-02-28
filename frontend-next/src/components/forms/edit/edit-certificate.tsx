@@ -50,7 +50,7 @@ const EditCertificate = ({ studentData, session }: EditCertificateProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const putCertificate = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/certificados/${studentData.certificado_fk}/`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/certificados/${studentData.certificado_fk}/`,
       {
         method: "PUT",
         headers: {

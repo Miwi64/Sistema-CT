@@ -20,7 +20,7 @@ import { DeleteButton } from "@/components/delete-button";
 
 async function getData(session: Session, id: string) {
   const fetchApi = await fetch(
-    `http://127.0.0.1:8000/data/api/v1/alumnos?num_control=${id}`,
+    `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos?num_control=${id}`,
     {
       method: "GET",
       headers: {
@@ -39,8 +39,8 @@ export default async function Page({ params }: { params: { id: string } }) {
     student.sexo === "m" || student.sexo === "M"
       ? "Masculino"
       : student.sexo === "f" || student.sexo === "F"
-        ? "Femenino"
-        : "Indefinido";
+      ? "Femenino"
+      : "Indefinido";
   return (
     <>
       <h1 className="text-muted-foreground font-semibold mt-8 text-md">
@@ -86,7 +86,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                         head: "Estado de nacimiento",
                         value: student.estado_nacimiento,
                       },
-                      { head: "Fecha de nacimiento", value: student.fecha_nacimiento },
+                      {
+                        head: "Fecha de nacimiento",
+                        value: student.fecha_nacimiento,
+                      },
                     ].map(({ head, value }) => (
                       <TableRow key={value}>
                         <TableCell>{head}</TableCell>
@@ -122,8 +125,14 @@ export default async function Page({ params }: { params: { id: string } }) {
                   <TableBody>
                     {[
                       { head: "Nombre", value: student.nombre_carrera },
-                      { head: "Periodo de ingreso", value: student.periodo_ingreso },
-                      { head: "Periodo de egreso", value: student.periodo_egreso },
+                      {
+                        head: "Periodo de ingreso",
+                        value: student.periodo_ingreso,
+                      },
+                      {
+                        head: "Periodo de egreso",
+                        value: student.periodo_egreso,
+                      },
                     ].map(({ head, value }) => (
                       <TableRow key={value}>
                         <TableCell>{head}</TableCell>
@@ -164,7 +173,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                           head: "Fecha de registro",
                           value: student.fecha_registro_cert,
                         },
-                        { head: "Observaciones", value: student.observaciones_cert },
+                        {
+                          head: "Observaciones",
+                          value: student.observaciones_cert,
+                        },
                       ].map(({ head, value }) => (
                         <TableRow key={value}>
                           <TableCell>{head}</TableCell>
@@ -209,7 +221,10 @@ export default async function Page({ params }: { params: { id: string } }) {
                         { head: "Fecha del acto", value: student.fecha_acto },
                         { head: "Número de cédula", value: student.num_cedula },
                         { head: "Plan de estudios", value: student.clave_plan },
-                        { head: "Observaciones", value: student.observaciones_tit },
+                        {
+                          head: "Observaciones",
+                          value: student.observaciones_tit,
+                        },
                       ].map(({ head, value }) => (
                         <TableRow key={value}>
                           <TableCell>{head}</TableCell>

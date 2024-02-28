@@ -57,7 +57,7 @@ export default function LinkCertificateButton({
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const postCertificate = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/certificados/`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/certificados/`,
       {
         method: "POST",
         headers: {
@@ -85,7 +85,7 @@ export default function LinkCertificateButton({
     const { id_certificado } = await postCertificate.json();
 
     const putStudent = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/alumnos/${studentData.id_alumno}/`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/${studentData.id_alumno}/`,
       {
         method: "PUT",
         headers: {

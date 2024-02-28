@@ -60,7 +60,7 @@ export default function LinkTitleButton({
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const postTitle = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/titulados/`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/titulados/`,
       {
         method: "POST",
         headers: {
@@ -89,7 +89,7 @@ export default function LinkTitleButton({
     const { id_titulo } = await postTitle.json();
 
     const putStudent = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/alumnos/${studentData.id_alumno}/`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/${studentData.id_alumno}/`,
       {
         method: "PUT",
         headers: {

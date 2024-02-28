@@ -55,7 +55,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const putTitle = await fetch(
-      `http://127.0.0.1:8000/data/api/v1/titulados/${studentData.titulo_fk}/`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/titulados/${studentData.titulo_fk}/`,
       {
         method: "PUT",
         headers: {
@@ -63,6 +63,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
           Authorization: "Token " + session.token,
         },
         body: JSON.stringify({
+          num_cedula: values.num_cedula,
           clave_plan: values.clave_plan,
           fecha_acto: values.fecha_acto.toISOString().split("T")[0],
           fecha_registro: values.fecha_registro_tit.toISOString().split("T")[0],

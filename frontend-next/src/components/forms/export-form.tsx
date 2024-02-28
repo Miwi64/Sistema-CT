@@ -80,9 +80,9 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
     //Select the correct template
     const dataPath =
       config.formatType === "gob"
-        ? `http://127.0.0.1:8000/data/api/v1/get-gob-report-data/${config.career}`
+        ? `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/get-gob-report-data/${config.career}`
         : config.formatType === "est911"
-        ? `http://127.0.0.1:8000/data/api/v1/get-format911/${config.year}/`
+        ? `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/get-format911/${config.year}/`
         : undefined;
     //Return if the format type is unknown
     if (!templatePath || !dataPath) return;
@@ -114,8 +114,14 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
     //Generate report
     switch (config.formatType) {
       case "gob":
-        const careerName = careers.find(career => career.id_carrera === config.career)?.nombre_carrera;
-        await generateGobReport(template, data, careerName? careerName: "No reconocida");
+        const careerName = careers.find(
+          (career) => career.id_carrera === config.career
+        )?.nombre_carrera;
+        await generateGobReport(
+          template,
+          data,
+          careerName ? careerName : "No reconocida"
+        );
         break;
       case "est911":
         console.log(config);
