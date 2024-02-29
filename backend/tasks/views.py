@@ -456,6 +456,40 @@ class AlumView(generics.ListAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = AlumnoFilter
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            modified_data = self.modify_date_format(serializer.data)
+            return self.get_paginated_response(modified_data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        modified_data = self.modify_date_format(serializer.data)
+        return Response(modified_data)
+
+    def modify_date_format(self, data):
+        """
+        Modify the 'periodo_ingreso' and 'periodo_egreso' attributes in the data.
+        """
+        for item in data:
+            if 'periodo_ingreso' in item:
+                periodo_ingreso = datetime.strptime(item['periodo_ingreso'], '%Y-%m-%d')
+                if periodo_ingreso.month < 7:
+                    item['periodo_ingreso'] = f"{periodo_ingreso.year}-1"
+                else:
+                    item['periodo_ingreso'] = f"{periodo_ingreso.year}-2"
+
+            if 'periodo_egreso' in item:
+                periodo_egreso = datetime.strptime(item['periodo_egreso'], '%Y-%m-%d')
+                if periodo_egreso.month < 7:
+                    item['periodo_egreso'] = f"{periodo_egreso.year}-1"
+                else:
+                    item['periodo_egreso'] = f"{periodo_egreso.year}-2"
+
+        return data
+
 
 
 class AlumnosView(viewsets.ModelViewSet):
@@ -466,6 +500,40 @@ class AlumnosView(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, SearchFilter)
     filterset_class = AlumnoFilter
     search_fields = ('nombre','apellidop','apellidom','num_control','sexo','CURP','periodo_ingreso','periodo_egreso','estado_nacimiento','fecha_nacimiento','carrera_fk','certificado_fk','titulo_fk')
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            modified_data = self.modify_date_format(serializer.data)
+            return self.get_paginated_response(modified_data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        modified_data = self.modify_date_format(serializer.data)
+        return Response(modified_data)
+
+    def modify_date_format(self, data):
+        """
+        Modify the 'periodo_ingreso' and 'periodo_egreso' attributes in the data.
+        """
+        for item in data:
+            if 'periodo_ingreso' in item:
+                periodo_ingreso = datetime.strptime(item['periodo_ingreso'], '%Y-%m-%d')
+                if periodo_ingreso.month < 7:
+                    item['periodo_ingreso'] = f"{periodo_ingreso.year}-1"
+                else:
+                    item['periodo_ingreso'] = f"{periodo_ingreso.year}-2"
+
+            if 'periodo_egreso' in item:
+                periodo_egreso = datetime.strptime(item['periodo_egreso'], '%Y-%m-%d')
+                if periodo_egreso.month < 7:
+                    item['periodo_egreso'] = f"{periodo_egreso.year}-1"
+                else:
+                    item['periodo_egreso'] = f"{periodo_egreso.year}-2"
+
+        return data
 
     
 
