@@ -8,6 +8,7 @@ import { Student } from "./columns";
 import { TDocumentDefinitions } from "pdfmake/interfaces";
 import { VisibilityState } from "@tanstack/react-table";
 import { notification } from "@/components/responsive/notification";
+import { getSession } from "next-auth/react";
 
 type GobReportData = {
   summary: [
@@ -219,8 +220,13 @@ export const handleExcelDownload = async (
   headers.forEach((head, index) => {
     objHeaders[`column${index + 1}`] = head;
   });
-  fetch(`${process.env.NEXT_PUBLIC_DJANGO_API_BASEURL}/alumnos/?` + `${urlFilter}`)
-    .then((response) => response.json())
+  const session = await getSession();
+  fetch(`${process.env.NEXT_PUBLIC_DJANGO_API_BASEURL}/alumnos/?` + `${urlFilter}`,{
+    method: "GET",
+    headers: {
+      Authorization: "Token " + session?.token,
+    },
+  }).then((response) => response.json())
     .then(async (data: Student[]) => {
       const selected_data = data.map((element: { [x: string]: any }) =>
         filterProps(element, columns)
@@ -245,8 +251,14 @@ export const handlePdfDownload = async (
     (col) => columnVisibility[col] === true
   );
   const headers = formatHeader(REF_COLUMN_NAMES, columns);
+  const session = await getSession();
   const fetchData = await fetch(
-    `${process.env.NEXT_PUBLIC_DJANGO_API_BASEURL}/alumnos/?` + `${urlFilter}`
+    `${process.env.NEXT_PUBLIC_DJANGO_API_BASEURL}/alumnos/?` + `${urlFilter}`,{
+      method: "GET",
+      headers: {
+        Authorization: "Token " + session?.token,
+      },
+    }
   );
   const data = await fetchData.json();
   const docDefinition: TDocumentDefinitions = {

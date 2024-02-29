@@ -450,6 +450,7 @@ class AlumnoFilter(filters.FilterSet):
 
     
 class AlumView(generics.ListAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = AlumnoSerializer
     queryset = Alumnos.objects.order_by('id_alumno')
     filter_backends = (filters.DjangoFilterBackend,)
