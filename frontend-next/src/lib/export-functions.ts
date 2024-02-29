@@ -232,7 +232,7 @@ export const handleExcelDownload = async (
         filterProps(element, columns)
       );
       const fetchTemplate = await fetch(
-        `http://localhost:3000/templates/export_template.xlsx`
+        `${process.env.NEXT_PUBLIC_URL}/templates/export_template.xlsx`
       );
       const template = await fetchTemplate.arrayBuffer();
       const excelTemplate = await JsExcelTemplate.fromArrayBuffer(template);

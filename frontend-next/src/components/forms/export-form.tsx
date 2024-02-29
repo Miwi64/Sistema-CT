@@ -73,9 +73,9 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
     //Select the correct data api url
     const templatePath =
       config.formatType === "gob"
-        ? `http://localhost:3000/templates/gob_template.xlsx`
+        ? `${process.env.NEXT_PUBLIC_URL}/templates/gob_template.xlsx`
         : config.formatType === "est911"
-        ? `http://localhost:3000/templates/est911_template.xlsx`
+        ? `${process.env.NEXT_PUBLIC_URL}/templates/est911_template.xlsx`
         : undefined;
     //Select the correct template
     const dataPath =
