@@ -514,27 +514,49 @@ class AlumnosView(viewsets.ModelViewSet):
         modified_data = self.modify_date_format(serializer.data)
         return Response(modified_data)
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        modified_data = self.modify_date_format1(serializer.data)
+        return Response(modified_data)
+
+
     def modify_date_format(self, data):
         """
         Modify the 'periodo_ingreso' and 'periodo_egreso' attributes in the data.
         """
         for item in data:
             if 'periodo_ingreso' in item:
-                periodo_ingreso = datetime.strptime(item['periodo_ingreso'], '%Y-%m-%d')
-                if periodo_ingreso.month < 7:
-                    item['periodo_ingreso'] = f"{periodo_ingreso.year}-1"
+                periodo_ingreso = item['periodo_ingreso']
+                periodo_ingreso_datetime = timezone.make_aware(datetime.strptime(periodo_ingreso, '%Y-%m-%d'))
+                if periodo_ingreso_datetime.month < 7:
+                    item['periodo_ingreso'] = f"{periodo_ingreso_datetime.year}-1"
                 else:
-                    item['periodo_ingreso'] = f"{periodo_ingreso.year}-2"
+                    item['periodo_ingreso'] = f"{periodo_ingreso_datetime.year}-2"
 
             if 'periodo_egreso' in item:
-                periodo_egreso = datetime.strptime(item['periodo_egreso'], '%Y-%m-%d')
-                if periodo_egreso.month < 7:
-                    item['periodo_egreso'] = f"{periodo_egreso.year}-1"
+                periodo_egreso = item['periodo_egreso']
+                periodo_egreso_datetime = timezone.make_aware(datetime.strptime(periodo_egreso, '%Y-%m-%d'))
+                if periodo_egreso_datetime.month < 7:
+                    item['periodo_egreso'] = f"{periodo_egreso_datetime.year}-1"
                 else:
-                    item['periodo_egreso'] = f"{periodo_egreso.year}-2"
+                    item['periodo_egreso'] = f"{periodo_egreso_datetime.year}-2"
 
         return data
 
+    def modify_date_format1(self, data):
+            """
+            Modify the 'periodo_ingreso' and 'periodo_egreso' attributes in the data.
+            """
+            if 'periodo_ingreso' in data:
+                periodo_ingreso = datetime.strptime(data['periodo_ingreso'], '%Y-%m-%d').date()
+                data['periodo_ingreso'] = periodo_ingreso
+
+            if 'periodo_egreso' in data:
+                periodo_egreso = datetime.strptime(data['periodo_egreso'], '%Y-%m-%d').date()
+                data['periodo_egreso'] = periodo_egreso
+
+            return data
     
 
     def create(self, request:Request, ):
