@@ -118,61 +118,6 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
       return;
     }
 
-    // const postTitle = await fetch(
-    //   `http://127.0.0.1:8000/data/api/v1/titulados/`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: "Token " + session?.token,
-    //     },
-    //     body: JSON.stringify({
-    //       num_titulo: values.num_titulo,
-    //       clave_plan: values.clave_plan,
-    //       fecha_acto: values.fecha_acto,
-    //       fecha_registro: values.fecha_registro_tit,
-    //       num_cedula: values.num_cedula,
-    //       observaciones: values.observaciones_tit,
-    //     }),
-    //   }
-    // );
-    // if (!postTitle.ok) {
-    //   handleError(`Ha ocurrido un error al registrar el título.
-    //   Revise que los datos sean correctos y vuelva a intentarlo`);
-    //   return;
-    // }
-    // const { id_titulo } = await postTitle.json();
-
-    // const postStudent = await fetch(
-    //   `http://127.0.0.1:8000/data/api/v1/alumnos/`,
-    //   {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: "Token " + session?.token,
-    //     },
-    //     body: JSON.stringify({
-    //       nombre: values.nombre,
-    //       apellidop: values.apellidop,
-    //       apellidom: values.apellidom,
-    //       num_control: values.num_control,
-    //       sexo: values.sexo,
-    //       CURP: values.CURP,
-    //       periodo_ingreso: values.periodo_ingreso,
-    //       periodo_egreso: values.periodo_egreso,
-    //       estado_nacimiento: values.estado_nacimiento,
-    //       fecha_nacimiento: values.fecha_nacimiento,
-    //       carrera_fk: values.carrera_fk,
-    //       titulo_fk: id_titulo,
-    //       certificado_fk: null,
-    //     }),
-    //   }
-    // );
-    // if (!postStudent.ok) {
-    //   handleError(`Ha ocurrido un error al registrar los datos del
-    //   estudiante en el título. Revise que los datos sean correctos y vuelva a intentarlo`);
-    //   return;
-    // }
     router.push("/table");
     notification(
       "Registro realizado correctamente",
@@ -230,7 +175,10 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de título</FormLabel>
                 <FormControl>
-                  <NumericInput placeholder="Número de título" field={field} />
+                  <NumericInput
+                    placeholder="Número de título - Ejem.: 12345678"
+                    field={field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -243,7 +191,10 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Número de cédula</FormLabel>
                 <FormControl>
-                  <NumericInput placeholder="Número de cédula" field={field} />
+                  <NumericInput
+                    placeholder="Número de cédula - Ejem.: 12345678"
+                    field={field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -256,7 +207,10 @@ const TitleForm = ({ careers, session }: TitleFormProps) => {
               <FormItem className="">
                 <FormLabel>Plan de estudios</FormLabel>
                 <FormControl>
-                  <Input placeholder="Clave Plan" {...field} />
+                  <Input
+                    placeholder="Clave Plan - Ejem.: IISC-2006-201"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

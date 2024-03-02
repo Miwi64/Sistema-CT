@@ -101,7 +101,10 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
               <FormItem className="">
                 <FormLabel>Número de cedula</FormLabel>
                 <FormControl>
-                  <NumericInput placeholder="Número de cédula" field={field} />
+                  <NumericInput
+                    placeholder="Número de cédula - Ejem.: 12345678"
+                    field={field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -112,9 +115,12 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
             name="clave_plan"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Plan de estudios</FormLabel>
+                <FormLabel>Plan de estudios*</FormLabel>
                 <FormControl>
-                  <Input placeholder="Clave Plan" {...field} />
+                  <Input
+                    placeholder="Clave Plan Ejem.: IISC-2001-201"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -125,7 +131,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
             name="fecha_registro_tit"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Fecha de registro</FormLabel>
+                <FormLabel>Fecha de registro*</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -178,7 +184,7 @@ const EditTitle = ({ studentData, session }: EditTitleProps) => {
             name="fecha_acto"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Fecha del acto</FormLabel>
+                <FormLabel>Fecha del acto*</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>

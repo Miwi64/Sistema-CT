@@ -85,7 +85,7 @@ export const TITLE_SCHEMA = {
             }
             return value.replace(/\s+/g, "");
         })
-        .pipe(z.string().min(13, { message: "ejem.: IISC-2006-201" })),
+        .pipe(z.string().min(13, { message: "Campo requerido - ejem.: IISC-2006-201" })),
     fecha_acto: z
         .date({ required_error: "Campo requerido" }),
     fecha_registro_tit: z

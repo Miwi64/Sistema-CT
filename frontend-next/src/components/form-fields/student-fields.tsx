@@ -36,9 +36,12 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         name="num_control"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>Número de control</FormLabel>
+            <FormLabel>Número de control*</FormLabel>
             <FormControl>
-              <Input placeholder="Número de control" {...field} />
+              <Input
+                placeholder="Número de control - Ejem.: 12345678"
+                {...field}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -49,9 +52,9 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         name="nombre"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>Nombre</FormLabel>
+            <FormLabel>Nombre*</FormLabel>
             <FormControl>
-              <Input placeholder="Nombre" {...field} />
+              <Input placeholder="Nombre - Ejem.: Juan Carlos" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -62,9 +65,12 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         name="apellidop"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>Apellido Paterno</FormLabel>
+            <FormLabel>Apellido Paterno*</FormLabel>
             <FormControl>
-              <Input placeholder="Apellido paterno" {...field} />
+              <Input
+                placeholder="Apellido paterno - Ejem.: Estrada"
+                {...field}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -77,7 +83,7 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
           <FormItem className="">
             <FormLabel>Apellido Materno</FormLabel>
             <FormControl>
-              <Input placeholder="Apellido materno" {...field} />
+              <Input placeholder="Apellido materno - Ejem.: Perez" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -88,7 +94,7 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         name="sexo"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>Género</FormLabel>
+            <FormLabel>Género*</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
@@ -109,9 +115,12 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         name="CURP"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>CURP</FormLabel>
+            <FormLabel>CURP*</FormLabel>
             <FormControl>
-              <Input placeholder="CURP" {...field} />
+              <Input
+                placeholder="CURP - Ejem.: PECJ040815HBCSPNA7"
+                {...field}
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -122,7 +131,7 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         name="estado_nacimiento"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>Estado de nacimiento</FormLabel>
+            <FormLabel>Estado de nacimiento*</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
                 <SelectTrigger>
@@ -147,7 +156,7 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         name="fecha_nacimiento"
         render={({ field }) => (
           <FormItem className="flex flex-col gap-2">
-            <FormLabel>Fecha de nacimiento</FormLabel>
+            <FormLabel>Fecha de nacimiento*</FormLabel>
             <Popover>
               <PopoverTrigger asChild>
                 <FormControl>
@@ -172,7 +181,9 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
                   mode="single"
                   selected={field.value}
                   onSelect={field.onChange}
-                  captionLayout="dropdown" fromYear={1950} toYear={new Date().getFullYear()}
+                  captionLayout="dropdown"
+                  fromYear={1950}
+                  toYear={new Date().getFullYear()}
                   classNames={{
                     caption: "justify-between",
                     caption_label: "hidden",
@@ -180,7 +191,7 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
                                                 rounded-md border border-input bg-background 
                                                 px-3 py-1 text-sm ring-offset-background 
                                                 [&>span]:line-clamp-1`,
-                    caption_dropdowns: "text-[0] flex justify-center"
+                    caption_dropdowns: "text-[0] flex justify-center",
                   }}
                   disabled={(date) =>
                     date > new Date() || date < new Date("1900-01-01")
@@ -198,9 +209,14 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         name="periodo_ingreso"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>Periodo de Ingreso</FormLabel>
+            <FormLabel>Periodo de Ingreso*</FormLabel>
             <FormControl>
-              <SemesterSelector from={1990} value={field.value} onValueChange={field.onChange} reverse />
+              <SemesterSelector
+                from={1990}
+                value={field.value}
+                onValueChange={field.onChange}
+                reverse
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -211,9 +227,14 @@ const StudentFields = ({ form }: StudentFieldsProps) => {
         name="periodo_egreso"
         render={({ field }) => (
           <FormItem className="">
-            <FormLabel>Periodo de egreso</FormLabel>
+            <FormLabel>Periodo de egreso*</FormLabel>
             <FormControl>
-              <SemesterSelector from={1990} value={field.value} onValueChange={field.onChange} reverse />
+              <SemesterSelector
+                from={1990}
+                value={field.value}
+                onValueChange={field.onChange}
+                reverse
+              />
             </FormControl>
             <FormMessage />
           </FormItem>

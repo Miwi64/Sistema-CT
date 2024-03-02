@@ -144,9 +144,12 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
             name="num_folio"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Número de folio</FormLabel>
+                <FormLabel>Número de folio*</FormLabel>
                 <FormControl>
-                  <NumericInput placeholder="Número de folio" field={field} />
+                  <NumericInput
+                    placeholder="Número de folio - Ejem.: 12345678"
+                    field={field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -157,7 +160,7 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
             name="carrera_fk"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Carrera</FormLabel>
+                <FormLabel>Carrera*</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -184,7 +187,7 @@ const CertificateForm = ({ careers, session }: CertificateFormProps) => {
             name="fecha_registro_cert"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Fecha de registro</FormLabel>
+                <FormLabel>Fecha de registro*</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>

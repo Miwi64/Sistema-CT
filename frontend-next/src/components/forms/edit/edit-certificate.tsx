@@ -93,7 +93,7 @@ const EditCertificate = ({ studentData, session }: EditCertificateProps) => {
             name="fecha_registro_cert"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Fecha de registro</FormLabel>
+                <FormLabel>Fecha de registro*</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>

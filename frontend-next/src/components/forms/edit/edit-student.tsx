@@ -121,9 +121,9 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="nombre"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Nombre</FormLabel>
+                <FormLabel>Nombre*</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nombre" {...field} />
+                  <Input placeholder="Nombre - Ejem.: Juan Carlos" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -134,9 +134,12 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="apellidop"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Apellido Paterno</FormLabel>
+                <FormLabel>Apellido Paterno*</FormLabel>
                 <FormControl>
-                  <Input placeholder="Apellido paterno" {...field} />
+                  <Input
+                    placeholder="Apellido paterno - Ejem.: Estrada"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -147,9 +150,12 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="apellidom"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Apellido Materno</FormLabel>
+                <FormLabel>Apellido Materno*</FormLabel>
                 <FormControl>
-                  <Input placeholder="Apellido materno" {...field} />
+                  <Input
+                    placeholder="Apellido materno - Ejem.: Perez"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -160,7 +166,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="sexo"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Género</FormLabel>
+                <FormLabel>Género*</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -184,9 +190,12 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="CURP"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>CURP</FormLabel>
+                <FormLabel>CURP*</FormLabel>
                 <FormControl>
-                  <Input placeholder="CURP" {...field} />
+                  <Input
+                    placeholder="CURP - Ejem.: PERA050403HBCDPNA9"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -197,7 +206,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="estado_nacimiento"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Estado de nacimiento</FormLabel>
+                <FormLabel>Estado de nacimiento*</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -225,7 +234,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="fecha_nacimiento"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Fecha de nacimiento</FormLabel>
+                <FormLabel>Fecha de nacimiento*</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -278,7 +287,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="carrera_fk"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Carrera</FormLabel>
+                <FormLabel>Carrera*</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -305,7 +314,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="periodo_ingreso"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Periodo de ingreso</FormLabel>
+                <FormLabel>Periodo de ingreso*</FormLabel>
                 <FormControl>
                   <SemesterSelector
                     from={1990}
@@ -323,7 +332,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
             name="periodo_egreso"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Periodo de egreso</FormLabel>
+                <FormLabel>Periodo de egreso*</FormLabel>
                 <FormControl>
                   <SemesterSelector
                     from={1990}
