@@ -20,7 +20,7 @@ import { DeleteButton } from "@/components/delete-button";
 
 async function getData(session: Session, id: string) {
   const fetchApi = await fetch(
-    `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos?num_control=${id}`,
+    `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/${id}/`,
     {
       method: "GET",
       headers: {
@@ -28,19 +28,26 @@ async function getData(session: Session, id: string) {
       },
     }
   );
-  const { results: studentData } = await fetchApi.json();
+  const studentData = await fetchApi.json();
   return studentData;
+}
+
+function convertMonthToYear(dateString: string): string {
+  const [year, month, day] = dateString.split("-").map(Number);
+  return `${year}-${month <= 6 ? 1 : 2}`;
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-  const [student] = await getData(session, params.id);
-  const sexoText =
+  const student = await getData(session, params.id);
+  const generoText =
     student.sexo === "m" || student.sexo === "M"
       ? "Masculino"
       : student.sexo === "f" || student.sexo === "F"
       ? "Femenino"
       : "Indefinido";
+  const periodoIngresoText = convertMonthToYear(student.periodo_ingreso);
+  const periodoEgresoText = convertMonthToYear(student.periodo_egreso);
   return (
     <>
       <h1 className="text-muted-foreground font-semibold mt-8 text-md">
@@ -54,7 +61,7 @@ export default async function Page({ params }: { params: { id: string } }) {
             <span className="hidden md:inline">Editar</span>
           </a>
         </Button>
-        <DeleteButton id={params.id} />
+        <DeleteButton id={student.num_control} />
       </section>
       <section className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-10">
         <Collapsible defaultOpen>
@@ -80,7 +87,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                       { head: "Nombre", value: student.nombre },
                       { head: "Apellido paterno", value: student.apellidop },
                       { head: "Apellido materno", value: student.apellidom },
-                      { head: "Sexo", value: sexoText },
+                      { head: "Género", value: generoText },
                       { head: "CURP", value: student.CURP },
                       {
                         head: "Estado de nacimiento",
@@ -127,11 +134,11 @@ export default async function Page({ params }: { params: { id: string } }) {
                       { head: "Nombre", value: student.nombre_carrera },
                       {
                         head: "Periodo de ingreso",
-                        value: student.periodo_ingreso,
+                        value: periodoIngresoText,
                       },
                       {
                         head: "Periodo de egreso",
-                        value: student.periodo_egreso,
+                        value: periodoEgresoText,
                       },
                     ].map(({ head, value }) => (
                       <TableRow key={value}>

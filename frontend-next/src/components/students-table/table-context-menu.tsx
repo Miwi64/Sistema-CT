@@ -56,7 +56,7 @@ const TableContextMenu = ({
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const handleDelete = async () => {
     const search = await fetch(
-      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/?num_control=${id}`,
+      `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/${id}/`,
       {
         method: "GET",
         headers: {
@@ -65,9 +65,7 @@ const TableContextMenu = ({
         },
       }
     );
-    const {
-      results: [student],
-    } = await search.json();
+    const student = await search.json();
 
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/${student?.id_alumno}/`,
@@ -124,9 +122,13 @@ const TableContextMenu = ({
     }
   };
 
-  const deleteButton = (id: string, trigger: React.ReactNode) => (
+  const deleteButton = (
+    id: string,
+    trigger: React.ReactNode,
+    title: string
+  ) => (
     <ResponsiveDialog
-      title={`Eliminar ${id}`}
+      title={`Eliminar ${title}`}
       controlledOpen={{ open: dialogOpen, setOpen: setDialogOpen }}
       trigger={trigger}
       description="¿Está seguro? Esta acción no podrá deshacerse."
@@ -170,7 +172,8 @@ const TableContextMenu = ({
             >
               <Trash2 />
               <span className="ml-2">Eliminar</span>
-            </ContextMenuItem>
+            </ContextMenuItem>,
+            title
           )}
         </ContextMenuContent>
       </ContextMenu>
@@ -205,7 +208,8 @@ const TableContextMenu = ({
             <Button variant="destructive" className="justify-start py-6 gap-4">
               <Trash2 />
               <span className="text-lg">Eliminar</span>
-            </Button>
+            </Button>,
+            title
           )}
         </div>
         <DrawerFooter className="pt-4 w-full flex flex-row justify-center">

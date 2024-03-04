@@ -24,7 +24,7 @@ import { STATES } from "@/lib/constants";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { Button } from "../../ui/button";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../../ui/calendar";
 import { Session } from "next-auth";
@@ -50,6 +50,14 @@ interface EditStudentProps {
 }
 
 const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
+  const birthDate = parseISO(studentData.fecha_nacimiento);
+  const utcBirthDate = new Date(
+    birthDate.getTime() + birthDate.getTimezoneOffset() * 60000
+  );
+  const localBirthDate = new Date(
+    utcBirthDate.getTime() - utcBirthDate.getTimezoneOffset() * 60000
+  );
+
   const initialValues = {
     nombre: studentData.nombre,
     apellidop: studentData.apellidop,
@@ -58,7 +66,7 @@ const EditStudent = ({ studentData, careers, session }: EditStudentProps) => {
     CURP: studentData.CURP,
     carrera_fk: `${studentData.carrera_fk}`,
     estado_nacimiento: studentData.estado_nacimiento,
-    fecha_nacimiento: new Date(studentData.fecha_nacimiento),
+    fecha_nacimiento: localBirthDate,
     periodo_ingreso: studentData.periodo_ingreso,
     periodo_egreso: studentData.periodo_egreso,
   };

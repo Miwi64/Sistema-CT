@@ -22,8 +22,8 @@ import {
 } from "../components/ui/form";
 import { ModeToggle } from "../components/mode-toggle";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { notification } from "@/components/responsive/notification";
 import { useMediaQuery } from "@/hooks/use-media-query";
@@ -42,11 +42,18 @@ const formSchema = z.object({
 
 const Login = () => {
   const params = useSearchParams();
+  const { data: session, status } = useSession();
   const callbackUrl = params.get("callbackUrl") || "/table";
   const router = useRouter();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const [signing, setSigning] = useState(false);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push(callbackUrl);
+    }
+  }, [status]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setSigning(true);
@@ -108,7 +115,7 @@ const Login = () => {
       />
       <section
         className="w-full h-screen flex justify-center items-center overflow-y-auto absolute 
-      md:bg-[rgba(255,255,255,0.9)] md:dark:bg-[rgba(0,0,0,0.9)] backdrop-blur-3xl"
+      md:bg-[rgba(255,255,255,0.6)] md:dark:bg-[rgba(0,0,0,0.8)] backdrop-blur-3xl"
       >
         <Card
           className="rounded-none md:rounded-lg bg-transparent md:bg-card w-full h-full

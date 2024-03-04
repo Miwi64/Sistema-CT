@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { Button } from "../../ui/button";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../../ui/calendar";
 import { Textarea } from "../../ui/textarea";
@@ -38,14 +38,28 @@ interface EditTitleProps {
 }
 
 const EditTitle = ({ studentData, session }: EditTitleProps) => {
+  const registerDate = parseISO(studentData.fecha_registro_tit || "1970-12-10");
+  const utcRegisterDate = new Date(
+    registerDate.getTime() + registerDate.getTimezoneOffset() * 60000
+  );
+  const localregisterDate = new Date(
+    utcRegisterDate.getTime() - utcRegisterDate.getTimezoneOffset() * 60000
+  );
+
+  const actDate = parseISO(studentData.fecha_acto || "1970-12-10");
+  const utcActDate = new Date(
+    actDate.getTime() + actDate.getTimezoneOffset() * 60000
+  );
+  const localActDate = new Date(
+    utcActDate.getTime() - utcActDate.getTimezoneOffset() * 60000
+  );
+
   const initialValues = {
     num_cedula: studentData.num_cedula,
     observaciones_tit: studentData.observaciones_tit,
     clave_plan: studentData.clave_plan,
-    fecha_acto: new Date(studentData.fecha_acto || "1970-01-01"),
-    fecha_registro_tit: new Date(
-      studentData.fecha_registro_tit || "1970-01-01"
-    ),
+    fecha_acto: localActDate,
+    fecha_registro_tit: localregisterDate,
   };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 import { Button } from "../../ui/button";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../../ui/calendar";
 import { Textarea } from "../../ui/textarea";
@@ -36,10 +36,18 @@ interface EditCertificateProps {
 }
 
 const EditCertificate = ({ studentData, session }: EditCertificateProps) => {
+  const registerDate = parseISO(
+    studentData.fecha_registro_cert || "1970-12-10"
+  );
+  const utcRegisterDate = new Date(
+    registerDate.getTime() + registerDate.getTimezoneOffset() * 60000
+  );
+  const localregisterDate = new Date(
+    utcRegisterDate.getTime() - utcRegisterDate.getTimezoneOffset() * 60000
+  );
+
   const initialValues = {
-    fecha_registro_cert: new Date(
-      studentData.fecha_registro_cert || "1970-01-01"
-    ),
+    fecha_registro_cert: localregisterDate,
     observaciones_cert: studentData.observaciones_cert,
   };
   const form = useForm<z.infer<typeof formSchema>>({

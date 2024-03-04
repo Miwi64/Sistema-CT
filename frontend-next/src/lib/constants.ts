@@ -140,6 +140,7 @@ export const FORMATS: { [key: string]: string } = {
 }
 
 export const CERTIFICATE_VISIBLE_COLUMNS = {
+    "id_alumno": false,
     "num_control": true,
     "nombre": true,
     "apellidop": true,
@@ -162,6 +163,7 @@ export const CERTIFICATE_VISIBLE_COLUMNS = {
     "observaciones_tit": false
 }
 export const TITLE_VISIBLE_COLUMNS = {
+    "id_alumno": false,
     "num_control": true,
     "nombre": true,
     "apellidop": true,
@@ -185,6 +187,7 @@ export const TITLE_VISIBLE_COLUMNS = {
 }
 
 export const BOTH_VISIBLE_COLUMNS = {
+    "id_alumno": false,
     "num_control": true,
     "nombre": true,
     "apellidop": true,

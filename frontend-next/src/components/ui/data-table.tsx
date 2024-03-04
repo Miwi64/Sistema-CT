@@ -36,7 +36,7 @@ export function DataTable<TData, TValue>({
   data,
   columnVisibility,
   setColumnVisibility,
-  setData
+  setData,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -66,9 +66,11 @@ export function DataTable<TData, TValue>({
     <div className="rounded-md border">
       {reactTable.getRowModel().rows?.length ? (
         <div>
-          <Table style={{
-            width: reactTable.getCenterTotalSize(),
-          }}>
+          <Table
+            style={{
+              width: reactTable.getCenterTotalSize(),
+            }}
+          >
             <TableHeader>
               {reactTable.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -85,9 +87,9 @@ export function DataTable<TData, TValue>({
                         {header.isPlaceholder
                           ? null
                           : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                       </TableHead>
                     );
                   })}
@@ -98,19 +100,25 @@ export function DataTable<TData, TValue>({
               {reactTable.getRowModel().rows.map((row) => (
                 <TableContextMenu
                   title={row.getValue("num_control")}
-                  id={row.getValue("num_control")}
+                  id={row.getValue("id_alumno")}
                   key={row.id}
                   afterDelete={() => {
                     const dataCopy = [...data];
                     dataCopy.splice(row.index, 1);
-                    setData(dataCopy)
+                    setData(dataCopy);
                   }}
                 >
-                  <TableRow className="hover:bg-accent" data-state={row.getIsSelected() && "selected"}>
+                  <TableRow
+                    className="hover:bg-accent"
+                    data-state={row.getIsSelected() && "selected"}
+                  >
                     {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id} style={{
-                        width: cell.column.getSize(),
-                      }}>
+                      <TableCell
+                        key={cell.id}
+                        style={{
+                          width: cell.column.getSize(),
+                        }}
+                      >
                         {flexRender(
                           cell.column.columnDef.cell,
                           cell.getContext()
@@ -133,8 +141,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           </TableBody>
         </Table>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }

@@ -147,7 +147,10 @@ const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
             <FormItem className="">
               <FormLabel>Número de título</FormLabel>
               <FormControl>
-                <NumericInput placeholder="Número de título" field={field} />
+                <NumericInput
+                  placeholder="Número de título - Ejem.: 12345678"
+                  field={field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -160,7 +163,10 @@ const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
             <FormItem className="">
               <FormLabel>Número de cédula</FormLabel>
               <FormControl>
-                <NumericInput placeholder="Número de cédula" field={field} />
+                <NumericInput
+                  placeholder="Número de cédula - Ejem.: 12345678"
+                  field={field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -173,7 +179,10 @@ const LinkTitleForm = ({ form, onSubmit }: LinkTitleFormProps) => (
             <FormItem className="">
               <FormLabel>Plan de estudios</FormLabel>
               <FormControl>
-                <Input placeholder="Clave Plan" {...field} />
+                <Input
+                  placeholder="Clave Plan - Ejem.: IISC-2006-201"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

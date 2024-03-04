@@ -10,7 +10,7 @@ import { Session, getServerSession } from "next-auth";
 
 async function getData(session: Session, id: string) {
   const fetchStudent = await fetch(
-    `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos?num_control=${id}`,
+    `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/alumnos/${id}/`,
     {
       method: "GET",
       headers: {
@@ -28,16 +28,16 @@ async function getData(session: Session, id: string) {
     }
   );
   const careersData = await fetchCareers.json();
-  const { results: studentData } = await fetchStudent.json();
+  const studentData = await fetchStudent.json();
   return { studentData, careersData };
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-  const {
-    studentData: [student],
-    careersData: careers,
-  } = await getData(session, params.id);
+  const { studentData: student, careersData: careers } = await getData(
+    session,
+    params.id
+  );
   return (
     <>
       <h1 className="my-3 text-2xl font-semibold leading-none tracking-tight">

@@ -33,6 +33,10 @@ export type Student = {
 
 export const columns: ColumnDef<Student>[] = [
   {
+    accessorKey: "id_alumno",
+    header: "ID Alumno",
+  },
+  {
     accessorKey: "num_control",
     header: "No. control"
   },

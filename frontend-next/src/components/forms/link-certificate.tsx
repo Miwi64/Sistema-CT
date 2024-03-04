@@ -143,7 +143,10 @@ const LinkCertificateForm = ({ form, onSubmit }: LinkCertificateFormProps) => (
             <FormItem className="">
               <FormLabel>Número de folio</FormLabel>
               <FormControl>
-                <NumericInput placeholder="Número de folio" field={field} />
+                <NumericInput
+                  placeholder="Número de folio - Ejem.: 12345678"
+                  field={field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

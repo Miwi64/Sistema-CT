@@ -116,7 +116,7 @@ export function NavMenu() {
             </NavigationMenuContent>
           </NavigationMenuItem>
 
-          <NavigationMenuItem>
+          {/* <NavigationMenuItem>
             <NavigationMenuTrigger>Importar</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-2 p-2 md:w-[400px]">
@@ -133,7 +133,7 @@ export function NavMenu() {
                 )}
               </ul>
             </NavigationMenuContent>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
 
           <NavigationMenuItem>
             <NavigationMenuLink
@@ -170,9 +170,9 @@ export function NavMenu() {
                     </a>
                   </NavigationMenuLink>
                 </li>
-                <ListItem href="/table/profile" title="Editar perfil">
+                {/* <ListItem href="/table/profile" title="Editar perfil">
                   Nombre, contraseña.
-                </ListItem>
+                </ListItem> */}
                 <ListItem
                   className="cursor-pointer"
                   onClick={async () => {
@@ -230,7 +230,7 @@ export function NavMobile() {
               focus:shadow-md text-center"
             >
               <div className="w-full flex justify-center">
-                <a href="/table/profile">
+                <a href="#">
                   <Avatar className="w-[60px] h-[60px]">
                     <AvatarFallback>
                       <User size={30} />
@@ -245,11 +245,11 @@ export function NavMobile() {
                 </p>
               </div>
               <div className="w-full flex justify-center gap-2">
-                <Button variant="outline" asChild>
+                {/* <Button variant="outline" asChild>
                   <a href="/table/profile">
                     <Edit2 size={20} />
                   </a>
-                </Button>
+                </Button> */}
                 <Button variant="outline" onClick={() => signOut()}>
                   <LogOut size={20} />
                 </Button>
@@ -262,7 +262,13 @@ export function NavMobile() {
             </div>
           </SheetHeader>
           <div className="px-4 py-6 grid grid-cols-3 text-muted-foreground gap-3">
-            {navLinks.map(({ title, icon, path }, index) => (
+            {[
+              navLinks[0],
+              navLinks[1],
+              navLinks[2],
+              navLinks[5],
+              navLinks[6],
+            ].map(({ title, icon, path }, index) => (
               <Button
                 key={index}
                 variant="ghost"
