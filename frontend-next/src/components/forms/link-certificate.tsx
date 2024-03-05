@@ -30,6 +30,7 @@ import { notification } from "../responsive/notification";
 import ResponsiveDialog from "../responsive/dialog";
 import { useState } from "react";
 import NumericInput from "../custom-selectors/numeric-input";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object(CERTIFICATE_SCHEMA);
 
@@ -47,6 +48,7 @@ export default function LinkCertificateButton({
   studentData,
   session,
 }: LinkCertificateButtonProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -116,18 +118,22 @@ export default function LinkCertificateButton({
     location.reload();
   };
 
+  function handleOperation() {
+    router.push(`/table/link-cert/${studentData.id_alumno}`);
+  }
+
   return (
     <ResponsiveDialog
       trigger={
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={handleOperation}>
           <ScrollText className="mr-2" />
           <span className="inline">Certificado</span>
         </Button>
       }
-      title="Vincular Certificado"
+      title="Abriendo Formulario para Vincular Certificado"
       controlledOpen={{ open, setOpen }}
     >
-      <LinkCertificateForm form={form} onSubmit={onSubmit} />
+      {/* <LinkCertificateForm form={form} onSubmit={onSubmit} /> */}
     </ResponsiveDialog>
   );
 }

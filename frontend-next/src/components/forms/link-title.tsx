@@ -22,7 +22,6 @@ import { BookType, CalendarIcon } from "lucide-react";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
 import { Session } from "next-auth";
 import { Student } from "@/lib/columns";
 import { TITLE_SCHEMA } from "@/lib/form-schemas";
@@ -31,6 +30,7 @@ import { notification } from "../responsive/notification";
 import { useState } from "react";
 import ResponsiveDialog from "../responsive/dialog";
 import NumericInput from "../custom-selectors/numeric-input";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object(TITLE_SCHEMA);
 
@@ -58,6 +58,7 @@ export default function LinkTitleButton({
     },
   });
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const router = useRouter();
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const postTitle = await fetch(
       `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/titulados/`,
@@ -120,10 +121,14 @@ export default function LinkTitleButton({
     location.reload();
   };
 
+  function handleOperation() {
+    router.push(`/table/link-title/${studentData.id_alumno}`);
+  }
+
   return (
     <ResponsiveDialog
       trigger={
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={handleOperation}>
           <BookType className="mr-2" />
           <span className="inline">Título</span>
         </Button>
@@ -131,7 +136,7 @@ export default function LinkTitleButton({
       title="Vincular Título"
       controlledOpen={{ open, setOpen }}
     >
-      <LinkTitleForm form={form} onSubmit={onSubmit} />
+      {/* <LinkTitleForm form={form} onSubmit={onSubmit} /> */}
     </ResponsiveDialog>
   );
 }
