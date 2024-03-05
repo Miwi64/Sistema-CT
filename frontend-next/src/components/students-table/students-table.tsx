@@ -14,6 +14,7 @@ import FilterTab from "./tabs/filter-tab";
 import PageTab from "./tabs/page-tab";
 import { VisibilityState } from "@tanstack/react-table";
 import { CERTIFICATE_VISIBLE_COLUMNS } from "@/lib/constants";
+import Loader from "../ui/loader";
 
 interface StudentsTableProps {
   careers: Career[];
@@ -67,6 +68,7 @@ export default function StudentsTable({
     CERTIFICATE_VISIBLE_COLUMNS
   );
 
+  const [loading, setLoading] = useState(false);
   const [urlFilter, setUrlFilter] = useState<string>("");
   const [filters, setFilters] = useState<FilterData>({
     doc: "C",
@@ -83,9 +85,8 @@ export default function StudentsTable({
     period: {
       enable: false,
       criteria: "Ingreso",
-      date: `${new Date().getFullYear()}${
-        new Date().getMonth() < 8 ? "-02-01" : "-08-1"
-      }`,
+      date: `${new Date().getFullYear()}${new Date().getMonth() < 8 ? "-02-01" : "-08-1"
+        }`,
     },
   });
   useEffect(() => {
@@ -99,7 +100,6 @@ export default function StudentsTable({
           },
         }
       );
-
       const { results, ...pagination } = await fetchApi.json();
       setPaginationData(pagination);
       setStudentData(results);
@@ -109,25 +109,25 @@ export default function StudentsTable({
       filters.doc === "C"
         ? "&certificado_fk_null=false"
         : filters.doc === "T"
-        ? "&titulo_fk_null=false"
-        : "";
+          ? "&titulo_fk_null=false"
+          : "";
     const sexFilter =
       filters.gender === "M"
         ? "&genero=M"
         : filters.gender === "F"
-        ? "&genero=F"
-        : "";
+          ? "&genero=F"
+          : "";
     const careerFilter =
       filters.career !== -1 ? `&carrera_fk=${filters.career}` : "";
     const min = new Date(
       filters.date.min.getTime() -
-        filters.date.min.getTimezoneOffset() * 60 * 1000
+      filters.date.min.getTimezoneOffset() * 60 * 1000
     )
       .toISOString()
       .split("T")[0];
     const max = new Date(
       filters.date.max.getTime() -
-        filters.date.max.getTimezoneOffset() * 60 * 1000
+      filters.date.max.getTimezoneOffset() * 60 * 1000
     )
       .toISOString()
       .split("T")[0];
@@ -135,16 +135,17 @@ export default function StudentsTable({
       ? `&${filters.date.criteria}_min=${min}&${filters.date.criteria}_max=${max}`
       : "";
     const periodFilter = filters.period.enable
-      ? `&periodo_${filters.period.criteria.toLowerCase()}=${
-          filters.period.date
-        }`
+      ? `&periodo_${filters.period.criteria.toLowerCase()}=${filters.period.date
+      }`
       : "";
     setUrlFilter(
       `${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`
     );
+    setLoading(true);
     loadData(
       `${docFilter}${sexFilter}${careerFilter}${dateFilter}${periodFilter}${orderFilter}&num_control=${filters.search}`
     );
+    setLoading(false);
   }, [paginationData.current_page, filters]);
   return (
     <>
@@ -196,13 +197,15 @@ export default function StudentsTable({
           setPaginationData={setPaginationData}
         />
       </Tabs>
-      <DataTable
-        columnVisibility={columnVisibility}
-        setColumnVisibility={setColumnVisibility}
-        columns={columns}
-        data={studentData}
-        setData={setStudentData}
-      />
+      {
+        loading ? <Loader /> : <DataTable
+          columnVisibility={columnVisibility}
+          setColumnVisibility={setColumnVisibility}
+          columns={columns}
+          data={studentData}
+          setData={setStudentData}
+        />
+      }
       <section className="flex justify-center my-5">
         <PaginationHandler data={paginationData} setData={setPaginationData} />
       </section>

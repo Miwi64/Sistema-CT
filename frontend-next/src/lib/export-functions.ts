@@ -99,6 +99,7 @@ export const generateGobReport = async (
   data: GobReportData,
   career: string
 ) => {
+  let noSheetToDuplicate = false;
   const { summary, sheets } = data;
   const totalGraduates = summary.reduce(
     (previous, { graduates }) => previous + graduates,
@@ -119,6 +120,7 @@ export const generateGobReport = async (
           "error",
           "El formato de la plantilla no es válido."
         );
+        noSheetToDuplicate = true;
         return;
       }
       years.forEach((year) => {
@@ -152,6 +154,7 @@ export const generateGobReport = async (
   );
   workbook.xlsx.writeBuffer().then(
     async (buffer) => {
+      if (noSheetToDuplicate) return;
       const excelTemplate = await JsExcelTemplate.fromArrayBuffer(buffer);
       for (const sheet of sheets) {
         const { year, count, gen, students } = sheet;
