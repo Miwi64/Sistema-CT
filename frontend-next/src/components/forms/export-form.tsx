@@ -20,6 +20,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { notification } from "../responsive/notification";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import YearSelector from "../custom-selectors/year-selector";
+import Loader from "../ui/loader";
 
 interface ExportFormProps {
   careers: Career[];
@@ -46,6 +47,7 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
     useDefaultTemplate: true,
     templateFile: null,
   });
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -59,8 +61,8 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
       config.formatType === "gob"
         ? { value: config.career, text: "carrera" }
         : config.formatType === "est911"
-        ? { value: config.year, text: "año" }
-        : undefined;
+          ? { value: config.year, text: "año" }
+          : undefined;
     if (!requiredField?.value) {
       notification(
         "Favor de seleccionar " + requiredField?.text,
@@ -75,17 +77,20 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
       config.formatType === "gob"
         ? `${process.env.NEXT_PUBLIC_URL}/templates/gob_template.xlsx`
         : config.formatType === "est911"
-        ? `${process.env.NEXT_PUBLIC_URL}/templates/est911_template.xlsx`
-        : undefined;
+          ? `${process.env.NEXT_PUBLIC_URL}/templates/est911_template.xlsx`
+          : undefined;
     //Select the correct template
     const dataPath =
       config.formatType === "gob"
         ? `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/get-gob-report-data/${config.career}`
         : config.formatType === "est911"
-        ? `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/get-format911/${config.year}/`
-        : undefined;
+          ? `${process.env.NEXT_PUBLIC_DJANGO_API_URL}/get-format911/${config.year}/`
+          : undefined;
     //Return if the format type is unknown
-    if (!templatePath || !dataPath) return;
+    if (!templatePath || !dataPath) {
+      setLoading(false);
+      return;
+    }
     //Select default templete or a custom one
     let template;
     if (config.templateFile && !config.useDefaultTemplate) {
@@ -101,6 +106,7 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
         "Vuelve a intentarlo más tarde",
         isDesktop
       );
+      setLoading(false);
       return;
     }
     //Get data
@@ -112,6 +118,7 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
     });
     const data = await fetchData.json();
     //Generate report
+    setLoading(true);
     switch (config.formatType) {
       case "gob":
         const careerName = careers.find(
@@ -130,110 +137,113 @@ const ExportForm = ({ careers, session }: ExportFormProps) => {
       default:
         break;
     }
+    setLoading(false);
+    console.log(config)
   };
+  return loading? <Loader /> : (<section className="grid gap-3">
+    <section className="">
+      <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
+        Exportar
+      </h1>
+      <Label htmlFor="report">Tipo de reporte</Label>
+      <Select
+        onValueChange={(value) =>
+          setConfig((prev) => ({ ...prev, formatType: value }))
+        }
+        value={config.formatType}
+      >
+        <SelectTrigger className="my-2">
+          <SelectValue>{REPORTS[config.formatType]}</SelectValue>
+        </SelectTrigger>
+        <SelectContent>
+          {Object.keys(REPORTS).map((keys, index) => (
+            <SelectItem key={index} value={keys}>
+              {Object.values(REPORTS)[index]}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </section>
 
-  return (
-    <section className="grid gap-3">
+    <section className="">
+      <Label htmlFor="template">Plantilla</Label>
+      <RadioGroup
+        className="flex gap-5 my-2"
+        defaultValue="default"
+        value={config.useDefaultTemplate? "default": "custom"}
+        onValueChange={(value) => {
+          setConfig({ ...config, useDefaultTemplate: value === "default" });
+        }}
+      >
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="default" id="default" />
+          <Label htmlFor="default">Usar plantilla por defecto</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="custom" id="custom" />
+          <Label htmlFor="custom">Plantilla personalizada</Label>
+        </div>
+      </RadioGroup>
+    </section>
+
+    {!config.useDefaultTemplate && (
       <section className="">
-        <Label htmlFor="report">Tipo de reporte</Label>
+        <Label htmlFor="template">Usar plantilla personalizada</Label>
+        <Input
+          className="my-2"
+          accept=".xlsx"
+          onChange={handleFileChange}
+          id="template"
+          type="file"
+          placeholder="Subir"
+        />
+      </section>
+    )}
+
+    {config.formatType === "gob" && (
+      <section className="">
+        <Label htmlFor="career">Carrera</Label>
         <Select
           onValueChange={(value) =>
-            setConfig((prev) => ({ ...prev, formatType: value }))
+            setConfig((prev) => ({ ...prev, career: Number(value) }))
           }
-          value={config.formatType}
+          value={`${config.career}`}
         >
           <SelectTrigger className="my-2">
-            <SelectValue>{REPORTS[config.formatType]}</SelectValue>
+            <SelectValue placeholder={"Seleccionar carrera"} />
           </SelectTrigger>
-          <SelectContent>
-            {Object.keys(REPORTS).map((keys, index) => (
-              <SelectItem key={index} value={keys}>
-                {Object.values(REPORTS)[index]}
+          <SelectContent className="max-h-[250px]">
+            {careers.map(({ id_carrera, nombre_carrera }) => (
+              <SelectItem key={id_carrera} value={`${id_carrera}`}>
+                {nombre_carrera}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
       </section>
-
+    )}
+    {config.formatType === "est911" && (
       <section className="">
-        <Label htmlFor="template">Plantilla</Label>
-        <RadioGroup
-          className="flex gap-5 my-2"
-          defaultValue="default"
-          onValueChange={(value) => {
-            setConfig({ ...config, useDefaultTemplate: value === "default" });
-          }}
-        >
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="default" id="default" />
-            <Label htmlFor="default">Usar plantilla por defecto</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <RadioGroupItem value="custom" id="custom" />
-            <Label htmlFor="custom">Plantilla personalizada</Label>
-          </div>
-        </RadioGroup>
+        <Label htmlFor="year">Año</Label>
+        <YearSelector
+          reverse
+          from={1990}
+          value={`${config.year}`}
+          onValueChange={(value) =>
+            setConfig((prev) => ({ ...prev, year: Number(value) }))
+          }
+        />
       </section>
-
-      {!config.useDefaultTemplate && (
-        <section className="">
-          <Label htmlFor="template">Usar plantilla personalizada</Label>
-          <Input
-            className="my-2"
-            accept=".xlsx"
-            onChange={handleFileChange}
-            id="template"
-            type="file"
-            placeholder="Subir"
-          />
-        </section>
-      )}
-
-      {config.formatType === "gob" && (
-        <section className="">
-          <Label htmlFor="career">Carrera</Label>
-          <Select
-            onValueChange={(value) =>
-              setConfig((prev) => ({ ...prev, career: Number(value) }))
-            }
-            value={`${config.career}`}
-          >
-            <SelectTrigger className="my-2">
-              <SelectValue placeholder={"Seleccionar carrera"} />
-            </SelectTrigger>
-            <SelectContent className="max-h-[250px]">
-              {careers.map(({ id_carrera, nombre_carrera }) => (
-                <SelectItem key={id_carrera} value={`${id_carrera}`}>
-                  {nombre_carrera}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </section>
-      )}
-      {config.formatType === "est911" && (
-        <section className="">
-          <Label htmlFor="year">Año</Label>
-          <YearSelector
-            reverse
-            from={1990}
-            value={`${config.year}`}
-            onValueChange={(value) =>
-              setConfig((prev) => ({ ...prev, year: Number(value) }))
-            }
-          />
-        </section>
-      )}
-      <section className="w-full flex justify-center mb-5">
-        <Button
-          disabled={!config.useDefaultTemplate && !config.templateFile}
-          onClick={handleExport}
-        >
-          Exportar
-        </Button>
-      </section>
+    )}
+    <section className="w-full flex justify-center mb-5">
+      <Button
+        disabled={!config.useDefaultTemplate && !config.templateFile}
+        onClick={handleExport}
+      >
+        Exportar
+      </Button>
     </section>
-  );
+  </section>)
 };
 
 export default ExportForm;
