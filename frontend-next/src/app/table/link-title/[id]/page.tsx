@@ -122,7 +122,6 @@ const Titlepage = ({ params }: { params: { id: string } }) => {
       return;
     }
     notification("Actualización correcta", "success", undefined, isDesktop);
-    location.reload();
     router.push(`/table/edit/${studentData.id_alumno}`);
   };
 
