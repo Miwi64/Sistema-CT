@@ -23,7 +23,7 @@ const Page = async () => {
   return (
     <>
       <h1 className="my-5 text-2xl font-semibold leading-none tracking-tight">
-        Agregar Certificado
+        Agregar Alumnos
       </h1>
       <StudentForm careers={careers} session={session} />
     </>
