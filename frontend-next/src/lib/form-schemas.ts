@@ -71,7 +71,7 @@ export const TITLE_SCHEMA = {
             }
             return value.replace(/\s+/g, "");
         })
-        .pipe(z.string().min(8, { message: "Minimo 8 caracteres" })),
+        .pipe(z.string().min(4, { message: "Minimo 5 caracteres" })),
     num_cedula: z.string().max(10, "Máximo 10 caracteres").optional(),
     observaciones_tit: z
         .string()

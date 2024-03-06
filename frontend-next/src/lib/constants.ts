@@ -156,6 +156,15 @@ export const STUDENT_VISIBLE_COLUMNS = {
   "nombre_carrera": true,
   "periodo_ingreso": true,
   "periodo_egreso": true,
+  "num_folio": false,
+  "fecha_registro_cert": false,
+  "observaciones_cert": false,
+  "num_titulo": false,
+  "clave_plan": false,
+  "fecha_registro_tit": false,
+  "fecha_acto": false,
+  "num_cedula": false,
+  "observaciones_tit": false
 }
 
 export const CERTIFICATE_VISIBLE_COLUMNS = {
