@@ -126,6 +126,10 @@ export const STATES = [
     {
       "text": "Zacatecas",
       "value": "Zacatecas"
+    },
+    {
+      "text": "Extranjero",
+      "value": "Extranjero"
     }
   ]
 
@@ -137,6 +141,21 @@ export const REPORTS: { [key: string]: string } = {
 export const FORMATS: { [key: string]: string } = {
     pdf: "Archivo PDF",
     xls: "Archivo de Excel (xlsx)"
+}
+
+export const STUDENT_VISIBLE_COLUMNS = {
+  "id_alumno": false,
+  "num_control": true,
+  "nombre": true,
+  "apellidop": true,
+  "apellidom": true,
+  "sexo": true,
+  "fecha_nacimiento": true,
+  "estado_nacimiento": true,
+  "CURP": true,
+  "nombre_carrera": true,
+  "periodo_ingreso": true,
+  "periodo_egreso": true,
 }
 
 export const CERTIFICATE_VISIBLE_COLUMNS = {

@@ -13,7 +13,7 @@ import StartTab from "./tabs/start-tab";
 import FilterTab from "./tabs/filter-tab";
 import PageTab from "./tabs/page-tab";
 import { VisibilityState } from "@tanstack/react-table";
-import { CERTIFICATE_VISIBLE_COLUMNS } from "@/lib/constants";
+import { STUDENT_VISIBLE_COLUMNS } from "@/lib/constants";
 import Loader from "../ui/loader";
 
 interface StudentsTableProps {
@@ -65,13 +65,13 @@ export default function StudentsTable({
 
   const [studentData, setStudentData] = useState<Student[]>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
-    CERTIFICATE_VISIBLE_COLUMNS
+    STUDENT_VISIBLE_COLUMNS
   );
 
   const [loading, setLoading] = useState(false);
   const [urlFilter, setUrlFilter] = useState<string>("");
   const [filters, setFilters] = useState<FilterData>({
-    doc: "C",
+    doc: "E",
     gender: "B",
     career: -1,
     search: "",
@@ -110,7 +110,9 @@ export default function StudentsTable({
         ? "&certificado_fk_null=false"
         : filters.doc === "T"
           ? "&titulo_fk_null=false"
-          : "";
+          : filters.doc === "CT" ?
+          "&certificado_fk_null=false&titulo_fk_null=false":
+          "";
     const sexFilter =
       filters.gender === "M"
         ? "&genero=M"

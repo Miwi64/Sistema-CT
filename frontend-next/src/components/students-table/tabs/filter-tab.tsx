@@ -29,6 +29,7 @@ import {
   DATE_CRITERIAS,
   ORDER_CRITERIAS,
   STUDENT_COLUMNS,
+  STUDENT_VISIBLE_COLUMNS,
   TITLE_COLUMNS,
   TITLE_VISIBLE_COLUMNS,
 } from "@/lib/constants";
@@ -261,7 +262,7 @@ const FilterTab = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
-            <DropdownMenuLabel>Mostrar estudiantes con</DropdownMenuLabel>
+            <DropdownMenuLabel>Mostrar estudiantes</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuRadioGroup
               value={filters.doc}
@@ -274,18 +275,26 @@ const FilterTab = ({
                 else if (value === "T") {
                   setColumnVisibility(TITLE_VISIBLE_COLUMNS)
                 }
-                else {
+                else if (value === "CT") {
                   setColumnVisibility(BOTH_VISIBLE_COLUMNS)
+                }
+                else {
+                  setColumnVisibility(STUDENT_VISIBLE_COLUMNS)
                 }
               }
               }
             >
-              <DropdownMenuRadioItem value="C">
-                Certificado
+              <DropdownMenuRadioItem value="E">
+                Egresados
               </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="T">Título</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="C">
+                con Certificado
+              </DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="T">
+                con Título
+              </DropdownMenuRadioItem>
               <DropdownMenuRadioItem value="CT">
-                Certificado y título
+                con Certificado y título
               </DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
