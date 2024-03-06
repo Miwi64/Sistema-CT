@@ -31,6 +31,7 @@ import { useState } from "react";
 import ResponsiveDialog from "../responsive/dialog";
 import NumericInput from "../custom-selectors/numeric-input";
 import { useRouter } from "next/navigation";
+import Loader from "../ui/loader";
 
 const formSchema = z.object(TITLE_SCHEMA);
 
@@ -133,9 +134,10 @@ export default function LinkTitleButton({
           <span className="inline">Título</span>
         </Button>
       }
-      title="Vincular Título"
+      title="Abriendo Formulario para anexar Título"
       controlledOpen={{ open, setOpen }}
     >
+      <Loader />
       {/* <LinkTitleForm form={form} onSubmit={onSubmit} /> */}
     </ResponsiveDialog>
   );

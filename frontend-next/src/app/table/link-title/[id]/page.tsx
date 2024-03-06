@@ -123,6 +123,7 @@ const Titlepage = ({ params }: { params: { id: string } }) => {
     }
     notification("Actualización correcta", "success", undefined, isDesktop);
     router.push(`/table/edit/${studentData.id_alumno}`);
+    router.refresh();
   };
 
   return (

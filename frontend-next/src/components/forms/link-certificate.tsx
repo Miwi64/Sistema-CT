@@ -31,6 +31,7 @@ import ResponsiveDialog from "../responsive/dialog";
 import { useState } from "react";
 import NumericInput from "../custom-selectors/numeric-input";
 import { useRouter } from "next/navigation";
+import Loader from "../ui/loader";
 
 const formSchema = z.object(CERTIFICATE_SCHEMA);
 
@@ -130,9 +131,10 @@ export default function LinkCertificateButton({
           <span className="inline">Certificado</span>
         </Button>
       }
-      title="Abriendo Formulario para Vincular Certificado"
+      title="Abriendo Formulario para anexar Certificado"
       controlledOpen={{ open, setOpen }}
     >
+      <Loader />
       {/* <LinkCertificateForm form={form} onSubmit={onSubmit} /> */}
     </ResponsiveDialog>
   );

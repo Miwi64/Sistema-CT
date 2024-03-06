@@ -21,7 +21,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
+
 import TableContextMenu from "../students-table/table-context-menu";
+import { useRouter } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -40,7 +42,7 @@ export function DataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
+  const router = useRouter();
   const reactTable = useReactTable({
     data,
     columns,
@@ -62,6 +64,11 @@ export function DataTable<TData, TValue>({
       columnVisibility,
     },
   });
+
+  function handleClick(id: number) {
+    router.push(`/table/view/${id}`);
+  }
+
   return (
     <div className="rounded-md border">
       {reactTable.getRowModel().rows?.length ? (
@@ -109,8 +116,11 @@ export function DataTable<TData, TValue>({
                   }}
                 >
                   <TableRow
-                    className="hover:bg-accent"
+                    className="hover:bg-accent cursor-pointer"
                     data-state={row.getIsSelected() && "selected"}
+                    onClick={() => {
+                      handleClick(row.getValue("id_alumno"));
+                    }}
                   >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell
