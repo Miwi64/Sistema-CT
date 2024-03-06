@@ -79,6 +79,13 @@ const navLinks = [
     icon: <GraduationCap size={40} />,
     path: "/table/careers",
   },
+  {
+    desktopTitle: "Alumnos",
+    description: "Agregar alumno",
+    title: "Alumnos",
+    icon: <User size={40} />,
+    path: "/table/student-form",
+  },
 ];
 
 export function NavMenu() {
@@ -101,7 +108,7 @@ export function NavMenu() {
             <NavigationMenuTrigger>Agregar</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-1 p-2 md:w-[300px]">
-                {[navLinks[1], navLinks[2], navLinks[6]].map(
+                {[navLinks[1], navLinks[2], navLinks[6], navLinks[7]].map(
                   ({ desktopTitle, path, description }) => (
                     <ListItem
                       key={desktopTitle}
@@ -268,6 +275,7 @@ export function NavMobile() {
               navLinks[2],
               navLinks[5],
               navLinks[6],
+              navLinks[7],
             ].map(({ title, icon, path }, index) => (
               <Button
                 key={index}
