@@ -27,11 +27,11 @@ const Page = async () => {
   const careers = await getCareers(session);
   return (
     <section className="py-5">
-      <div className="flex justify-between items-center gap-5 mb-7">
-        <h1 className="text-3xl font-bold">Carreras</h1>
+      <div className="flex justify-between items-center gap-5 mb-5">
+        <h1 className="text-2xl font-semibold leading-none tracking-tight">Carreras</h1>
         <AddButton session={session} />
       </div>
-      <section className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <section className="grid gap-3">
         {careers.map((career: Career) => (
           <CareerCard
             key={career.id_carrera}

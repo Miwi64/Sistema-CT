@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/navigation-menu";
 import {
   BookText,
-  Edit2,
   FileDown,
   FileUp,
   GraduationCap,
@@ -52,6 +51,13 @@ const navLinks = [
     path: "/table/title-form",
   },
   {
+    desktopTitle: "Egresado",
+    description: "Agregar estudiante sin título y/o certificado",
+    title: "Agregar Egresado",
+    icon: <User size={40} />,
+    path: "/table/student-form",
+  },
+  {
     desktopTitle: "Certificado",
     description: "Subir certificados desde un archivo de Excel",
     title: "Importar Certificados",
@@ -66,26 +72,19 @@ const navLinks = [
     path: "/table/title-import",
   },
   {
-    desktopTitle: "Crear reporte",
-    description: "Generar reporte con formato",
-    title: "Crear Reporte",
-    icon: <FileDown size={40} />,
-    path: "/table/export",
-  },
-  {
-    desktopTitle: "Carrera",
+    desktopTitle: "Carreras",
     description: "Agregar carrera",
     title: "Carreras",
     icon: <GraduationCap size={40} />,
     path: "/table/careers",
   },
   {
-    desktopTitle: "Alumnos",
-    description: "Agregar alumno",
-    title: "Alumnos",
-    icon: <User size={40} />,
-    path: "/table/student-form",
-  },
+    desktopTitle: "Crear reporte",
+    description: "Generar reporte con formato",
+    title: "Crear Reporte",
+    icon: <FileDown size={40} />,
+    path: "/table/export",
+  }
 ];
 
 export function NavMenu() {
@@ -105,10 +104,17 @@ export function NavMenu() {
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Agregar</NavigationMenuTrigger>
-            <NavigationMenuContent>
+            <NavigationMenuTrigger
+              onPointerMove={(e) => e.preventDefault()}
+              onPointerLeave={(e) => e.preventDefault()}
+            >
+              Agregar
+            </NavigationMenuTrigger>
+            <NavigationMenuContent
+              onPointerMove={(e) => e.preventDefault()}
+              onPointerLeave={(e) => e.preventDefault()}>
               <ul className="grid gap-1 p-2 md:w-[300px]">
-                {[navLinks[1], navLinks[2], navLinks[6], navLinks[7]].map(
+                {[navLinks[1], navLinks[2], navLinks[3]].map(
                   ({ desktopTitle, path, description }) => (
                     <ListItem
                       key={desktopTitle}
@@ -127,7 +133,7 @@ export function NavMenu() {
             <NavigationMenuTrigger>Importar</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-2 p-2 md:w-[400px]">
-                {[navLinks[3], navLinks[4]].map(
+                {[navLinks[4], navLinks[5]].map(
                   ({ desktopTitle, path, description }) => (
                     <ListItem
                       key={desktopTitle}
@@ -144,16 +150,32 @@ export function NavMenu() {
 
           <NavigationMenuItem>
             <NavigationMenuLink
-              href={navLinks[5].path}
+              href={navLinks[6].path}
               className={navigationMenuTriggerStyle()}
             >
-              {navLinks[5].desktopTitle}
+              {navLinks[6].desktopTitle}
             </NavigationMenuLink>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Cuenta</NavigationMenuTrigger>
-            <NavigationMenuContent>
+            <NavigationMenuLink
+              href={navLinks[7].path}
+              className={navigationMenuTriggerStyle()}
+            >
+              {navLinks[7].desktopTitle}
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+
+          <NavigationMenuItem>
+            <NavigationMenuTrigger
+              onPointerMove={(e) => e.preventDefault()}
+              onPointerLeave={(e) => e.preventDefault()}
+            >
+              Cuenta
+            </NavigationMenuTrigger>
+            <NavigationMenuContent
+              onPointerMove={(e) => e.preventDefault()}
+              onPointerLeave={(e) => e.preventDefault()}>
               <ul className="grid gap-1 py-4 px-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
                 <li className="row-span-3">
                   <NavigationMenuLink asChild>
@@ -273,7 +295,7 @@ export function NavMobile() {
               navLinks[0],
               navLinks[1],
               navLinks[2],
-              navLinks[5],
+              navLinks[3],
               navLinks[6],
               navLinks[7],
             ].map(({ title, icon, path }, index) => (

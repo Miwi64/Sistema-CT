@@ -1,7 +1,6 @@
 import { Session, getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import ExportForm from "@/components/forms/export-form";
-import Loader from "@/components/ui/loader";
 
 const getCareers = async (session: Session) => {
   const fetchApi = await fetch(
@@ -17,7 +16,7 @@ const getCareers = async (session: Session) => {
   return results;
 };
 
-const StudentsTablePage = async () => {
+const Page = async () => {
   const session = await getServerSession(authOptions);
   const careers = await getCareers(session);
   return (
@@ -27,4 +26,4 @@ const StudentsTablePage = async () => {
   );
 };
 
-export default StudentsTablePage;
+export default Page;
